@@ -1,0 +1,21 @@
+{
+  "name": "projeto_final_sistema",
+  "version": "1.0.0",
+  "description": "Projeto Final - Sistema Pizzaria Express",
+  "main": "login.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Allyssonantos/Projeto_Final_Sistema.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Allyssonantos/Projeto_Final_Sistema/issues"
+  },
+  "homepage": "https://github.com/Allyssonantos/Projeto_Final_Sistema#readme"
+}

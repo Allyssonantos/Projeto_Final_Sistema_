@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzaria</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <!--Nave Bar-->
+    <nav class="navbar">
+        <div class="nav-buttons">
+            <a href="./cadastro.html">Cadastro</a>
+            <button onclick="scrollToSection('menu-pizzas')">Pizzas</button>
+            <button onclick="scrollToSection('menu-bebidas')">Bebidas</button>
+        </div>
+    </nav>
+    
+    <!--Logo-->
+
+    <header>
+        <img src="./img/logo_pizzaria.png" alt="Logo da Pizzaria" class="logo">
+        <h1>Bem-vindo à Nossa Pizzaria</h1>
+        <p>Aberto das 18:00 às 23:59 | 10% de desconto para pedidos online!</p>
+    </header>
+
+   
+    
+    <h1 class="menu_h1" id="menu-pizzas">Menu Pizzas</h1>
+
+    
+    <!-- Menu de Pizzas -->
+    <h1 class="menu_h1">Menu Pizzas</h1>
+    <div class="container">
+        <div id="lista-pizzas" class="produtos"></div> <!-- Produtos serão inseridos aqui -->
+    </div>
+
+    <!-- Menu de Bebidas -->
+    <h1 class="menu_h1">Menu Bebidas</h1>
+    <div class="container">
+        <div id="lista-bebidas" class="produtos"></div> <!-- Produtos serão inseridos aqui -->
+    </div>
+
+    <!-- Carrinho -->
+    <div class="carrinho">
+        <h2>Carrinho</h2>
+        <ul id="carrinho"></ul>
+        <p id="total">Total: R$ 0,00</p>
+        <button onclick="finalizarPedido()">Finalizar Pedido</button>
+    </div>
+
+        
+   
+    
+    <script src="./script.js"></script>
+</body>
+</html>
