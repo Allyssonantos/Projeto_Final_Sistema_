@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Administrador</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <h1>Painel do Administrador</h1>
+
+    <h2>Adicionar Produto</h2>
+    
+    <input id="nomeProduto" type="text" placeholder="Nome do Produto">
+    <textarea id="descricaoProduto" placeholder="Descrição do Produto"></textarea>
+    <input id="precoProduto" type="text" placeholder="Preço">
+    <select id="categoriaProduto">
+        <option value="pizza">Pizza</option>
+        <option value="bebida">Bebida</option>
+    </select>
+    <button id="btnAdicionarProduto">Adicionar Produto</button>
+
+    <h2>Lista de Produtos</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Preço</th>
+                <th>Categoria</th>
+            </tr>
+        </thead>
+        <tbody id="listaProdutos">
+            <!-- Produtos serão carregados aqui -->
+        </tbody>
+    </table>
+
+    <script src="script.js"></script>
+</body>
+</html>

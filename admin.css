@@ -1,0 +1,126 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: url('img/pizza-background.jpg') no-repeat center center/cover;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza horizontalmente */
+    justify-content: center; /* Centraliza verticalmente */
+    height: 100vh; /* Altura total da tela */
+    color: #333;
+    text-align: center; /* Centraliza o texto */
+}
+
+h1 {
+    font-size: 32px;
+    color: #ff6347;
+    margin-top: 30px;
+}
+
+h2 {
+    font-size: 24px;
+    color: #ff6347;
+    margin-top: 20px;
+}
+
+.container {
+    background-color: rgba(224, 217, 217, 0.9); /* Ajuste para um fundo mais sólido */
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 40%;
+    max-width: 120px; /* Limita o tamanho da container */
+    margin-top: 50px;
+}
+
+input, textarea, select, button {
+    width: 10%;
+    padding: 12px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #888888;
+    font-size: 16px;
+}
+
+input, select {
+    height: 40px;
+}
+
+textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+button {
+    background-color: #ff6347;
+    color: white;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #ff4500;
+    transform: scale(1.05); /* Leve aumento no botão ao passar o mouse */
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 99, 71, 0.7); /* Efeito de foco */
+}
+
+table {
+    width: 10%;
+    margin-top: 30px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #ff6347;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ff6347;
+    color: white;
+}
+
+#listaProdutos {
+    text-align: center;
+}
+
+#mensagem-container {
+    font-size: 14px;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#mensagem-container.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+#mensagem-container.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}

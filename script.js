@@ -83,7 +83,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
 
 // função de verificação administrator
 
-fetch("http://localhost/pizzaria/api/verificar_login.php")
+fetch("http://localhost/pizzaria_express/api/verificar_login.php")
     .then(response => response.json())
     .then(data => {
         if (data.status === "erro") {
@@ -97,3 +97,77 @@ fetch("http://localhost/pizzaria/api/verificar_login.php")
 function scrollToSection(id) {
     document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); 
 }
+
+    // função para adicionar produto administrador
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const btnAdicionar = document.getElementById("btnAdicionarProduto");
+    
+        if (!btnAdicionar) {
+            console.error("❌ ERRO: Botão de adicionar produto não encontrado!");
+            return;
+        }
+    
+        // Evento para adicionar produto
+        btnAdicionar.addEventListener("click", function () {
+            console.log("✅ Botão de adicionar produto clicado!");
+            adicionarProduto();
+        });
+    
+        // Carregar lista de produtos ao iniciar a página
+        carregarProdutos();
+    });
+    
+    // Função para adicionar produto
+    function adicionarProduto() {
+        const nome = document.getElementById("nomeProduto").value;
+        const descricao = document.getElementById("descricaoProduto").value;
+        const preco = document.getElementById("precoProduto").value;
+        const categoria = document.getElementById("categoriaProduto").value;
+    
+        if (!nome || !descricao || !preco || !categoria) {
+            alert("Por favor, preencha todos os campos!");
+            return;
+        }
+    
+        // Enviar os dados para o PHP via Fetch API
+        fetch("http://localhost/pizzaria_express/api/produtos.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nome, descricao, preco, categoria }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("✅ Produto adicionado com sucesso!");
+                carregarProdutos();  // Atualiza a lista de produtos
+            } else {
+                alert("❌ Erro ao adicionar produto!");
+            }
+        })
+        .catch(error => console.error("❌ Erro na requisição:", error));
+    }
+    
+    // Função para carregar produtos
+    function carregarProdutos() {
+        fetch("http://localhost/pizzaria_express/api/produtos.php")
+            .then(response => response.json())
+            .then(data => {
+                const lista = document.getElementById("listaProdutos");
+                lista.innerHTML = "";
+    
+                data.forEach(produto => {
+                    const row = `<tr>
+                        <td>${produto.id}</td>
+                        <td>${produto.nome}</td>
+                        <td>${produto.descricao}</td>
+                        <td>R$ ${produto.preco}</td>
+                        <td>${produto.categoria}</td>
+                    </tr>`;
+                    lista.innerHTML += row;
+                });
+            })
+            .catch(error => console.error("❌ Erro ao carregar produtos:", error));
+    }
