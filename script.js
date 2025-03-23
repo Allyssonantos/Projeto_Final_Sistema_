@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const mensagemContainer = document.getElementById("mensagem-container");
 
             try {
-                const response = await fetch("http://localhost/pizzaria/api/cadastro.php", {
+                const response = await fetch("http://localhost/pizzaria_express/api/cadastro.php", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -49,6 +49,48 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+// login
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    let email = document.getElementById("email").value;
+    let senha = document.getElementById("senha").value;
+
+    fetch("http://localhost/pizzaria_express/api/login.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, senha })
+    })
+    .then(response => response.json())
+    .then(data => {
+        let mensagem = document.getElementById("mensagem");
+        if (data.status === "sucesso") {
+            mensagem.style.color = "green";
+            mensagem.innerText = data.mensagem;
+            setTimeout(() => {
+                window.location.href = "index.html"; // Redireciona para a página inicial
+            }, 2000);
+        } else {
+            mensagem.style.color = "red";
+            mensagem.innerText = data.mensagem;
+        }
+    })
+    .catch(error => console.error("Erro ao conectar:", error));
+});
+
+// função de verificação administrator
+
+fetch("http://localhost/pizzaria/api/verificar_login.php")
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "erro") {
+            window.location.href = "login.html"; // Redireciona para login se não estiver logado
+        }
+    })
+    .catch(error => console.error("Erro ao verificar login:", error));
 
 // Funções para achar os dodos clicando nos botoes no carberçario
 

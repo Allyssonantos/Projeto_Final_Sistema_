@@ -1,0 +1,98 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: url('img/pizza-background.jpg') no-repeat center center/cover;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container-login {
+    background-color: rgba(244, 244, 244, 0.849);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 24px;
+    color: #d32f2f; /* Cor tomate */
+    margin-bottom: 20px;
+}
+
+/* Estilo dos campos de input */
+label {
+    font-size: 14px;
+    color: #333;
+    text-align: left;
+    display: block;
+    margin-top: 10px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Estilo do botão de cadastro */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #d32f2f; /* Cor tomate */
+    color: white;
+    border: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #d30d0d; /* Tom mais intenso */
+}
+
+p {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+a {
+    color: #d32f2f;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Estilo da mensagem de sucesso ou erro */
+#mensagem-container {
+    font-size: 14px;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#mensagem-container.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+#mensagem-container.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
