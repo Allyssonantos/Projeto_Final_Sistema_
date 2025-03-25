@@ -1,39 +1,65 @@
 <?php
-header("Content-Type: application/json");
-include("../db.php"); // Arquivo de conexão com o banco
+
+require_once "db.php";
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+$mysqli = new mysqli("localhost", "root", "", "pizzaria");
+
+if ($mysqli->connect_error) {
+    echo json_encode(["status" => "erro", "mensagem" => "Erro ao conectar ao banco"]);
+    exit;
+}
 
 $method = $_SERVER["REQUEST_METHOD"];
 
 if ($method === "POST") {
-    // Recebe os dados do frontend
     $dados = json_decode(file_get_contents("php://input"), true);
-    
-    if (!isset($dados["nome"], $dados["descricao"], $dados["preco"], $dados["categoria"])) {
-        echo json_encode(["success" => false, "message" => "Dados inválidos!"]);
+
+    if (!$dados || !isset($dados["nome"]) || !isset($dados["descricao"]) || !isset($dados["preco"]) || !isset($dados["categoria"])) {
+        echo json_encode(["status" => "erro", "mensagem" => "Dados inválidos"]);
         exit;
     }
 
-    $nome = $dados["nome"];
-    $descricao = $dados["descricao"];
-    $preco = $dados["preco"];
-    $categoria = $dados["categoria"];
+    $nome = $mysqli->real_escape_string($dados["nome"]);
+    $descricao = $mysqli->real_escape_string($dados["descricao"]);
+    $preco = floatval($dados["preco"]);
+    $categoria = $mysqli->real_escape_string($dados["categoria"]);
 
-    // Insere no banco
-    $stmt = $pdo->prepare("INSERT INTO produtos (nome, descricao, preco, categoria) VALUES (?, ?, ?, ?)");
-    $resultado = $stmt->execute([$nome, $descricao, $preco, $categoria]);
+    $sql = "INSERT INTO produtos (nome, descricao, preco, categoria) VALUES ('$nome', '$descricao', '$preco', '$categoria')";
 
-    echo json_encode(["success" => $resultado]);
-    exit;
-}
+    if ($mysqli->query($sql)) {
+        echo json_encode(["status" => "sucesso", "mensagem" => "Produto cadastrado"]);
+    } else {
+        echo json_encode(["status" => "erro", "mensagem" => "Erro ao cadastrar"]);
+    }
+} elseif ($method === "GET") {
+    $result = $mysqli->query("SELECT * FROM produtos");
+    $produtos = [];
 
-if ($method === "GET") {
-    // Busca os produtos no banco
-    $stmt = $pdo->query("SELECT * FROM produtos");
-    $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    while ($row = $result->fetch_assoc()) {
+        $produtos[] = $row;
+    }
+
     echo json_encode($produtos);
-    exit;
+} else {
+    echo json_encode(["status" => "erro", "mensagem" => "Método não permitido"]);
 }
 
-echo json_encode(["success" => false, "message" => "Método não permitido"]);
-exit;
+$mysqli->close();
+
 ?>
+
+
+
+
+
+
+
+

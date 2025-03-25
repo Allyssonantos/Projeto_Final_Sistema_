@@ -7,92 +7,91 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background: url('img/pizza-background.jpg') no-repeat center center/cover;
-    background-size: cover;
+   /*ackground: url('img/pizza-background.jpg') no-repeat center center/cover;*/
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centraliza horizontalmente */
-    justify-content: center; /* Centraliza verticalmente */
-    height: 100vh; /* Altura total da tela */
-    color: #333;
-    text-align: center; /* Centraliza o texto */
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    text-align: center;
 }
 
+
+/* Estilo dos Containers */
+.container_cadastrar_produtos, 
+.container_produtos_cadastrados {
+    background-color: rgba(196, 192, 192, 0.9);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Ajustes individuais */
+.container_cadastrar_produtos {
+    width: 350px;
+    margin-top: 10px;
+}
+
+.container_produtos_cadastrados {
+    width: 500px;
+    margin-top: 10px;
+}
+
+/* Estilos de títulos */
 h1 {
-    font-size: 32px;
-    color: #ff6347;
-    margin-top: 30px;
+    font-size: 26px;
+    color: #b71c1c;
+    margin-bottom: 20px;
 }
 
 h2 {
-    font-size: 24px;
-    color: #ff6347;
-    margin-top: 20px;
-}
-
-.container {
-    background-color: rgba(224, 217, 217, 0.9); /* Ajuste para um fundo mais sólido */
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 40%;
-    max-width: 120px; /* Limita o tamanho da container */
-    margin-top: 50px;
-}
-
-input, textarea, select, button {
-    width: 10%;
-    padding: 12px;
-    margin-top: 10px;
+    font-size: 20px;
+    color: #b71c1c;
     margin-bottom: 20px;
+}
+
+/* Campos de entrada */
+input, textarea, select, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
     border-radius: 5px;
-    border: 1px solid #888888;
+    border: 1px solid #ddd;
     font-size: 16px;
 }
 
-input, select {
-    height: 40px;
-}
-
-textarea {
-    resize: vertical;
-    height: 100px;
-}
-
+/* Botão */
 button {
-    background-color: #ff6347;
+    background-color: #b71c1c;
     color: white;
     border: none;
     font-size: 18px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: 0.3s ease;
 }
 
 button:hover {
-    background-color: #ff4500;
-    transform: scale(1.05); /* Leve aumento no botão ao passar o mouse */
+    background-color: #8e0000;
 }
 
-button:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(255, 99, 71, 0.7); /* Efeito de foco */
-}
-
+/* Estilizando a tabela */
 table {
-    width: 10%;
-    margin-top: 30px;
+    width: 100%;
+    margin-top: 40px;
     border-collapse: collapse;
 }
 
 th, td {
-    padding: 10px;
-    text-align: center;
+    padding: 20px;
     border: 1px solid #ddd;
+    text-align: center;
 }
 
 th {
-    background-color: #ff6347;
+    background-color: #b71c1c;
     color: white;
+    margin-bottom: 10px;
 }
 
 tr:nth-child(even) {
@@ -100,14 +99,11 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-    background-color: #ff6347;
+    background-color: #b71c1c;
     color: white;
 }
 
-#listaProdutos {
-    text-align: center;
-}
-
+/* Mensagens de status */
 #mensagem-container {
     font-size: 14px;
     margin-top: 15px;

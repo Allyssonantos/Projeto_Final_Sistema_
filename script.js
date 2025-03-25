@@ -51,123 +51,154 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // login
-document.getElementById("loginForm").addEventListener("submit", function(event) {
-    event.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+    let loginForm = document.getElementById("loginForm");
 
-    let email = document.getElementById("email").value;
-    let senha = document.getElementById("senha").value;
+    if (loginForm) {
+        loginForm.addEventListener("submit", function(event) {
+            event.preventDefault();
 
-    fetch("http://localhost/pizzaria_express/api/login.php", {
+            let email = document.getElementById("email").value;
+            let senha = document.getElementById("senha").value;
+
+            fetch("http://localhost/pizzaria_express/api/login.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, senha })
+            })
+            .then(response => response.json())
+            .then(data => {
+                let mensagem = document.getElementById("mensagem");
+                if (data.status === "sucesso") {
+                    mensagem.style.color = "green";
+                    mensagem.innerText = data.mensagem;
+                    setTimeout(() => {
+                        window.location.href = "index.html"; // Redireciona para a página inicial
+                    }, 2000);
+                } else {
+                    mensagem.style.color = "red";
+                    mensagem.innerText = data.mensagem;
+                }
+            })
+            .catch(error => console.error("Erro ao conectar:", error));
+        });
+    } else {
+        console.error("❌ ERRO: Formulário de login não encontrado.");
+    }
+});
+// função de verificação administrator
+
+
+
+// função de castrado de produtos pagina administrator
+
+document.addEventListener("DOMContentLoaded", function () {
+    carregarProdutos();
+});
+
+document.getElementById("btnAdicionarProduto").addEventListener("click", function () {
+    let nome = document.getElementById("nomeProduto").value;
+    let descricao = document.getElementById("descricaoProduto").value;
+    let preco = document.getElementById("precoProduto").value;
+    let categoria = document.getElementById("categoriaProduto").value;
+
+    fetch("http://localhost/pizzaria_express/api/adicionar_produto.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ email, senha })
+        body: JSON.stringify({ nome, descricao, preco, categoria })
     })
     .then(response => response.json())
     .then(data => {
-        let mensagem = document.getElementById("mensagem");
-        if (data.status === "sucesso") {
-            mensagem.style.color = "green";
-            mensagem.innerText = data.mensagem;
-            setTimeout(() => {
-                window.location.href = "index.html"; // Redireciona para a página inicial
-            }, 2000);
-        } else {
-            mensagem.style.color = "red";
-            mensagem.innerText = data.mensagem;
-        }
+        alert(data.mensagem);
+        carregarProdutos();
     })
-    .catch(error => console.error("Erro ao conectar:", error));
+    .catch(error => console.error("Erro ao adicionar produto:", error));
 });
 
-// função de verificação administrator
+function carregarProdutos() {
+    fetch("http://localhost/pizzaria_express/api/produtos.php")
+        .then(response => response.json())
+        .then(produtos => {
+            let listaProdutos = document.getElementById("listaProdutos");
+            listaProdutos.innerHTML = "";
 
-fetch("http://localhost/pizzaria_express/api/verificar_login.php")
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === "erro") {
-            window.location.href = "login.html"; // Redireciona para login se não estiver logado
-        }
-    })
-    .catch(error => console.error("Erro ao verificar login:", error));
+            produtos.forEach(produto => {
+                let row = document.createElement("tr");
 
-// Funções para achar os dodos clicando nos botoes no carberçario
+                row.innerHTML = `
+                    <td>${produto.id}</td>
+                    <td><input type="text" value="${produto.nome}" id="nome-${produto.id}" disabled></td>
+                    <td><input type="text" value="${produto.descricao}" id="descricao-${produto.id}" disabled></td>
+                    <td><input type="number" step="0.01" value="${produto.preco}" id="preco-${produto.id}" disabled></td>
+                    <td>
+                        <select id="categoria-${produto.id}" disabled>
+                            <option value="pizza" ${produto.categoria === "pizza" ? "selected" : ""}>Pizza</option>
+                            <option value="bebida" ${produto.categoria === "bebida" ? "selected" : ""}>Bebida</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button onclick="habilitarEdicao(${produto.id})">Editar</button>
+                        <button onclick="editarProduto(${produto.id})" id="salvar-${produto.id}" style="display:none;">Salvar</button>
+                        <button onclick="excluirProduto(${produto.id})" style="background-color: red; color: white;">Excluir</button>
+                    </td>
+                `;
 
-function scrollToSection(id) {
-    document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); 
+                listaProdutos.appendChild(row);
+            });
+        })
+        .catch(error => console.error("Erro ao carregar produtos:", error));
 }
 
-    // função para adicionar produto administrador
+function habilitarEdicao(id) {
+    document.getElementById(`nome-${id}`).disabled = false;
+    document.getElementById(`descricao-${id}`).disabled = false;
+    document.getElementById(`preco-${id}`).disabled = false;
+    document.getElementById(`categoria-${id}`).disabled = false;
+    document.getElementById(`salvar-${id}`).style.display = "inline"; // Mostra o botão "Salvar"
+}
 
+function editarProduto(id) {
+    let nome = document.getElementById(`nome-${id}`).value;
+    let descricao = document.getElementById(`descricao-${id}`).value;
+    let preco = document.getElementById(`preco-${id}`).value;
+    let categoria = document.getElementById(`categoria-${id}`).value;
 
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const btnAdicionar = document.getElementById("btnAdicionarProduto");
-    
-        if (!btnAdicionar) {
-            console.error("❌ ERRO: Botão de adicionar produto não encontrado!");
-            return;
-        }
-    
-        // Evento para adicionar produto
-        btnAdicionar.addEventListener("click", function () {
-            console.log("✅ Botão de adicionar produto clicado!");
-            adicionarProduto();
-        });
-    
-        // Carregar lista de produtos ao iniciar a página
+    fetch("http://localhost/pizzaria_express/api/editar_produto.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id, nome, descricao, preco, categoria })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.mensagem);
         carregarProdutos();
-    });
-    
-    // Função para adicionar produto
-    function adicionarProduto() {
-        const nome = document.getElementById("nomeProduto").value;
-        const descricao = document.getElementById("descricaoProduto").value;
-        const preco = document.getElementById("precoProduto").value;
-        const categoria = document.getElementById("categoriaProduto").value;
-    
-        if (!nome || !descricao || !preco || !categoria) {
-            alert("Por favor, preencha todos os campos!");
-            return;
-        }
-    
-        // Enviar os dados para o PHP via Fetch API
-        fetch("http://localhost/pizzaria_express/api/produtos.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nome, descricao, preco, categoria }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert("✅ Produto adicionado com sucesso!");
-                carregarProdutos();  // Atualiza a lista de produtos
-            } else {
-                alert("❌ Erro ao adicionar produto!");
-            }
-        })
-        .catch(error => console.error("❌ Erro na requisição:", error));
+    })
+    .catch(error => console.error("Erro ao editar produto:", error));
+}
+
+function excluirProduto(id) {
+    if (!confirm("Tem certeza que deseja excluir este produto?")) {
+        return;
     }
-    
-    // Função para carregar produtos
-    function carregarProdutos() {
-        fetch("http://localhost/pizzaria_express/api/produtos.php")
-            .then(response => response.json())
-            .then(data => {
-                const lista = document.getElementById("listaProdutos");
-                lista.innerHTML = "";
-    
-                data.forEach(produto => {
-                    const row = `<tr>
-                        <td>${produto.id}</td>
-                        <td>${produto.nome}</td>
-                        <td>${produto.descricao}</td>
-                        <td>R$ ${produto.preco}</td>
-                        <td>${produto.categoria}</td>
-                    </tr>`;
-                    lista.innerHTML += row;
-                });
-            })
-            .catch(error => console.error("❌ Erro ao carregar produtos:", error));
-    }
+
+    fetch("http://localhost/pizzaria_express/api/excluir_produto.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.mensagem);
+        carregarProdutos();
+    })
+    .catch(error => console.error("Erro ao excluir produto:", error));
+}
+

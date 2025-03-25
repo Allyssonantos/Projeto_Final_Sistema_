@@ -7,26 +7,33 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background: url('img/pizza-background.jpg') no-repeat center center/cover;
+    /*ackground: url('img/pizza-background.jpg') no-repeat center center/cover;*/
     background-size: cover;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    text-align: center;
+    padding: 20px;
 }
 
+/* Container principal */
 .container-login {
-    background-color: rgba(244, 244, 244, 0.849);
+    background-color: rgba(196, 192, 192, 0.9);
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 100%;
+    max-width: 400px;
     text-align: center;
+    margin: 20px;
 }
 
+/* Títulos */
 h2 {
     font-size: 24px;
-    color: #d32f2f; /* Cor tomate */
+    color: #d32f2f; 
     margin-bottom: 20px;
 }
 
@@ -41,30 +48,39 @@ label {
 
 input {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin-top: 5px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
+    transition: all 0.3s ease;
 }
 
-/* Estilo do botão de cadastro */
+input:focus {
+    border-color: #d32f2f;
+    outline: none;
+    box-shadow: 0 0 5px rgba(211, 47, 47, 0.5);
+}
+
+/* Estilo do botão */
 button {
     width: 100%;
     padding: 12px;
-    background-color: #d32f2f; /* Cor tomate */
+    background-color: #d32f2f;
     color: white;
     border: none;
     font-size: 16px;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-    background-color: #d30d0d; /* Tom mais intenso */
+    background-color: #b71c1c;
+    transform: scale(1.05);
 }
 
+/* Links */
 p {
     margin-top: 15px;
     font-size: 14px;
@@ -73,6 +89,7 @@ p {
 a {
     color: #d32f2f;
     text-decoration: none;
+    font-weight: bold;
 }
 
 a:hover {
@@ -95,4 +112,15 @@ a:hover {
 #mensagem-container.error {
     background-color: #f8d7da;
     color: #721c24;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 480px) {
+    h2 {
+        font-size: 20px;
+    }
+    input, button {
+        font-size: 14px;
+        padding: 10px;
+    }
 }
