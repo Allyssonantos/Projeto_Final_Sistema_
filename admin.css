@@ -34,8 +34,9 @@ body {
 }
 
 .container_produtos_cadastrados {
-    width: 500px;
+    width: auto;
     margin-top: 10px;
+    align-items: center;
 }
 
 /* Estilos de títulos */
@@ -78,12 +79,12 @@ button:hover {
 /* Estilizando a tabela */
 table {
     width: 100%;
-    margin-top: 40px;
+    margin-top: 20px;
     border-collapse: collapse;
 }
 
 th, td {
-    padding: 20px;
+    padding: 12px;
     border: 1px solid #ddd;
     text-align: center;
 }
@@ -91,7 +92,6 @@ th, td {
 th {
     background-color: #b71c1c;
     color: white;
-    margin-bottom: 10px;
 }
 
 tr:nth-child(even) {

@@ -202,3 +202,159 @@ function excluirProduto(id) {
     .catch(error => console.error("Erro ao excluir produto:", error));
 }
 
+// função lista de produtos
+
+function carregarProdutos() {
+    fetch("http://localhost/pizzaria_express/api/listar_produtos.php")
+    .then(response => response.json())
+    .then(produtos => {
+        let listaPizzas = document.getElementById("lista-pizzas");
+        let listaBebidas = document.getElementById("lista-bebidas");
+
+        listaPizzas.innerHTML = "";
+        listaBebidas.innerHTML = "";
+
+        produtos.forEach(produto => {
+            let divProduto = document.createElement("div");
+            divProduto.classList.add("produto");
+
+            divProduto.innerHTML = `
+                <h3>${produto.nome}</h3>
+                <p>${produto.descricao}</p>
+                <p><strong>Preço:</strong> R$ ${produto.preco}</p>
+                <button onclick="adicionarAoCarrinho(${produto.id}, '${produto.nome}', ${produto.preco})">Adicionar ao Carrinho</button>
+            `;
+
+            if (produto.categoria === "pizza") {
+                listaPizzas.appendChild(divProduto);
+            } else if (produto.categoria === "bebida") {
+                listaBebidas.appendChild(divProduto);
+            }
+        });
+    })
+    .catch(error => console.error("Erro ao carregar produtos:", error));
+}
+
+
+// função carrinho
+
+document.addEventListener("DOMContentLoaded", function() {
+    carregarProdutos();
+});
+
+// Variável global do carrinho
+let carrinho = [];
+
+// Função para carregar produtos do banco de dados
+function carregarProdutos() {
+    fetch("api/produtos.php")
+        .then(response => response.json())
+        .then(produtos => {
+            let listaPizzas = document.getElementById("lista-pizzas");
+            let listaBebidas = document.getElementById("lista-bebidas");
+
+            if (!listaPizzas || !listaBebidas) {
+                console.error("Elementos da lista de produtos não encontrados!");
+                return;
+            }
+
+            listaPizzas.innerHTML = "";
+            listaBebidas.innerHTML = "";
+
+            produtos.forEach(produto => {
+                let div = document.createElement("div");
+                div.classList.add("produto");
+                div.innerHTML = `
+                    <h3>${produto.nome}</h3>
+                    <p>${produto.descricao}</p>
+                    <p><strong>R$ ${produto.preco}</strong></p>
+                    <button onclick="adicionarAoCarrinho(${produto.id}, '${produto.nome}', ${produto.preco})">
+                        Adicionar ao Carrinho
+                    </button>
+                `;
+
+                if (produto.categoria === "pizza") {
+                    listaPizzas.appendChild(div);
+                } else if (produto.categoria === "bebida") {
+                    listaBebidas.appendChild(div);
+                }
+            });
+        })
+        .catch(error => console.error("Erro ao carregar produtos:", error));
+}
+
+// Função para adicionar um produto ao carrinho
+function adicionarAoCarrinho(id, nome, preco) {
+    let itemExistente = carrinho.find(item => item.id === id);
+
+    if (itemExistente) {
+        itemExistente.quantidade += 1;
+    } else {
+        carrinho.push({ id, nome, preco, quantidade: 1 });
+    }
+
+    atualizarCarrinho();
+}
+
+// Função para remover um item do carrinho
+function removerDoCarrinho(id) {
+    carrinho = carrinho.filter(item => item.id !== id);
+    atualizarCarrinho();
+}
+
+// Função para atualizar a exibição do carrinho
+function atualizarCarrinho() {
+    let listaCarrinho = document.getElementById("lista-carrinho");
+    let totalCarrinho = document.getElementById("total");
+
+    if (!listaCarrinho || !totalCarrinho) {
+        console.error("Elementos do carrinho não encontrados!");
+        return;
+    }
+
+    listaCarrinho.innerHTML = "";
+    let total = 0;
+
+    carrinho.forEach(item => {
+        total += item.preco * item.quantidade;
+
+        let li = document.createElement("li");
+        li.innerHTML = `
+            ${item.nome} - R$ ${item.preco} x ${item.quantidade}
+            <button onclick="removerDoCarrinho(${item.id})">Remover</button>
+        `;
+        listaCarrinho.appendChild(li);
+    });
+
+    totalCarrinho.innerText = `Total: R$ ${total.toFixed(2)}`;
+}
+
+// Função para finalizar o pedido
+function finalizarPedido() {
+    if (carrinho.length === 0) {
+        alert("Seu carrinho está vazio!");
+        return;
+    }
+
+    let pedido = {
+        produtos: carrinho,
+        total: carrinho.reduce((acc, item) => acc + item.preco * item.quantidade, 0)
+    };
+
+    fetch("api/finalizar_pedido.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(pedido)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("Pedido realizado com sucesso!");
+        carrinho = [];
+        atualizarCarrinho();
+    })
+    .catch(error => console.error("Erro ao finalizar pedido:", error));
+}
+
+
+
+
