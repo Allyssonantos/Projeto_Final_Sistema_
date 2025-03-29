@@ -1,121 +1,46 @@
-/* Reset básico */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* --- START OF FILE login.css --- */
+
+/* Body já configurado em base.css para centralizar */
+
+/* Estilos específicos para o container de login, se necessário */
+.login-container {
+    max-width: 400px; /* Pode ajustar a largura aqui */
 }
 
-body {
-    font-family: 'Arial', sans-serif;
-    /*ackground: url('img/pizza-background.jpg') no-repeat center center/cover;*/
-    background-size: cover;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    text-align: center;
-    padding: 20px;
+/* Estilos dos campos e labels (podem herdar de base.css ou sobrescrever) */
+.input-field {
+    margin-bottom: 15px; /* Espaçamento entre campos */
+    text-align: left; /* Alinha label à esquerda */
 }
 
-/* Container principal */
-.container-login {
-    background-color: rgba(196, 192, 192, 0.9);
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    margin: 20px;
-}
-
-/* Títulos */
-h2 {
-    font-size: 24px;
-    color: #d32f2f; 
-    margin-bottom: 20px;
-}
-
-/* Estilo dos campos de input */
 label {
     font-size: 14px;
-    color: #333;
-    text-align: left;
-    display: block;
-    margin-top: 10px;
+    color: #555; /* Cor um pouco mais suave */
+    display: block; /* Garante que fique acima do input */
+    margin-bottom: 3px;
 }
 
-input {
-    width: 100%;
-    padding: 12px;
-    margin-top: 5px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: all 0.3s ease;
+/* Botão de submit já estilizado em base.css, pode adicionar especificidade */
+#loginForm button {
+    margin-top: 10px; /* Espaço acima do botão */
+    width: 100%; /* Garante largura total */
 }
 
-input:focus {
-    border-color: #d32f2f;
-    outline: none;
-    box-shadow: 0 0 5px rgba(211, 47, 47, 0.5);
-}
-
-/* Estilo do botão */
-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #d32f2f;
-    color: white;
-    border: none;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-button:hover {
-    background-color: #b71c1c;
-    transform: scale(1.05);
-}
-
-/* Links */
-p {
-    margin-top: 15px;
+/* Link para cadastro */
+.signup-link {
+    margin-top: 25px; /* Mais espaço acima */
     font-size: 14px;
 }
 
-a {
-    color: #d32f2f;
-    text-decoration: none;
-    font-weight: bold;
+.signup-link p {
+    margin-bottom: 8px; /* Espaço entre os links */
 }
 
-a:hover {
-    text-decoration: underline;
-}
-
-/* Estilo da mensagem de sucesso ou erro */
-#mensagem-container {
-    font-size: 14px;
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-#mensagem-container.success {
-    background-color: #d4edda;
-    color: #155724;
-}
-
-#mensagem-container.error {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-
-/* Responsividade para telas menores */
+/* Responsividade se necessário, além do base.css */
 @media (max-width: 480px) {
+    .login-container {
+        padding: 20px; /* Menos padding em telas pequenas */
+    }
     h2 {
         font-size: 20px;
     }
@@ -124,3 +49,5 @@ a:hover {
         padding: 10px;
     }
 }
+
+/* --- END OF FILE login.css --- */

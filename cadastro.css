@@ -1,69 +1,52 @@
-/* Reset básico */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* --- START OF FILE cadastro.css --- */
+
+/* Body já configurado em base.css para centralizar */
+
+/* Estilos específicos para o container de cadastro */
+.cadastro-container {
+    max-width: 420px; /* Um pouco maior talvez */
 }
 
-body {
-    font-family: 'Arial', sans-serif;
-    /*ackground: url('img/pizza-background.jpg') no-repeat center center/cover;*/
-    background-size: cover;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    text-align: center;
-    padding: 20px;
-}
-
-/* Container principal */
-.container-cadastro {
-    background-color: rgba(196, 192, 192, 0.9);
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    margin: 20px;
-}
-
-/* Títulos */
-h2 {
-    font-size: 24px;
-    color: #d32f2f; 
-    margin-bottom: 20px;
-}
-
-/* Estilo dos campos de input */
+/* Estilo dos labels */
 label {
     font-size: 14px;
-    color: #333;
+    color: #555;
     text-align: left;
     display: block;
-    margin-top: 10px;
+    margin-bottom: 3px; /* Pequeno espaço abaixo do label */
+    margin-top: 12px; /* Espaço acima de cada label/input */
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
+label:first-of-type {
+    margin-top: 0; /* Remove margem do primeiro label */
 }
 
-/* Estilo do botão */
-button {
+/* Inputs já estilizados em base.css */
+
+/* Botão de submit */
+#cadastroForm button {
+    margin-top: 20px; /* Espaço acima do botão */
     width: 100%;
-    padding: 12px;
-    background-color: #d32f2f;
-    color: white;
-    border: none;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color
 }
+
+/* Link para login */
+.cadastro-container p { /* Seleciona o <p> dentro do container específico */
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+    .cadastro-container {
+        padding: 20px;
+    }
+    h2 {
+        font-size: 20px;
+    }
+     input, button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+/* --- END OF FILE cadastro.css --- */

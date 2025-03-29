@@ -1,54 +1,66 @@
+<!-- START OF FILE index.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pizzaria</title>
-    <link rel="stylesheet" href="style.css">
-
+    <title>Pizzaria Express</title>
+    <link rel="stylesheet" href="base.css"> <!-- CSS Base -->
+    <link rel="stylesheet" href="style.css"> <!-- CSS Específico -->
 </head>
 <body>
-    <!--Nave Bar-->
+    <!-- Navbar -->
     <nav class="navbar">
+         <!-- Logo pode vir aqui também se preferir -->
         <div class="nav-buttons">
-            <a href="login.html">Login</a>
-            <button onclick="scrollToSection('menu-pizzas')">Pizzas</button>
-            <button onclick="scrollToSection('menu-bebidas')">Bebidas</button>
+            <a href="login.html" class="nav-button">Login</a> <!-- Classe adicionada para estilo opcional -->
+            <!-- Usar data attribute para o scroll -->
+            <button data-scroll-to="menu-pizzas">Pizzas</button>
+            <button data-scroll-to="menu-bebidas">Bebidas</button>
         </div>
     </nav>
-    
-    <!--Logo-->
 
-    <header>
-        <img src="./img/logo_pizzaria.png" alt="Logo da Pizzaria" class="logo">
+    <!-- Header -->
+    <header class="main-header"> <!-- Classe adicionada -->
+        <img src="./img/logo_pizzaria.png" alt="Logo da Pizzaria Express" class="logo">
         <h1>Bem-vindo à Nossa Pizzaria</h1>
-        <p>Aberto das 18:00 às 23:59 | 10% de desconto para pedidos online!</p>
+        <p>Aberto das 18:00 às 23:59 | Peça online!</p>
     </header>
 
-        <h1 class="menu_h1">Menu Pizzas</h1>
-    <div class="container">
-        <div id="lista-pizzas" class="produtos"></div> <!-- Produtos de pizza aqui -->
-    </div>
+    <!-- Conteúdo Principal -->
+    <main class="main-content">
+        <!-- Menu de Pizzas -->
+        <section id="menu-pizzas" class="menu-section">
+            <h2 class="menu_h2">Menu Pizzas</h2> <!-- Nível H2 é mais apropriado aqui -->
+            <div class="container-produtos">
+                <div id="lista-pizzas" class="produtos">
+                    <p>Carregando pizzas...</p> <!-- Feedback inicial -->
+                </div>
+            </div>
+        </section>
 
-    <h1 class="menu_h1">Menu Bebidas</h1>
-    <div class="container">
-        <div id="lista-bebidas" class="produtos"></div> <!-- Produtos de bebida aqui -->
-    </div>
+        <!-- Menu de Bebidas -->
+        <section id="menu-bebidas" class="menu-section">
+             <h2 class="menu_h2">Menu Bebidas</h2>
+             <div class="container-produtos">
+                 <div id="lista-bebidas" class="produtos">
+                     <p>Carregando bebidas...</p> <!-- Feedback inicial -->
+                 </div>
+            </div>
+        </section>
+    </main>
 
-
-    <!-- Carrinho -->
-    
-    <div class="carrinho">
+    <!-- Carrinho Lateral -->
+    <aside class="carrinho-container">
         <h2>Carrinho</h2>
-        <ul id="lista-carrinho"></ul>
+        <ul id="carrinho-itens"> <!-- ID atualizado -->
+            <li>Carrinho vazio.</li>
+        </ul>
         <p id="total">Total: R$ 0,00</p>
-        <button onclick="finalizarPedido()">Finalizar Pedido</button>
-    </div>
+        <button id="btn-finalizar-pedido">Finalizar Pedido</button> <!-- ID adicionado -->
+    </aside>
 
-    
-        
-   
-    
-    <script src="./script.js"></script>
+    <script src="store.js"></script> <!-- Script específico -->
 </body>
 </html>
+<!-- END OF FILE index.html -->

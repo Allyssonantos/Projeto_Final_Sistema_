@@ -1,17 +1,20 @@
+<!-- START OF FILE cadastro.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro</title>
-    <link rel="stylesheet" href="cadastro.css">
+    <title>Cadastro - Pizzaria Express</title>
+    <link rel="stylesheet" href="base.css"> <!-- CSS Base -->
+    <link rel="stylesheet" href="cadastro.css"> <!-- CSS Específico -->
 </head>
 <body>
-    <div class="container-cadastro">
+     <!-- Usando container padrão do base.css -->
+    <div class="content-container cadastro-container"> <!-- Classe específica opcional -->
         <h2>Cadastro de Usuário</h2>
-        
-        <!-- Mensagem de Sucesso ou Erro -->
-        <div id="mensagem-container"></div>
+
+        <!-- Mensagem de Feedback -->
+        <div id="mensagem-cadastro" class="mensagem"></div> <!-- ID específico -->
 
         <form id="cadastroForm">
             <label for="nome">Nome:</label>
@@ -27,8 +30,10 @@
         </form>
 
         <p>Já tem uma conta? <a href="login.html">Faça login</a></p>
+        <p><a href="index.html">Voltar à página inicial</a></p> <!-- Link para voltar -->
     </div>
 
-    <script src="script.js"></script>
+    <script src="auth.js"></script> <!-- Script específico -->
 </body>
 </html>
+<!-- END OF FILE cadastro.html -->

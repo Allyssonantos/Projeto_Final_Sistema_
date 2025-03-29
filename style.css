@@ -1,129 +1,282 @@
-/* Reset básico */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* --- START OF FILE style.css --- */
 
+/* Sobrescrever body flex para layout normal na index */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f8f8;
-}
-header {
-    background-color: #d32f2f;
-    color: white;
-    text-align: center;
-    padding: 20px;
+    display: block; /* Ou flex com direção diferente */
+    min-height: auto;
+    background-color: #f8f8f8; /* Fundo claro */
+    padding-top: 60px; /* Espaço para navbar fixa */
 }
 
-header h1, header p {
-    margin: 10px 0;
-}
+/* Navbar Fixa */
 .navbar {
-    min-height: 40px;
+    position: fixed; /* Fixa no topo */
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 50px; /* Altura aumentada */
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Distribui os elementos */
-    padding: 8px 20px;
+    justify-content: flex-end; /* Alinha botões à direita */
+    padding: 0 30px; /* Padding horizontal */
     background-color: #d32f2f;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000; /* Garante que fique sobre outros elementos */
 }
 
 .nav-buttons {
     display: flex;
-    gap: 10px;
+    gap: 15px; /* Espaçamento entre botões */
 }
 
 .nav-buttons a, .nav-buttons button {
-    padding: 10px 15px;
-    border: none;
+    padding: 8px 18px; /* Ajuste padding */
     background-color: white;
-    cursor: pointer;
-    text-decoration: none;
-    color: black;
+    color: #d32f2f; /* Texto vermelho */
+    font-weight: bold;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-size: 14px;
 }
-.menu {
+.nav-buttons a:hover, .nav-buttons button:hover {
+    background-color: #eee; /* Leve mudança no hover */
+    transform: none; /* Remove o scale do base.css se não desejar */
+}
+
+/* Header Principal */
+.main-header {
+    background-color: #e64a19; /* Tom de laranja/vermelho */
+    color: white;
+    text-align: center;
+    padding: 40px 20px; /* Mais padding */
+    margin-bottom: 30px; /* Espaço antes do conteúdo */
+}
+
+.main-header .logo {
+    max-width: 150px; /* Tamanho do logo */
+    margin-bottom: 15px;
+}
+
+.main-header h1 {
+    color: white; /* Sobrescreve cor base */
+    margin-bottom: 10px;
+    font-size: 32px;
+}
+
+.main-header p {
+    font-size: 18px;
+    opacity: 0.9;
+}
+
+/* Layout Principal com Carrinho Lateral */
+.main-content {
+    display: flex;
+    flex-direction: column; /* Empilha seções verticalmente */
+    padding: 0 20px; /* Padding lateral */
+    width: calc(100% - 320px); /* Largura menos a do carrinho */
+    float: left; /* Flutua à esquerda */
+}
+
+.carrinho-container {
+    width: 300px; /* Largura fixa */
+    min-height: 400px; /* Altura mínima */
+    border-left: 1px solid #ccc; /* Linha divisória */
+    padding: 20px;
+    background-color: #fff;
+    float: right; /* Flutua à direita */
+    position: sticky; /* Mantém visível ao rolar */
+    top: 70px; /* Abaixo da navbar */
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+}
+
+/* Seções do Menu */
+.menu-section {
+    margin-bottom: 40px;
+}
+
+.menu_h2 { /* Estilo para títulos de seção */
+    font-size: 28px;
+    color: #333;
+    text-align: left; /* Alinha à esquerda */
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e64a19;
+}
+
+/* Container dos Produtos */
+.container-produtos {
+    width: 100%;
+}
+
+.produtos {
+    display: grid; /* Usar grid para layout responsivo */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Colunas responsivas */
+    gap: 25px; /* Espaçamento entre produtos */
+}
+
+/* Estilo Individual do Produto */
+.produto {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    display: flex; /* Flex para alinhar imagem e info */
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.produto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+}
+
+.produto img {
+    max-width: 100%; /* Imagem responsiva */
+    height: 150px; /* Altura fixa */
+    object-fit: cover; /* Mantém proporção da imagem */
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.produto .info {
+    flex-grow: 1; /* Faz a div info ocupar espaço restante */
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
+    justify-content: space-between; /* Espaça conteúdo interno */
 }
 
-.menu_h1{
-    font-size: 24px;
-    color: rgb(0, 0, 0);
+.produto h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.produto p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 12px;
+    flex-grow: 1; /* Ocupa espaço */
+}
+
+.produto .preco {
+    font-weight: bold;
+    font-size: 18px;
+    color: #e64a19; /* Cor do preço */
+    margin-bottom: 15px;
+}
+
+.produto .btn-add-carrinho {
+    width: auto; /* Largura automática */
+    padding: 8px 20px;
+    font-size: 14px;
+    align-self: center; /* Centraliza botão */
+}
+
+/* Estilos do Carrinho */
+.carrinho-container h2 {
     text-align: center;
+    margin-bottom: 20px;
+    color: #333;
 }
 
-.container {
+#carrinho-itens {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+    max-height: 400px; /* Altura máxima com scroll */
+    overflow-y: auto; /* Scroll vertical se necessário */
+}
+
+#carrinho-itens li {
+    padding: 10px 5px;
+    border-bottom: 1px dashed #eee;
+    font-size: 14px;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    padding: 20px;
+    align-items: center;
+}
+#carrinho-itens li:last-child {
+    border-bottom: none;
 }
 
-/* Mantém o carrinho fixo na lateral */
-.carrinho {
-    width: 25%;
-    min-height: 300px;
-    border: 2px solid #333;
-    padding: 15px;
-    position: sticky;
-    top: 20px;
-    background-color: white;
+#carrinho-itens .btn-remover-item {
+     background-color: #ffcccb; /* Fundo vermelho claro */
+     color: #a00; /* Texto vermelho escuro */
+     border: none;
+     border-radius: 3px;
+     padding: 3px 6px;
+     font-size: 12px;
+     cursor: pointer;
+     margin-left: 10px;
+}
+#carrinho-itens .btn-remover-item:hover {
+    background-color: #ffa0a0;
 }
 
-/* Produtos ocupam 70% da largura */
-.produtos {
-    width: 70%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.produto {
-    width: 30%;
-    padding: 15px;
-    border: 1px solid #ddd;
-    text-align: center;
-    margin-bottom: 15px;
-}
-.produto img{
-    width: 100px;
-    height: 100px;
-    border-radius: 10px;
-    margin-right: 15px;
-
-}
-
-.produtos-bebidas {
-    width: 70%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.produtos-bebidas .produto {
-    width: 30%;
-    padding: 15px;
-    border: 1px solid #ddd;
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-.info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.preco {
+#total {
     font-weight: bold;
-    font-size: 16px;
-    color: #000;
+    font-size: 18px;
+    text-align: right;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #ccc;
 }
 
-.btn:hover {
-    background: #444;
+#btn-finalizar-pedido {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    font-size: 16px;
 }
+
+/* Limpa floats para o footer (se houver) */
+body::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Media Query para telas menores */
+@media (max-width: 900px) {
+    .main-content {
+        width: 100%;
+        float: none;
+        padding: 0 15px;
+    }
+    .carrinho-container {
+        width: 100%;
+        float: none;
+        position: relative; /* Remove sticky */
+        top: auto;
+        margin-top: 30px;
+        border-left: none;
+        border-top: 1px solid #ccc;
+        box-shadow: none;
+    }
+    .produtos {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Ajuste para telas menores */
+    }
+}
+
+@media (max-width: 600px) {
+    .navbar {
+        padding: 0 15px;
+        min-height: 45px;
+    }
+     .nav-buttons {
+        gap: 8px;
+    }
+     .nav-buttons a, .nav-buttons button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+     .main-header h1 { font-size: 26px; }
+     .main-header p { font-size: 16px; }
+     .menu_h2 { font-size: 24px; }
+     .produto { padding: 15px; }
+     .produto img { height: 120px; }
+}
+
+/* --- END OF FILE style.css --- */

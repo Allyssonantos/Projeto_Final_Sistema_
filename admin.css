@@ -1,122 +1,299 @@
-/* Reset básico */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* --- START OF FILE admin.css --- */
 
+/* Layout geral para admin */
 body {
-    font-family: 'Arial', sans-serif;
-   /*ackground: url('img/pizza-background.jpg') no-repeat center center/cover;*/
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: auto;
-    text-align: center;
+    /* display: block; /* Remove flex centralizado do base */
+    justify-content: flex-start; /* Alinha conteúdo ao topo */
+    align-items: stretch; /* Estica itens */
+    padding: 20px; /* Padding geral */
 }
 
+.admin-wrapper {
+    width: 100%;
+    max-width: 1200px; /* Largura máxima */
+    margin: 0 auto; /* Centraliza o wrapper */
+}
 
-/* Estilo dos Containers */
-.container_cadastrar_produtos, 
-.container_produtos_cadastrados {
-    background-color: rgba(196, 192, 192, 0.9);
-    padding: 30px;
+.admin-wrapper h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Containers Admin (Adicionar e Listar) */
+.container-admin {
+    background-color: rgba(226, 224, 224, 0.95);
+    padding: 25px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    margin-bottom: 30px; /* Espaço entre containers */
 }
 
-/* Ajustes individuais */
-.container_cadastrar_produtos {
-    width: 350px;
-    margin-top: 10px;
-}
-
-.container_produtos_cadastrados {
-    width: auto;
-    margin-top: 10px;
-    align-items: center;
-}
-
-/* Estilos de títulos */
-h1 {
-    font-size: 26px;
-    color: #b71c1c;
+.container-admin h2 {
+    text-align: left;
     margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
 }
 
-h2 {
-    font-size: 20px;
-    color: #b71c1c;
-    margin-bottom: 20px;
+/* Campos de entrada específicos do admin */
+.container-cadastrar-produtos input,
+.container-cadastrar-produtos textarea,
+.container-cadastrar-produtos select,
+.container-cadastrar-produtos button {
+    margin-bottom: 15px; /* Espaço abaixo de cada campo */
 }
-
-/* Campos de entrada */
-input, textarea, select, button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    font-size: 16px;
+.container-cadastrar-produtos textarea {
+    min-height: 80px; /* Altura mínima para descrição */
+    resize: vertical; /* Permite redimensionar verticalmente */
 }
-
-/* Botão */
-button {
-    background-color: #b71c1c;
-    color: white;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-    transition: 0.3s ease;
-}
-
-button:hover {
-    background-color: #8e0000;
+.container-cadastrar-produtos button {
+    margin-top: 10px; /* Espaço acima do botão */
 }
 
 /* Estilizando a tabela */
-table {
+.table-container {
+    overflow-x: auto; /* Scroll horizontal se a tabela for larga */
+}
+
+.product-table {
     width: 100%;
-    margin-top: 20px;
     border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff; /* Fundo branco para a tabela */
 }
 
-th, td {
-    padding: 12px;
+.product-table th,
+.product-table td {
+    padding: 12px 15px; /* Padding nas células */
     border: 1px solid #ddd;
-    text-align: center;
+    text-align: left; /* Alinhar texto à esquerda */
+    vertical-align: middle; /* Alinhar verticalmente ao centro */
 }
 
-th {
+.product-table th {
     background-color: #b71c1c;
     color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 13px;
 }
 
-tr:nth-child(even) {
-    background-color: #f2f2f2;
+.product-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Cor alternada suave */
 }
 
-tr:hover {
-    background-color: #b71c1c;
-    color: white;
+.product-table tr:hover {
+    background-color: #f1f1f1; /* Cor suave no hover */
 }
 
-/* Mensagens de status */
-#mensagem-container {
+/* Inputs e Selects dentro da tabela */
+.product-table input,
+.product-table select {
+    padding: 6px 8px;
     font-size: 14px;
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 5px;
+    border: 1px solid #ccc; /* Borda sutil */
+}
+.product-table input:disabled,
+.product-table select:disabled {
+    background-color: #eee; /* Fundo cinza quando desabilitado */
+    border-color: #ddd;
+    color: #777;
+    cursor: not-allowed;
 }
 
-#mensagem-container.success {
-    background-color: #d4edda;
-    color: #155724;
+/* Célula de Ações */
+.product-table td.actions {
+    text-align: center; /* Centraliza botões */
+    white-space: nowrap; /* Impede quebra de linha dos botões */
 }
 
-#mensagem-container.error {
-    background-color: #f8d7da;
-    color: #721c24;
+.product-table .actions button {
+    padding: 6px 10px;
+    font-size: 13px;
+    margin: 0 3px; /* Pequeno espaço entre botões */
+    min-width: 60px; /* Largura mínima */
 }
+
+/* Botões específicos de Ações */
+.button-edit {
+    background-color: #4CAF50; /* Verde */
+}
+.button-edit:hover {
+    background-color: #45a049;
+}
+
+.button-save {
+    background-color: #007bff; /* Azul */
+}
+.button-save:hover {
+    background-color: #0056b3;
+}
+
+.button-delete {
+    background-color: #f44336; /* Vermelho (já estava ok) */
+    color: white;
+}
+.button-delete:hover {
+    background-color: #da190b;
+}
+
+/* Classe para esconder botões (substitui style="display:none") */
+.hidden {
+    display: none;
+}
+
+
+/* Mensagem de feedback (já estilizada em base.css, pode ajustar aqui) */
+#mensagem-admin {
+     margin-bottom: 20px;
+}
+
+/* --- START OF (RESPONSIVE ADDITIONS TO) admin.css --- */
+
+/* --- Media Queries para Responsividade --- */
+
+/* Telas Médias (ex: Tablets) - Ajustes gerais e rolagem da tabela */
+@media (max-width: 992px) {
+    .admin-wrapper {
+        padding: 15px; /* Reduzir padding geral */
+    }
+
+    .container-admin {
+        padding: 20px; /* Reduzir padding dos containers */
+    }
+
+    .product-table th,
+    .product-table td {
+        padding: 10px 8px; /* Reduzir padding das células */
+        font-size: 14px; /* Reduzir fonte na tabela */
+    }
+
+    /* Garante rolagem horizontal se a tabela ainda for muito larga */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; /* Scroll suave em iOS */
+        margin-bottom: 15px; /* Espaço abaixo da tabela com scroll */
+    }
+}
+
+
+/* Telas Pequenas (ex: Celulares) - Transformar tabela em "cards" */
+@media (max-width: 768px) {
+    .admin-wrapper h1 {
+        font-size: 24px; /* Reduzir título principal */
+    }
+    .container-admin h2 {
+        font-size: 18px; /* Reduzir títulos das seções */
+    }
+
+    /* Esconder o cabeçalho da tabela */
+    .product-table thead {
+        display: none;
+    }
+
+    /* Transformar linhas em blocos */
+    .product-table tr {
+        display: block;
+        margin-bottom: 25px; /* Espaço entre os "cards" */
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #fff; /* Fundo branco para cada card */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+     /* Remover borda da tabela original */
+    .product-table, .product-table tbody, .product-table td {
+        border: none;
+    }
+
+    /* Transformar células em blocos e adicionar labels */
+    .product-table td {
+        display: block;
+        text-align: right; /* Alinha valor à direita */
+        padding: 10px;
+        padding-left: 40%; /* Espaço para o label à esquerda */
+        position: relative; /* Necessário para o posicionamento do label */
+        border-bottom: 1px dotted #eee; /* Linha separadora dentro do card */
+        font-size: 15px; /* Tamanho de fonte um pouco maior no modo card */
+    }
+    .product-table td:last-child {
+        border-bottom: none; /* Remove borda da última célula */
+    }
+
+    /* Adicionar o label usando o atributo data-label */
+    .product-table td::before {
+        content: attr(data-label); /* Pega o texto do data-label */
+        position: absolute;
+        left: 10px; /* Posição do label */
+        width: calc(40% - 20px); /* Largura do label (40% do padding - espaço) */
+        text-align: left; /* Alinha texto do label à esquerda */
+        font-weight: bold;
+        color: #555;
+        font-size: 13px; /* Fonte menor para o label */
+        text-transform: uppercase;
+    }
+
+    /* Ajustes específicos para inputs/selects/botões dentro das células */
+    .product-table td input,
+    .product-table td select {
+        width: auto; /* Permitir que o input/select não ocupe 100% */
+        max-width: 100%; /* Mas não ultrapasse a célula */
+        display: inline-block; /* Para alinhar à direita com o texto */
+        margin-left: 5px; /* Pequeno espaço */
+        padding: 4px 6px; /* Padding menor */
+        font-size: 14px;
+    }
+
+    .product-table td[data-label="Descrição"] input {
+         width: 60%; /* Permitir mais espaço para descrição */
+         min-width: 150px;
+    }
+
+    /* Ajustar célula de Ações */
+    .product-table td.actions {
+        text-align: center; /* Centralizar botões */
+        padding-left: 10px; /* Resetar padding esquerdo */
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    .product-table td.actions::before {
+        display: none; /* Não precisa do label "Ações" visível aqui */
+    }
+    .product-table td.actions button {
+         margin: 5px; /* Espaço entre botões empilhados */
+         display: inline-block; /* Garante que fiquem lado a lado se couber */
+         min-width: 70px;
+    }
+
+    /* Remover rolagem horizontal do container, pois a tabela agora é vertical */
+    .table-container {
+        overflow-x: visible;
+    }
+}
+
+/* Ajustes ainda menores se necessário */
+@media (max-width: 480px) {
+    .admin-wrapper {
+        padding: 10px;
+    }
+    .container-admin {
+        padding: 15px;
+    }
+    .product-table td {
+         padding-left: 35%; /* Menos espaço para label em telas muito pequenas */
+         font-size: 14px;
+    }
+    .product-table td::before {
+        width: calc(35% - 15px);
+        font-size: 12px;
+    }
+     .product-table td[data-label="Descrição"] input {
+         width: 100%; /* Ocupar toda largura disponível */
+         margin-left: 0;
+         display: block; /* Quebrar linha para a descrição */
+         margin-top: 5px;
+    }
+
+}
+
+/* --- END OF (RESPONSIVE ADDITIONS TO) admin.css --- */

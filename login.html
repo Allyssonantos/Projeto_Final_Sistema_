@@ -1,37 +1,42 @@
+<!-- START OF FILE login.html -->
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Pizzaria</title>
-    <link rel="stylesheet" href="login.css">
+    <title>Login - Pizzaria Express</title>
+    <link rel="stylesheet" href="base.css"> <!-- CSS Base -->
+    <link rel="stylesheet" href="login.css"> <!-- CSS Específico -->
 </head>
 <body>
-    <div class="container-login">
-        <div class="login-box">
-            <h2>Login</h2>
-            <form id="loginForm">
-                <div class="input-field">
-                    <label for="email">E-mail:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
+    <!-- Usando container padrão do base.css -->
+    <div class="content-container login-container"> <!-- Classe específica opcional -->
+        <h2>Login</h2>
 
-                <div class="input-field">
-                    <label for="senha">Senha:</label>
-                    <input type="password" id="senha" name="senha" required>
-                </div>
+        <!-- Mensagem de Feedback -->
+        <div id="mensagem-login" class="mensagem"></div> <!-- ID específico -->
 
-                <button type="submit">Entrar</button>
-            </form>
-
-            <p id="mensagem"></p>
-
-            <div class="signup-link">
-                <p>Ainda não tem uma conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
+        <form id="loginForm">
+            <div class="input-field">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" required>
             </div>
+
+            <div class="input-field">
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha" required>
+            </div>
+
+            <button type="submit">Entrar</button>
+        </form>
+
+        <div class="signup-link">
+             <p>Ainda não tem uma conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
+             <p><a href="index.html">Voltar à página inicial</a></p> <!-- Link para voltar -->
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="auth.js"></script> <!-- Script específico -->
 </body>
 </html>
+<!-- END OF FILE login.html -->

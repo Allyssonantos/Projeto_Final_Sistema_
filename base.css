@@ -1,0 +1,119 @@
+/* --- START OF FILE base.css --- */
+
+/* Reset básico e Box Sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos Globais do Body */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4; /* Cor de fundo base */
+    color: #333; /* Cor de texto padrão */
+    line-height: 1.6;
+    display: flex; /* Flexbox para centralização em login/cadastro */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 0; /* Removido padding geral, adicionar por página se necessário */
+    margin: 0; /* Garantir sem margem */
+}
+
+/* Estilos Padrão para Links */
+a {
+    color: #d32f2f; /* Cor padrão dos links */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Estilos Padrão para Botões */
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    background-color: #d32f2f; /* Cor padrão */
+    color: white;
+}
+
+button:hover {
+    background-color: #b71c1c; /* Cor no hover */
+    transform: scale(1.02); /* Leve aumento no hover */
+}
+
+/* Inputs e Textareas Padrão */
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #d32f2f;
+    outline: none;
+    box-shadow: 0 0 5px rgba(211, 47, 47, 0.5);
+}
+
+/* Classe utilitária para esconder elementos */
+.hidden {
+    display: none;
+}
+
+/* Container geral para centralizar conteúdo (usado em login/cadastro/admin) */
+.content-container {
+    background-color: rgba(226, 224, 224, 0.95); /* Leve ajuste na cor/opacidade */
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 450px; /* Um pouco maior */
+    text-align: center;
+    margin: 20px; /* Margem para espaçamento */
+}
+
+/* Títulos comuns */
+h1 {
+    font-size: 26px;
+    color: #b71c1c; /* Vermelho mais escuro */
+    margin-bottom: 25px;
+}
+
+h2 {
+    font-size: 22px; /* Ajuste */
+    color: #d32f2f; /* Vermelho padrão */
+    margin-bottom: 20px;
+}
+
+/* Mensagens de Feedback */
+.mensagem {
+    font-size: 14px;
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.mensagem.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.mensagem.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+/* --- END OF FILE base.css --- */
