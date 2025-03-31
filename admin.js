@@ -1,78 +1,84 @@
-// --- START OF FILE admin.js ---
+// js/admin.js
 
 document.addEventListener("DOMContentLoaded", function () {
-    // URL base da sua API. Certifique-se que está correta!
-    const API_BASE_URL = "http://localhost/pizzaria_express/api";
+    // --- Configurações e Constantes ---
+    const API_BASE_URL = "http://localhost/pizzaria_express/api"; // !! VERIFIQUE SUA URL DA API !!
+    const UPLOADS_BASE_URL = 'uploads/produtos/';         // Caminho base para exibir imagens (relativo ao HTML)
+    const PLACEHOLDER_IMG = 'img/placeholder.png';           // Imagem padrão (certifique-se que existe em pizzaria_express/img/)
 
-    // Referências aos elementos do DOM
-    const btnAdicionarProduto = document.getElementById("btnAdicionarProduto");
+    // --- Referências aos Elementos do DOM ---
+
+    // Elementos Gerais
     const listaProdutosTbody = document.getElementById("listaProdutos");
-    const mensagemAdmin = document.getElementById("mensagem-admin"); // Container para feedback
+    const mensagemAdmin = document.getElementById("mensagem-admin");
 
-    // Elementos do formulário de adicionar produto
-    const nomeInput = document.getElementById("nomeProduto");
-    const descricaoInput = document.getElementById("descricaoProduto");
-    const precoInput = document.getElementById("precoProduto");
-    const categoriaSelect = document.getElementById("categoriaProduto");
+    // Elementos do Formulário de ADICIONAR Produto
+    const formAdicionarProduto = document.getElementById("formAdicionarProduto");
+    const btnAdicionarProduto = document.getElementById("btnAdicionarProduto");
+    const nomeInputAdd = document.getElementById("nomeProduto");
+    const descricaoInputAdd = document.getElementById("descricaoProduto");
+    const precoInputAdd = document.getElementById("precoProduto");
+    const categoriaSelectAdd = document.getElementById("categoriaProduto");
+    const imagemInputAdd = document.getElementById("imagemProduto");
 
-    // --- Função para exibir mensagens de feedback ---
-    function exibirMensagem(texto, tipo = "info") { // tipo pode ser 'success', 'error', ou 'info'
-        if (!mensagemAdmin) return; // Sai se o elemento de mensagem não existir
-        mensagemAdmin.textContent = texto;
-        // Define a classe CSS para estilizar a mensagem (usando classes de base.css ou admin.css)
-        mensagemAdmin.className = `mensagem ${tipo}`;
-        // Limpa a mensagem automaticamente após alguns segundos
-        setTimeout(() => {
-            if (mensagemAdmin.textContent === texto) { // Evita limpar uma msg mais recente
-                 mensagemAdmin.textContent = '';
-                 mensagemAdmin.className = 'mensagem'; // Reseta a classe
-            }
-        }, 5000); // Mensagem visível por 5 segundos
+    // Verifica se todos os elementos essenciais foram encontrados
+    if (!listaProdutosTbody || !mensagemAdmin || !formAdicionarProduto || !btnAdicionarProduto || !nomeInputAdd || !descricaoInputAdd || !precoInputAdd || !categoriaSelectAdd || !imagemInputAdd) {
+        console.error("ERRO FATAL: Um ou mais elementos essenciais do DOM não foram encontrados. Verifique os IDs no admin.html e admin.js.");
+        // Exibe mensagem para o usuário, se possível
+        if (mensagemAdmin) {
+             exibirMensagem("Erro crítico: Falha ao carregar interface do admin. Verifique o console.", "error");
+        }
+        return; // Interrompe a execução do script se elementos essenciais faltam
+    }
+
+
+    // --- Função Utilitária para Exibir Mensagens ---
+    function exibirMensagem(texto, tipo = "info") {
+         mensagemAdmin.textContent = texto;
+         mensagemAdmin.className = `mensagem ${tipo}`; // Usa classes CSS para estilizar
+         // Limpa a mensagem após 5 segundos
+         setTimeout(() => {
+             if (mensagemAdmin.textContent === texto) { // Evita limpar msg mais recente
+                  mensagemAdmin.textContent = '';
+                  mensagemAdmin.className = 'mensagem';
+             }
+         }, 5000);
     }
 
     // --- Carregar Produtos na Tabela ---
     async function carregarProdutos() {
-        // Verifica se o elemento tbody da tabela existe
-        if (!listaProdutosTbody) {
-            console.error("Elemento #listaProdutos (tbody) não encontrado.");
-            return;
-        }
-
         try {
-            // Faz a requisição GET para a API de produtos
             const response = await fetch(`${API_BASE_URL}/produtos.php`);
+            if (!response.ok) { throw new Error(`Erro HTTP ao buscar: ${response.status}`); }
 
-            // Verifica se a requisição foi bem-sucedida (status 2xx)
-            if (!response.ok) {
-                throw new Error(`Erro HTTP ao buscar produtos: ${response.status} ${response.statusText}`);
-            }
-
-            // Converte a resposta para JSON
             const produtos = await response.json();
+            listaProdutosTbody.innerHTML = ""; // Limpa tabela
 
-            // Limpa o conteúdo atual da tabela
-            listaProdutosTbody.innerHTML = "";
+            if (!Array.isArray(produtos)) { throw new Error("Resposta da API (produtos) inválida."); }
 
-            // Verifica se há produtos retornados
-            if (!Array.isArray(produtos)) {
-                 throw new Error("Formato de resposta da API inválido ao buscar produtos.");
-            }
             if (produtos.length === 0) {
-                 // Exibe uma mensagem se não houver produtos
-                 listaProdutosTbody.innerHTML = '<tr><td colspan="6">Nenhum produto cadastrado.</td></tr>';
-                 return;
+                listaProdutosTbody.innerHTML = '<tr><td colspan="7">Nenhum produto cadastrado.</td></tr>';
+                return;
             }
 
-            // Itera sobre cada produto e cria uma linha na tabela
+            // Cria as linhas da tabela
             produtos.forEach(produto => {
                 const row = document.createElement("tr");
-                // Define um atributo data-id na linha para fácil referência
                 row.setAttribute('data-id', produto.id);
 
-                // **MODIFICADO AQUI:** Adiciona data-label a cada TD para responsividade
+                // Define URL da imagem (ou placeholder) e nome do arquivo
+                const imagemUrl = produto.imagem_url ? produto.imagem_url : PLACEHOLDER_IMG;
+                const nomeImagem = produto.imagem_nome || 'Nenhuma';
+
+                // Adiciona data-label para responsividade CSS
                 row.innerHTML = `
                     <td data-label="ID">${produto.id}</td>
-                    <td data-label="Nome"><input type="text" value="${produto.nome}" id="nome-${produto.id}" disabled></td>
+                    <td data-label="Imagem" class="td-imagem">
+                        <img src="${imagemUrl}" alt="${produto.nome || 'Produto'}" class="imagem-produto-preview" onerror="this.onerror=null; this.src='${PLACEHOLDER_IMG}'; this.alt='Erro Imagem';">
+                        <span class="nome-imagem-atual">Atual: ${nomeImagem}</span>
+                        <input type="file" id="imagemEdit-${produto.id}" class="imagem-edit-input hidden" accept="image/*">
+                    </td>
+                    <td data-label="Nome"><input type="text" value="${produto.nome || ''}" id="nome-${produto.id}" disabled></td>
                     <td data-label="Descrição"><input type="text" value="${produto.descricao || ''}" id="descricao-${produto.id}" disabled></td>
                     <td data-label="Preço"><input type="number" step="0.01" value="${Number(produto.preco).toFixed(2)}" id="preco-${produto.id}" disabled></td>
                     <td data-label="Categoria">
@@ -87,184 +93,249 @@ document.addEventListener("DOMContentLoaded", function () {
                         <button class="button-delete" data-id="${produto.id}">Excluir</button>
                     </td>
                 `;
-                // Adiciona a linha criada ao corpo da tabela
                 listaProdutosTbody.appendChild(row);
             });
 
         } catch (error) {
-            // Exibe erro no console e na interface
-            console.error("Erro ao carregar produtos:", error);
-            exibirMensagem(`Falha ao carregar produtos: ${error.message}`, "error");
-            // Exibe mensagem de erro na tabela
-            if (listaProdutosTbody) listaProdutosTbody.innerHTML = `<tr><td colspan="6">Erro ao carregar produtos. Verifique a conexão com a API (${API_BASE_URL}/produtos.php) e o console do navegador.</td></tr>`;
+             console.error("Erro detalhado ao carregar produtos:", error);
+             exibirMensagem(`Falha ao carregar produtos: ${error.message}. Verifique API/Console.`, "error");
+             listaProdutosTbody.innerHTML = `<tr><td colspan="7">Erro ao carregar produtos.</td></tr>`;
         }
     }
 
     // --- Adicionar Produto ---
-    if (btnAdicionarProduto) {
-        btnAdicionarProduto.addEventListener("click", async function () {
-            // Obtém os valores dos campos do formulário
-            const nome = nomeInput.value.trim();
-            const descricao = descricaoInput.value.trim();
-            const preco = precoInput.value; // A API deve validar se é numérico
-            const categoria = categoriaSelect.value;
+    btnAdicionarProduto.addEventListener("click", async function () {
+        console.log("1. Botão Adicionar Produto Clicado!");
+        try {
+            const nome = nomeInputAdd.value.trim();
+            const descricao = descricaoInputAdd.value.trim();
+            const preco = precoInputAdd.value;
+            const categoria = categoriaSelectAdd.value;
+            const imagemFile = imagemInputAdd.files[0]; // Pega o arquivo selecionado
 
-            // Validação simples no frontend (a validação principal deve ser na API)
-            if (!nome || !preco || !categoria) {
-                exibirMensagem("Nome, Preço e Categoria são obrigatórios.", "error");
-                return;
+            console.log("2. Dados coletados:", { nome, preco, categoria, imagemPresente: !!imagemFile });
+
+            // Validação Frontend
+            if (!nome || !preco || !categoria || isNaN(parseFloat(preco)) || parseFloat(preco) < 0) {
+                console.error("3a. Validação falhou (dados básicos).");
+                exibirMensagem("Nome, Preço e Categoria são obrigatórios e válidos.", "error"); return;
             }
-            if (isNaN(parseFloat(preco)) || parseFloat(preco) < 0) {
-                exibirMensagem("O preço deve ser um número válido e não negativo.", "error");
-                 return;
+            if (imagemFile && imagemFile.size > 5 * 1024 * 1024) { // 5MB limit
+                 console.error("3b. Validação falhou (tamanho imagem).");
+                 exibirMensagem("A imagem selecionada é muito grande (máx 5MB).", "error"); return;
+             }
+             console.log("3c. Validação passou.");
+
+            // Cria FormData para enviar dados e arquivo
+            const formData = new FormData();
+            formData.append('nome', nome);
+            formData.append('descricao', descricao);
+            formData.append('preco', preco);
+            formData.append('categoria', categoria);
+            if (imagemFile) {
+                 formData.append('imagemProduto', imagemFile); // Nome DEVE corresponder ao esperado pelo PHP
+                 console.log("4a. Arquivo de imagem adicionado ao FormData.");
+            } else { console.log("4b. Nenhum arquivo de imagem selecionado."); }
+
+            console.log("5. Enviando requisição fetch para adicionar_produto.php...");
+            const response = await fetch(`${API_BASE_URL}/adicionar_produto.php`, { method: "POST", body: formData });
+            console.log("6. Resposta recebida, Status:", response.status);
+
+            if (!response.ok) {
+                const errorText = await response.text(); // Ler corpo como texto em caso de erro
+                console.error("7a. Erro na resposta HTTP:", response.status, response.statusText, "Corpo:", errorText);
+                exibirMensagem(`Erro do servidor (${response.status}). Verifique console/API.`, "error");
+                throw new Error(`HTTP error ${response.status}`);
             }
 
-            try {
-                // Faz a requisição POST para adicionar o produto
-                const response = await fetch(`${API_BASE_URL}/adicionar_produto.php`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    // Envia os dados como JSON no corpo da requisição
-                    body: JSON.stringify({ nome, descricao, preco, categoria })
-                });
+            const data = await response.json(); // Tenta parsear como JSON
+            console.log("7b. Resposta JSON recebida:", data);
 
-                // Converte a resposta da API para JSON
-                const data = await response.json();
-
-                // Verifica se a API retornou sucesso
-                if (data.sucesso) {
-                    exibirMensagem(data.mensagem || "Produto adicionado com sucesso!", "success");
-                    // Limpar campos do formulário após sucesso
-                    nomeInput.value = "";
-                    descricaoInput.value = "";
-                    precoInput.value = "";
-                    categoriaSelect.value = "pizza"; // Resetar para o valor padrão
-                    await carregarProdutos(); // Recarrega a lista de produtos
-                } else {
-                    // Exibe mensagem de erro retornada pela API
-                    exibirMensagem(data.mensagem || "Falha ao adicionar produto. Verifique os dados.", "error");
-                }
-            } catch (error) {
-                console.error("Erro na requisição ao adicionar produto:", error);
-                exibirMensagem(`Erro de conexão ao adicionar produto: ${error.message}`, "error");
+            if (data.sucesso) {
+                console.log("8a. Sucesso reportado pela API.");
+                exibirMensagem(data.mensagem || "Produto adicionado!", "success");
+                formAdicionarProduto.reset(); // Limpa o formulário inteiro
+                // imagemInputAdd.value = null; // reset() geralmente limpa file input também
+                await carregarProdutos(); // Recarrega a lista
+            } else {
+                console.error("8b. Falha reportada pela API:", data.mensagem);
+                exibirMensagem(data.mensagem || "Falha ao adicionar.", "error");
             }
-        });
-    } else {
-         console.warn("Botão #btnAdicionarProduto não encontrado.");
-    }
 
-    // --- Delegação de Eventos para Editar/Salvar/Excluir ---
-    // Adiciona um único listener no tbody para lidar com cliques nos botões das linhas
-    if (listaProdutosTbody) {
-        listaProdutosTbody.addEventListener('click', async (event) => {
-            const target = event.target; // O elemento que foi clicado
-            const id = target.getAttribute('data-id'); // Pega o ID do produto do botão
+        } catch (error) {
+            console.error("9. Erro durante fetch ou processamento:", error);
+            if (error instanceof SyntaxError) { // Erro ao parsear JSON
+                 exibirMensagem("Erro ao processar resposta do servidor (não é JSON). Verifique API/Console.", "error");
+            } else if (!error.message.startsWith('HTTP error')) { // Outros erros (rede, script)
+                 exibirMensagem(`Erro: ${error.message}`, "error");
+            } // Erro HTTP já tratado acima
+        }
+    });
 
-            // Sai se o clique não foi em um botão com data-id
-            if (!id || !target.matches('button')) return;
 
-            const row = target.closest('tr'); // Encontra a linha (tr) pai do botão
+    // --- Delegação de Eventos na Tabela para Editar/Salvar/Excluir ---
+    listaProdutosTbody.addEventListener('click', async (event) => {
+        const target = event.target;
+        const id = target.getAttribute('data-id');
+        if (!id || !target.matches('button')) return; // Só reage a cliques em botões com data-id
+        const row = target.closest('tr'); // A linha do produto
 
-            // Verifica qual botão foi clicado pela classe e chama a função correspondente
-            if (target.classList.contains('button-edit')) {
-                habilitarEdicao(row, id);
-            } else if (target.classList.contains('button-save')) {
-                await salvarEdicao(row, id); // salvarEdicao é async pois faz fetch
-            } else if (target.classList.contains('button-delete')) {
-                await excluirProduto(id); // excluirProduto é async pois faz fetch
-            }
-        });
-    } else {
-         console.warn("Elemento #listaProdutos (tbody) não encontrado para adicionar event listener.");
-    }
+        // Determina a ação com base na classe do botão
+        if (target.classList.contains('button-edit')) { habilitarEdicao(row, id); }
+        else if (target.classList.contains('button-save')) { await salvarEdicao(row, id); }
+        else if (target.classList.contains('button-delete')) { await excluirProduto(id); }
+    });
 
-    // --- Habilitar Edição de uma linha ---
+
+    // --- Habilitar Modo de Edição para uma Linha ---
     function habilitarEdicao(row, id) {
-        // Habilita todos os inputs e selects dentro da linha
-        row.querySelectorAll('input, select').forEach(el => el.disabled = false);
-        // Esconde o botão "Editar" e mostra o botão "Salvar"
+        // Habilita inputs de texto/número e select
+        row.querySelectorAll('input[type="text"], input[type="number"], select').forEach(el => el.disabled = false);
+        // Mostra o input de arquivo específico da linha e esconde nome atual
+        row.querySelector(`#imagemEdit-${id}`)?.classList.remove('hidden');
+        row.querySelector('.td-imagem .nome-imagem-atual')?.classList.add('hidden');
+        // Troca os botões Editar/Salvar
         row.querySelector('.button-edit').classList.add('hidden');
         row.querySelector('.button-save').classList.remove('hidden');
-        // Foca no campo de nome para facilitar a edição
-        const nomeInputEdicao = row.querySelector(`#nome-${id}`);
-        if (nomeInputEdicao) nomeInputEdicao.focus();
+        // Foca no campo nome
+        row.querySelector(`#nome-${id}`)?.focus();
     }
 
-    // --- Salvar Edição ---
+
+    // --- Salvar Edições de um Produto ---
     async function salvarEdicao(row, id) {
-        // Pega os valores atuais dos campos da linha
-        const nome = row.querySelector(`#nome-${id}`).value;
-        const descricao = row.querySelector(`#descricao-${id}`).value;
-        const preco = row.querySelector(`#preco-${id}`).value;
-        const categoria = row.querySelector(`#categoria-${id}`).value;
-
-        // Validação básica no frontend
-        if (!nome || !preco || !categoria || isNaN(parseFloat(preco)) || parseFloat(preco) < 0) {
-             exibirMensagem("Dados inválidos para salvar. Verifique Nome, Preço e Categoria.", "error");
-             return;
-        }
-
+        console.log(`Iniciando salvar edição para ID: ${id}`);
         try {
-            // Faz a requisição POST para a API de edição
-            const response = await fetch(`${API_BASE_URL}/editar_produto.php`, {
-                method: "POST", // Ou PUT, se sua API estiver configurada para isso
-                headers: { "Content-Type": "application/json" },
-                // Envia todos os dados, incluindo o ID
-                body: JSON.stringify({ id, nome, descricao, preco, categoria })
-            });
+            const nome = row.querySelector(`#nome-${id}`).value.trim();
+            const descricao = row.querySelector(`#descricao-${id}`).value.trim();
+            const preco = row.querySelector(`#preco-${id}`).value;
+            const categoria = row.querySelector(`#categoria-${id}`).value;
+            const imagemInputEdit = row.querySelector(`#imagemEdit-${id}`);
+            const novaImagemFile = imagemInputEdit ? imagemInputEdit.files[0] : null; // Pega novo arquivo
+
+            console.log("Dados para salvar:", { id, nome, preco, categoria, novaImagem: !!novaImagemFile });
+
+            // Validação Frontend
+            if (!nome || !preco || !categoria || isNaN(parseFloat(preco)) || parseFloat(preco) < 0) {
+                 console.error("Validação salvar falhou (dados básicos)");
+                 exibirMensagem("Dados inválidos para salvar.", "error"); return;
+             }
+             if (novaImagemFile && novaImagemFile.size > 5 * 1024 * 1024) { // 5MB limit
+                  console.error("Validação salvar falhou (tamanho imagem)");
+                  exibirMensagem("Nova imagem muito grande (máx 5MB).", "error"); return;
+              }
+
+            // Cria FormData para enviar dados e possível novo arquivo
+            const formData = new FormData();
+            formData.append('id', id); // Enviar o ID é crucial para o UPDATE
+            formData.append('nome', nome);
+            formData.append('descricao', descricao);
+            formData.append('preco', preco);
+            formData.append('categoria', categoria);
+            if (novaImagemFile) {
+                formData.append('imagemProduto', novaImagemFile); // Nome DEVE corresponder ao PHP
+                console.log("Novo arquivo de imagem adicionado para salvar.");
+            } else {
+                 console.log("Nenhum novo arquivo de imagem selecionado para salvar.");
+            }
+             // O PHP `editar_produto.php` deve manter a imagem antiga se 'imagemProduto' não for enviado
+
+            console.log("Enviando requisição fetch para editar_produto.php...");
+            const response = await fetch(`${API_BASE_URL}/editar_produto.php`, { method: "POST", body: formData });
+            console.log("Resposta salvar recebida, Status:", response.status);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error("Erro HTTP ao salvar:", response.status, response.statusText, "Corpo:", errorText);
+                exibirMensagem(`Erro do servidor (${response.status}) ao salvar.`, "error");
+                throw new Error(`HTTP error ${response.status}`);
+            }
 
             const data = await response.json();
+            console.log("Resposta JSON salvar:", data);
 
             if (data.sucesso) {
                 exibirMensagem(data.mensagem || "Produto atualizado!", "success");
-                // Desabilita os campos novamente e troca os botões
+                // Bloqueia campos, troca botões, limpa/esconde file input
                 row.querySelectorAll('input, select').forEach(el => el.disabled = true);
-                row.querySelector('.button-edit').classList.remove('hidden');
-                row.querySelector('.button-save').classList.add('hidden');
-                // Opcional: Recarregar tudo com carregarProdutos() ou apenas atualizar a linha visualmente
-                // await carregarProdutos();
+                 if(imagemInputEdit) {
+                    imagemInputEdit.classList.add('hidden');
+                    imagemInputEdit.value = null; // Limpa seleção
+                 }
+                 row.querySelector('.button-edit').classList.remove('hidden');
+                 row.querySelector('.button-save').classList.add('hidden');
+                 row.querySelector('.td-imagem .nome-imagem-atual')?.classList.remove('hidden');
+
+                // Recarrega a lista para garantir que a imagem (se mudou) seja exibida corretamente
+                 await carregarProdutos();
             } else {
-                exibirMensagem(data.mensagem || "Falha ao atualizar o produto.", "error");
+                console.error("Falha reportada pela API ao salvar:", data.mensagem);
+                exibirMensagem(data.mensagem || "Falha ao atualizar.", "error");
             }
-        } catch (error) {
-            console.error("Erro na requisição ao editar produto:", error);
-            exibirMensagem(`Erro de conexão ao salvar edição: ${error.message}`, "error");
+
+        } catch(error) {
+            console.error("Erro durante salvarEdicao:", error);
+             if (error instanceof SyntaxError) {
+                 exibirMensagem("Erro ao processar resposta do servidor (salvar).", "error");
+             } else if (!error.message.startsWith('HTTP error')) {
+                 exibirMensagem(`Erro ao salvar: ${error.message}`, "error");
+             } // Erro HTTP já tratado
         }
     }
 
+
     // --- Excluir Produto ---
     async function excluirProduto(id) {
-        // Confirmação antes de excluir
-        if (!confirm(`Tem certeza que deseja excluir o produto ID ${id}? Esta ação não pode ser desfeita.`)) {
-            return; // Sai da função se o usuário cancelar
+        console.log(`Tentando excluir produto ID: ${id}`);
+        if (!confirm(`Confirma a exclusão do produto ID ${id}? Imagem associada também será excluída permanentemente.`)) {
+            console.log("Exclusão cancelada pelo usuário.");
+            return;
         }
-
         try {
-            // Faz a requisição POST para a API de exclusão
+            console.log("Enviando requisição fetch para excluir_produto.php...");
             const response = await fetch(`${API_BASE_URL}/excluir_produto.php`, {
-                method: "POST", // Ou DELETE, se a API suportar e estiver configurada
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
-                // Envia apenas o ID do produto a ser excluído
-                body: JSON.stringify({ id })
+                body: JSON.stringify({ id }) // Envia ID como JSON
             });
+            console.log("Resposta excluir recebida, Status:", response.status);
+
+            if (!response.ok) {
+                 const errorText = await response.text();
+                 console.error("Erro HTTP ao excluir:", response.status, response.statusText, "Corpo:", errorText);
+                 exibirMensagem(`Erro do servidor (${response.status}) ao excluir.`, "error");
+                 throw new Error(`HTTP error ${response.status}`);
+             }
 
             const data = await response.json();
+            console.log("Resposta JSON excluir:", data);
 
             if (data.sucesso) {
-                exibirMensagem(data.mensagem || "Produto excluído com sucesso!", "success");
+                exibirMensagem(data.mensagem || "Produto excluído!", "success");
                 await carregarProdutos(); // Recarrega a lista para remover a linha
             } else {
-                exibirMensagem(data.mensagem || "Falha ao excluir o produto.", "error");
+                 console.error("Falha reportada pela API ao excluir:", data.mensagem);
+                 // Tratar caso 404 (produto não encontrado) especificamente, se a API retornar isso
+                 if (response.status === 404) {
+                      exibirMensagem(data.mensagem || `Produto ID ${id} não encontrado para excluir.`, "error");
+                      await carregarProdutos(); // Recarrega mesmo se não achou, para atualizar a lista
+                 } else {
+                      exibirMensagem(data.mensagem || "Falha ao excluir.", "error");
+                 }
             }
         } catch (error) {
-            console.error("Erro na requisição ao excluir produto:", error);
-            exibirMensagem(`Erro de conexão ao excluir produto: ${error.message}`, "error");
+             console.error("Erro durante excluirProduto:", error);
+              if (error instanceof SyntaxError) {
+                 exibirMensagem("Erro ao processar resposta do servidor (excluir).", "error");
+             } else if (!error.message.startsWith('HTTP error')) {
+                 exibirMensagem(`Erro ao excluir: ${error.message}`, "error");
+             } // Erro HTTP já tratado
         }
     }
 
     // --- Carregamento Inicial ---
     // Chama a função para carregar os produtos assim que o DOM estiver pronto
+    console.log("Iniciando carregamento inicial de produtos...");
     carregarProdutos();
 
-});
-// --- END OF FILE admin.js ---
+}); // Fim do DOMContentLoaded

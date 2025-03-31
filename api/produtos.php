@@ -1,134 +1,94 @@
 <?php
+// api/produtos.php
 
-
-// Remover require_once "db.php"; se a conexão for definida manualmente abaixo.
-// Se db.php DEVE fornecer a conexão, remova a linha $mysqli = new mysqli(...)
-// e use a variável de conexão de db.php (ex: $mysqli = $conn;)
-
-// Configurações de Erro (Ideal para desenvolvimento, logar em produção)
+// --- Configurações Iniciais ---
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_errors', 1); // 0 ou log em produção
+ini_set('log_errors', 1);
+// ini_set('error_log', '/caminho/completo/para/php_error.log');
 
-// Definição dos Headers CORS e Content-Type
-header("Access-Control-Allow-Origin: *"); // Em produção, restrinja para o domínio do seu frontend
+// --- Headers CORS e de Resposta ---
+header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS"); // Adicionar OPTIONS
-header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With"); // Headers comuns
+header("Access-Control-Allow-Methods: GET, OPTIONS"); // Permitir APENAS GET e OPTIONS neste endpoint
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 
-// --- Tratamento da requisição OPTIONS (CORS Preflight) ---
-// Deve vir ANTES de qualquer outra saída ou processamento
+// --- Tratamento da Requisição OPTIONS (Preflight) ---
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    // Apenas envia os headers e sai. O navegador entende.
     exit(0);
 }
 
-// --- Conexão com o Banco de Dados ---
-// Use as credenciais corretas e o nome do seu banco
-$mysqli = new mysqli("localhost", "root", "", "pizzaria");
-
-// Verificar erro de conexão
-if ($mysqli->connect_error) {
-    // Enviar resposta de erro JSON e sair
-    http_response_code(500); // Internal Server Error
-    echo json_encode(["erro" => true, "mensagem" => "Erro interno do servidor: Falha ao conectar ao banco de dados."]);
+// --- Verificar Método HTTP ---
+// Este endpoint só aceita GET
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    http_response_code(405); // Method Not Allowed
+    echo json_encode(["sucesso" => false, "mensagem" => "Método HTTP não permitido. Use GET."]);
     exit;
 }
 
-// Definir charset da conexão (importante para evitar problemas com caracteres especiais)
+// --- Conexão com o Banco de Dados ---
+$mysqli = new mysqli("localhost", "root", "", "pizzaria"); // Substitua se necessário
+
+// Verificar erro de conexão
+if ($mysqli->connect_error) {
+    http_response_code(500);
+    error_log("Erro de Conexão DB (produtos.php): " . $mysqli->connect_error);
+    echo json_encode(["sucesso" => false, "mensagem" => "Erro interno ao conectar ao banco de dados."]);
+    exit;
+}
 $mysqli->set_charset("utf8mb4");
 
-// --- Roteamento baseado no Método HTTP ---
-$method = $_SERVER["REQUEST_METHOD"];
+// --- Lógica para Buscar Todos os Produtos ---
 
-if ($method === "POST") {
-    // --- Lógica para ADICIONAR um produto ---
+// Query SQL para buscar todos os produtos, incluindo a coluna imagem_nome
+// Ordenar por categoria e depois por nome melhora a exibição
+$sql = "SELECT id, nome, descricao, preco, categoria, imagem_nome FROM produtos ORDER BY categoria, nome";
 
-    // Ler e decodificar o corpo da requisição JSON
-    $dados = json_decode(file_get_contents("php://input"), true);
+$result = $mysqli->query($sql);
 
-    // Validação básica dos dados recebidos
-    if (
-        !$dados ||
-        !isset($dados["nome"]) || empty(trim($dados["nome"])) || // Verifica se não está vazio
-        !isset($dados["descricao"]) || // Descrição pode ser vazia, então não verificamos empty()
-        !isset($dados["preco"]) || !is_numeric($dados["preco"]) || floatval($dados["preco"]) < 0 || // Verifica se é numérico e não negativo
-        !isset($dados["categoria"]) || !in_array($dados["categoria"], ['pizza', 'bebida']) // Verifica se a categoria é válida
-       ) {
-        http_response_code(400); // Bad Request
-        echo json_encode(["sucesso" => false, "mensagem" => "Dados inválidos ou faltando. Verifique nome, preço (numérico >= 0) e categoria ('pizza' ou 'bebida')."]);
-        exit;
-    }
-
-    // Limpar e preparar dados (floatval já trata o preço)
-    $nome = trim($dados["nome"]);
-    $descricao = trim($dados["descricao"]);
-    $preco = floatval($dados["preco"]);
-    $categoria = $dados["categoria"]; // Já validada com in_array
-
-    // --- USAR PREPARED STATEMENTS ---
-    $sql = "INSERT INTO produtos (nome, descricao, preco, categoria) VALUES (?, ?, ?, ?)";
-    $stmt = $mysqli->prepare($sql);
-
-    if ($stmt === false) {
-        http_response_code(500);
-        error_log("Erro ao preparar statement: " . $mysqli->error); // Logar o erro real
-        echo json_encode(["sucesso" => false, "mensagem" => "Erro interno ao preparar a inserção."]);
-        exit;
-    }
-
-    // Vincular parâmetros (s = string, d = double/float)
-    // Os tipos devem corresponder às colunas na sua tabela
-    $stmt->bind_param("ssds", $nome, $descricao, $preco, $categoria);
-
-    // Executar o statement
-    if ($stmt->execute()) {
-        http_response_code(201); // 201 Created - Padrão para criação bem-sucedida
-        echo json_encode(["sucesso" => true, "mensagem" => "Produto cadastrado com sucesso!"]);
-    } else {
-        http_response_code(500);
-        error_log("Erro ao executar statement: " . $stmt->error); // Logar o erro real
-        echo json_encode(["sucesso" => false, "mensagem" => "Erro ao cadastrar o produto no banco de dados."]);
-    }
-
-    // Fechar o statement
-    $stmt->close();
-
-} elseif ($method === "GET") {
-    // --- Lógica para BUSCAR todos os produtos ---
-
-    // Query para buscar todos os produtos
-    $result = $mysqli->query("SELECT id, nome, descricao, preco, categoria FROM produtos ORDER BY categoria, nome"); // Ordenar fica melhor
-
-    if ($result === false) {
-        http_response_code(500);
-        error_log("Erro ao executar query SELECT: " . $mysqli->error);
-        echo json_encode(["erro" => true, "mensagem" => "Erro ao buscar produtos."]);
-        exit;
-    }
-
-    $produtos = [];
-    // Buscar todos os resultados como um array associativo
-    while ($row = $result->fetch_assoc()) {
-        // Opcional: garantir que o preço seja float no JSON
-        $row['preco'] = floatval($row['preco']);
-        $produtos[] = $row;
-    }
-
-    // Fechar o result set
-    $result->free();
-
-    // Retornar o array de produtos como JSON
-    // Se não houver produtos, retornará um array vazio [], o que é correto.
-    http_response_code(200); // OK
-    echo json_encode($produtos);
-
-} else {
-    // Método não permitido
-    http_response_code(405); // Method Not Allowed
-    echo json_encode(["sucesso" => false, "mensagem" => "Método HTTP não permitido."]);
+// Verificar se a query falhou
+if ($result === false) {
+    http_response_code(500);
+    error_log("Erro ao executar query SELECT produtos: " . $mysqli->error);
+    echo json_encode(["sucesso" => false, "mensagem" => "Erro interno ao buscar produtos."]);
+    $mysqli->close();
+    exit;
 }
 
-// Fechar a conexão com o banco de dados
+// Array para armazenar os produtos formatados
+$produtos = [];
+
+// Define o caminho base para as imagens.
+// IMPORTANTE: Este caminho deve ser relativo à RAIZ DO SEU SITE vista pelo navegador,
+// ou seja, o caminho que o HTML (index.html/admin.html) usará para encontrar as imagens.
+// Se as pastas 'uploads' e 'index.html' estão ambas dentro de 'pizzaria_express', este caminho está OK.
+$baseUrlImagem = 'uploads/produtos/';
+
+// Itera sobre cada linha (produto) retornada do banco
+while ($row = $result->fetch_assoc()) {
+    // Garante que o preço seja um número float no JSON
+    $row['preco'] = floatval($row['preco']);
+
+    // Cria a chave 'imagem_url' no array $row
+    // Se 'imagem_nome' existe e não está vazio, constrói a URL completa
+    // Caso contrário, define como null
+    $row['imagem_url'] = (!empty($row['imagem_nome']))
+                        ? $baseUrlImagem . rawurlencode($row['imagem_nome']) // rawurlencode para nomes com espaços/caracteres especiais
+                        : null;
+
+    // Adiciona o produto formatado (com imagem_url) ao array final
+    $produtos[] = $row;
+}
+
+// Liberar a memória do resultado da query
+$result->free();
+
+// Fechar a conexão com o banco
 $mysqli->close();
+
+// --- Enviar Resposta JSON ---
+http_response_code(200); // OK
+// Codifica o array $produtos (que pode estar vazio se não houver produtos) em JSON e envia
+echo json_encode($produtos);
 
 ?>

@@ -296,4 +296,49 @@ body {
 
 }
 
-/* --- END OF (RESPONSIVE ADDITIONS TO) admin.css --- */
+/* configuração das imagems */
+
+/* Adicionar ao admin.css */
+.td-imagem {
+    text-align: center; /* Centraliza conteúdo da célula da imagem */
+    vertical-align: middle;
+}
+.imagem-produto-preview {
+    max-width: 60px; /* Tamanho pequeno para preview na tabela */
+    max-height: 60px;
+    display: block; /* Para margem funcionar */
+    margin: 0 auto 5px auto; /* Centraliza e dá espaço abaixo */
+    border: 1px solid #eee;
+    object-fit: cover; /* Evita distorção */
+}
+.nome-imagem-atual {
+    font-size: 11px;
+    color: #666;
+    display: block; /* Quebra linha */
+    margin-bottom: 5px;
+}
+.imagem-edit-input {
+    display: block; /* Quebra linha */
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Ajustes responsivos para imagem na tabela */
+@media (max-width: 768px) {
+    .product-table td[data-label="Imagem"] {
+        text-align: left; /* Alinha conteúdo à esquerda no modo card */
+         padding-left: 10px; /* Remove padding especial */
+    }
+    .product-table td[data-label="Imagem"]::before {
+        display: none; /* Não precisa do label "Imagem" */
+    }
+     .imagem-produto-preview {
+         display: inline-block; /* Lado a lado com outras infos */
+         vertical-align: middle;
+         margin: 0 10px 0 0;
+     }
+     .nome-imagem-atual, .imagem-edit-input {
+         display: inline-block;
+         vertical-align: middle;
+     }
+}
