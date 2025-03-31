@@ -1,75 +1,66 @@
 <?php
 session_start();
-// ... (headers CORS, conexão DB $mysqli) ...
-// --- Configurações Iniciais ---
-error_reporting(E_ALL);
-ini_set('display_errors', 1); // 0 ou log em produção
-ini_set('log_errors', 1);
-// ini_set('error_log', '/caminho/completo/para/php_error.log');
+error_reporting(E_ALL); ini_set('display_errors', 1); ini_set('log_errors', 1);
 
-// --- Headers CORS e de Resposta ---
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: GET, OPTIONS"); // Permitir APENAS GET e OPTIONS neste endpoint
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 
-// --- Tratamento da Requisição OPTIONS (Preflight) ---
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    exit(0);
-}
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') { exit(0); }
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') { /* ... erro 405 ... */ exit; }
 
-// --- Verificar Método HTTP ---
-// Este endpoint só aceita GET
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-    http_response_code(405); // Method Not Allowed
-    echo json_encode(["sucesso" => false, "mensagem" => "Método HTTP não permitido. Use GET."]);
-    exit;
-}
-
-// --- Conexão com o Banco de Dados ---
-$mysqli = new mysqli("localhost", "root", "", "pizzaria"); // Substitua se necessário
-
-// Verificar erro de conexão
-if ($mysqli->connect_error) {
-    http_response_code(500);
-    error_log("Erro de Conexão DB (produtos.php): " . $mysqli->connect_error);
-    echo json_encode(["sucesso" => false, "mensagem" => "Erro interno ao conectar ao banco de dados."]);
-    exit;
-}
-$mysqli->set_charset("utf8mb4");
-
-
-// !!! VERIFICAÇÃO DE ADMIN !!! (Exemplo MUITO SIMPLES - NÃO USE EM PRODUÇÃO)
-// Idealmente, verificar um campo 'is_admin' ou 'role' no banco ou na sessão
-if (!isset($_SESSION['usuario_id']) /* || !($_SESSION['is_admin'] ?? false) */ ) {
+// !!! VERIFICAÇÃO DE ADMIN - IMPLEMENTE DE FORMA SEGURA !!!
+$is_admin_check = ($_SESSION['usuario_email'] === 'admin@example.com'); // Exemplo INSEGURO
+if (!isset($_SESSION['usuario_id']) || !$is_admin_check ) {
      http_response_code(403); // Forbidden
      echo json_encode(["sucesso" => false, "mensagem" => "Acesso negado."]); exit;
 }
 
-// Busca pedidos (todos ou filtrados por status, etc.)
-// Adicionar JOIN com pedido_itens se quiser mostrar itens na lista principal
-$status_filtro = $_GET['status'] ?? null; // Ex: /admin_listar_pedidos.php?status=Recebido
+$mysqli = new mysqli("localhost", "root", "", "pizzaria");
+if ($mysqli->connect_error) { /* ... tratamento erro conexão ... */ exit; }
+$mysqli->set_charset("utf8mb4");
+
+// Filtro opcional por status
+$status_filtro = $_GET['status'] ?? null;
 $pedidos = [];
+$params = [];
+$types = "";
+
 $sql = "SELECT id, usuario_id, nome_cliente, email_cliente, telefone_cliente, endereco_entrega, data_pedido, valor_total, status
         FROM pedidos";
-if ($status_filtro) {
+
+if ($status_filtro && in_array($status_filtro, ['Recebido', 'Em Preparo', 'Saiu para Entrega', 'Entregue', 'Cancelado'])) {
      $sql .= " WHERE status = ?";
+     $params[] = $status_filtro;
+     $types .= "s";
 }
-$sql .= " ORDER BY data_pedido DESC";
+$sql .= " ORDER BY CASE status
+             WHEN 'Recebido' THEN 1
+             WHEN 'Em Preparo' THEN 2
+             WHEN 'Saiu para Entrega' THEN 3
+             WHEN 'Entregue' THEN 4
+             WHEN 'Cancelado' THEN 5
+             ELSE 6
+          END, data_pedido DESC"; // Ordena por status e depois por data
 
 $stmt = $mysqli->prepare($sql);
-if ($status_filtro) {
-    $stmt->bind_param("s", $status_filtro);
-}
-
-if($stmt->execute()){
-    $result = $stmt->get_result();
-    while($p = $result->fetch_assoc()){
-        // Poderia buscar os itens aqui também se necessário
-        $pedidos[] = $p;
+if($stmt){
+    if(!empty($params)){
+        $stmt->bind_param($types, ...$params);
     }
-} else { /* tratar erro */ }
-$stmt->close();
+    if($stmt->execute()){
+        $result = $stmt->get_result();
+        while($p = $result->fetch_assoc()){
+            $p['valor_total'] = floatval($p['valor_total']);
+            // Buscar itens aqui se necessário para exibição na lista principal
+            $pedidos[] = $p;
+        }
+    } else { error_log("Erro ao buscar pedidos admin: ".$stmt->error); }
+    $stmt->close();
+} else { error_log("Erro ao preparar busca pedidos admin: ".$mysqli->error); }
+
 $mysqli->close();
 
 echo json_encode(["sucesso" => true, "pedidos" => $pedidos]);

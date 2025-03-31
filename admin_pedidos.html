@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Gerenciar Pedidos</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/admin_pedidos.css"> <!-- Crie este CSS -->
+</head>
+<body>
+     <!-- Navbar (incluir global.js ajustará os links login/logout/perfil) -->
+    <nav class="navbar">
+        <div class="nav-brand"><a href="index.html">Pizzaria Express</a></div>
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-button">Cardápio</a>
+            <a href="perfil.html" id="nav-perfil" class="nav-button hidden">Meu Perfil</a>
+            <a href="admin.html" id="nav-admin-prod" class="nav-button hidden">Admin Produtos</a>
+            <a href="admin_pedidos.html" id="nav-admin-pedidos" class="nav-button hidden">Admin Pedidos</a>
+            <a href="login.html" id="nav-login" class="nav-button">Login</a>
+            <button id="nav-logout" class="nav-button hidden">Logout</button>
+        </div>
+    </nav>
+
+    <main class="container-admin-pedidos">
+        <h1>Gerenciar Pedidos</h1>
+        <div id="mensagem-admin-pedidos" class="mensagem"></div>
+
+        <div class="filtros-pedidos">
+            <label for="filtro-status">Filtrar por Status:</label>
+            <select id="filtro-status">
+                <option value="">Todos</option>
+                <option value="Recebido">Recebido</option>
+                <option value="Em Preparo">Em Preparo</option>
+                <option value="Saiu para Entrega">Saiu para Entrega</option>
+                <option value="Entregue">Entregue</option>
+                <option value="Cancelado">Cancelado</option>
+            </select>
+            <button id="btn-recarregar-pedidos">Recarregar</button>
+        </div>
+
+        <div class="tabela-pedidos-container">
+            <table id="tabela-pedidos">
+                <thead>
+                    <tr>
+                        <th>ID Pedido</th>
+                        <th>Data</th>
+                        <th>Cliente</th>
+                        <th>Telefone</th>
+                        <th>Endereço</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <!-- <th>Ações</th> -->
+                    </tr>
+                </thead>
+                <tbody id="corpo-tabela-pedidos">
+                    <tr><td colspan="7">Carregando pedidos...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="js/global.js"></script>
+    <script src="js/admin_pedidos.js"></script>
+</body>
+</html>

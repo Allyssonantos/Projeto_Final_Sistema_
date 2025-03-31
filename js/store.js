@@ -167,24 +167,75 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // --- Finalizar Pedido (Função de Exemplo) ---
-    function finalizarPedido() {
+    async function finalizarPedido() {
+        console.log("STORE.JS: Iniciando finalizarPedido...");
         if (carrinho.length === 0) {
             alert("Seu carrinho está vazio!");
             return;
         }
-        // Simulação: Exibe os dados do pedido no console e alerta
-        console.log("STORE.JS: Pedido finalizado (simulação):", JSON.stringify(carrinho)); // Mostra o array do carrinho como JSON
-        alert(`Pedido finalizado (simulação)! Total: R$ ${totalP.textContent.split('R$ ')[1]}\n\nItens:\n${carrinho.map(item => `${item.nome} (x${item.quantidade})`).join('\n')}`);
 
-        // TODO: Aqui você implementaria a lógica real:
-        // 1. Obter dados do usuário (se logado)
-        // 2. Enviar 'carrinho' (e dados do usuário) para uma API PHP de finalizar pedido
-        // 3. Limpar o carrinho no frontend após sucesso no backend
+        // Prepara os dados para enviar (apenas ID e quantidade são necessários, preço será verificado no backend)
+        const itensParaEnviar = carrinho.map(item => ({
+            id: item.id,
+            quantidade: item.quantidade
+        }));
+        console.log("STORE.JS: Itens a serem enviados para API:", itensParaEnviar);
 
-        // Limpa o carrinho local após a simulação
-        carrinho = [];
-        atualizarCarrinhoDisplay();
+        try {
+            exibirMensagemCarrinho("Processando seu pedido...", "info"); // Mostra feedback
+
+            // Faz fetch para a API de finalizar pedido
+            // credentials: 'include' é necessário para enviar o cookie de sessão
+            const response = await fetch(`${API_BASE_URL}/finalizar_pedido.php`, {
+                 method: 'POST',
+                 credentials: 'include', // <<< IMPORTANTE para sessão
+                 headers: { 'Content-Type': 'application/json' },
+                 body: JSON.stringify({ carrinho: itensParaEnviar }) // Envia o array dentro de um objeto {carrinho: [...]}
+             });
+            console.log("STORE.JS: Resposta finalizar_pedido - Status:", response.status);
+
+            const data = await response.json();
+            console.log("STORE.JS: Resposta JSON finalizar_pedido:", data);
+
+            if (!response.ok) { // Trata erro HTTP
+                 throw new Error(data.mensagem || `Erro ${response.status} ao finalizar pedido.`);
+             }
+
+            // Verifica o sucesso reportado pela API
+            if (data.sucesso) {
+                exibirMensagemCarrinho(`Pedido #${data.pedido_id || ''} realizado com sucesso!`, "success");
+                carrinho = []; // Limpa o carrinho local
+                atualizarCarrinhoDisplay(); // Atualiza a interface
+                // Opcional: redirecionar para página de confirmação ou perfil
+                // setTimeout(() => { window.location.href = 'perfil.html'; }, 2000);
+            } else {
+                // A API retornou {sucesso: false}
+                throw new Error(data.mensagem || "Falha ao processar o pedido.");
+            }
+
+        } catch (error) {
+            console.error("STORE.JS: Erro ao finalizar pedido:", error);
+             if (error instanceof SyntaxError) {
+                 exibirMensagemCarrinho("Erro ao processar resposta do servidor.", "error");
+             } else {
+                 exibirMensagemCarrinho(`Erro: ${error.message}`, "error");
+             }
+        }
     }
+
+     // Função auxiliar para mostrar mensagens perto do carrinho
+     function exibirMensagemCarrinho(texto, tipo) {
+         const msgContainer = document.querySelector('.carrinho-container .mensagem-carrinho'); // Crie esta div no HTML se quiser
+         if (msgContainer) {
+              msgContainer.textContent = texto;
+              msgContainer.className = `mensagem mensagem-carrinho ${tipo}`;
+         } else {
+             // Fallback para alert se não houver container
+              if(tipo === 'error') alert(`Erro: ${texto}`);
+              // else alert(texto); // Evitar muitos alerts de sucesso
+         }
+          // Limpar msg após um tempo
+     }
 
     // --- Scroll Suave para Seções ---
     function scrollToSection(sectionId) {

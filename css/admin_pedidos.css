@@ -1,0 +1,67 @@
+/* css/admin_pedidos.css */
+
+.container-admin-pedidos {
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.container-admin-pedidos h1 {
+     text-align: center;
+     margin-bottom: 30px;
+     color: #b71c1c;
+}
+
+.filtros-pedidos {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.tabela-pedidos-container {
+    overflow-x: auto; /* Rolagem horizontal em telas pequenas */
+}
+
+#tabela-pedidos {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#tabela-pedidos th,
+#tabela-pedidos td {
+    border: 1px solid #ddd;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+#tabela-pedidos th {
+    background-color: #b71c1c;
+    color: white;
+    font-weight: bold;
+}
+
+#tabela-pedidos tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+#tabela-pedidos tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+#tabela-pedidos td.status-cell {
+    min-width: 150px; /* Espaço para o select */
+}
+
+#tabela-pedidos select.status-pedido-select {
+     width: 100%;
+     padding: 5px;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+}

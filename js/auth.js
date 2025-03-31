@@ -1,49 +1,61 @@
-// --- START OF FILE auth.js ---
-
+// js/auth.js
 document.addEventListener("DOMContentLoaded", function () {
-    const API_BASE_URL = "http://localhost/pizzaria_express/api"; // Centralizar URL base
+    const API_BASE_URL = "http://localhost/pizzaria_express/api";
 
     // --- Lógica de Cadastro ---
     const cadastroForm = document.getElementById("cadastroForm");
-    const mensagemCadastro = document.getElementById("mensagem-cadastro"); // ID específico
+    const mensagemCadastro = document.getElementById("mensagem-cadastro");
 
     if (cadastroForm && mensagemCadastro) {
         cadastroForm.addEventListener("submit", async function (e) {
             e.preventDefault();
-
             const nome = document.getElementById("nome").value;
             const email = document.getElementById("email").value;
             const senha = document.getElementById("senha").value;
+            // PEGAR NOVOS CAMPOS
+            const endereco = document.getElementById("endereco")?.value || ''; // Usa ?. se o campo não existir ainda
+            const telefone = document.getElementById("telefone")?.value || '';
 
-            // Limpa mensagens anteriores
             mensagemCadastro.textContent = "";
-            mensagemCadastro.className = "mensagem"; // Reset classes
+            mensagemCadastro.className = "mensagem";
 
             try {
                 const response = await fetch(`${API_BASE_URL}/cadastro.php`, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ nome, email, senha })
+                    headers: { "Content-Type": "application/json" },
+                    // ENVIAR NOVOS CAMPOS
+                    body: JSON.stringify({ nome, email, senha, endereco, telefone })
                 });
 
+                // Ler como JSON primeiro
                 const result = await response.json();
 
+                if (!response.ok) { // Checa status HTTP
+                     throw new Error(result.mensagem || `Erro HTTP ${response.status}`);
+                }
+
+                // Usar a estrutura de resposta padrão {sucesso: true/false, mensagem: ...}
                 if (result.sucesso) {
-                    mensagemCadastro.textContent = result.sucesso;
+                    mensagemCadastro.textContent = result.mensagem || "Cadastro realizado com sucesso!";
                     mensagemCadastro.classList.add("success");
-                    setTimeout(() => {
-                        window.location.href = "login.html"; // Redireciona após sucesso
-                    }, 2000);
+                    setTimeout(() => { window.location.href = "login.html"; }, 2000);
                 } else {
-                    mensagemCadastro.textContent = result.erro || "Ocorreu um erro no cadastro.";
+                     // Trata especificamente erro 409 (Conflict - email existe) se a API retornar
+                     if (response.status === 409) {
+                         mensagemCadastro.textContent = result.mensagem || "Este e-mail já está cadastrado.";
+                     } else {
+                         mensagemCadastro.textContent = result.mensagem || "Ocorreu um erro no cadastro.";
+                     }
                     mensagemCadastro.classList.add("error");
                 }
 
             } catch (error) {
                 console.error("Erro na requisição de cadastro:", error);
-                mensagemCadastro.textContent = "Erro ao conectar ao servidor.";
+                if (error instanceof SyntaxError) {
+                     mensagemCadastro.textContent = "Erro ao processar resposta do servidor.";
+                 } else {
+                     mensagemCadastro.textContent = `Erro: ${error.message}`;
+                 }
                 mensagemCadastro.classList.add("error");
             }
         });
@@ -51,53 +63,65 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // --- Lógica de Login ---
     const loginForm = document.getElementById("loginForm");
-    const mensagemLogin = document.getElementById("mensagem-login"); // ID específico
+    const mensagemLogin = document.getElementById("mensagem-login");
 
     if (loginForm && mensagemLogin) {
         loginForm.addEventListener("submit", async function(event) {
             event.preventDefault();
-
             const email = document.getElementById("email").value;
             const senha = document.getElementById("senha").value;
-
-            // Limpa mensagens anteriores
             mensagemLogin.textContent = "";
-            mensagemLogin.className = "mensagem"; // Reset classes
+            mensagemLogin.className = "mensagem";
 
             try {
+                // credentials: 'include' é VITAL para enviar cookies de sessão
                 const response = await fetch(`${API_BASE_URL}/login.php`, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                    credentials: 'include', // <<< IMPORTANTE
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email, senha })
                 });
 
-                const data = await response.json();
+                const data = await response.json(); // Lê JSON
 
-                if (data.status === "sucesso") {
-                    mensagemLogin.textContent = data.mensagem;
+                 if (!response.ok) { // Checa status HTTP
+                     throw new Error(data.mensagem || `Erro HTTP ${response.status}`);
+                 }
+
+                // Usar a estrutura padrão {status: 'sucesso'/'erro', mensagem: ...} ou {sucesso: true/false}
+                // Adaptado para a estrutura retornada pelo login.php corrigido
+                 if (data.status === "sucesso" || data.sucesso === true) {
+                    mensagemLogin.textContent = data.mensagem || "Login bem-sucedido!";
                     mensagemLogin.classList.add("success");
-                    // Opcional: Armazenar token/session info se a API retornar
-                    // localStorage.setItem('authToken', data.token);
+
+                    // Chamar função global para verificar sessão e atualizar nav (opcional aqui,
+                    // pois o global.js fará isso no carregamento da próxima página)
+                    // await checkLoginStatus(); // Certifique-se que essa função existe globalmente se descomentar
+
+                    // Redireciona após um curto delay
                     setTimeout(() => {
-                        // Verificar se é admin (idealmente a API deveria informar)
-                        if (email === 'admin@example.com') { // Exemplo simples, NÃO SEGURO
-                             window.location.href = "admin.html";
-                        } else {
-                             window.location.href = "index.html"; // Redireciona para a página inicial
-                        }
-                    }, 1500);
+                        // !! NÃO FAÇA A VERIFICAÇÃO DE ADMIN AQUI !!
+                        // A verificação de admin deve ser feita pela API check_session.php
+                        // Apenas redirecione para a página principal. O global.js cuidará dos links.
+                         window.location.href = "index.html"; // Redireciona SEMPRE para a página inicial
+                    }, 1000);
+
                 } else {
-                    mensagemLogin.textContent = data.mensagem || "Credenciais inválidas.";
-                    mensagemLogin.classList.add("error");
+                     // Se chegou aqui, status HTTP era OK, mas API reportou falha
+                     mensagemLogin.textContent = data.mensagem || "Credenciais inválidas ou erro inesperado.";
+                     mensagemLogin.classList.add("error");
                 }
+
             } catch (error) {
                 console.error("Erro na requisição de login:", error);
-                mensagemLogin.textContent = "Erro ao conectar ao servidor.";
+                 if (error instanceof SyntaxError) {
+                     mensagemLogin.textContent = "Erro ao processar resposta do servidor.";
+                 } else {
+                     // Exibe a mensagem do erro capturado (pode ser da API ou de rede)
+                     mensagemLogin.textContent = `Erro: ${error.message}`;
+                 }
                 mensagemLogin.classList.add("error");
             }
         });
     }
-});
-// --- END OF FILE auth.js ---
+}); // Fim DOMContentLoaded
