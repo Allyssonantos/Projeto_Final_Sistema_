@@ -16,6 +16,8 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // Permitir que cookies de sessão sejam enviados/recebidos (se usar sessões)
 header("Access-Control-Allow-Credentials: true");
 
+
+
 // --- Tratamento da requisição OPTIONS (CORS Preflight) ---
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
@@ -38,6 +40,19 @@ if ($mysqli->connect_error) {
     echo json_encode(["status" => "erro", "mensagem" => "Erro interno do servidor: Falha ao conectar ao banco de dados."]);
     exit;
 }
+
+// Dentro do if (password_verify(...)) { ... }
+session_regenerate_id(true); // Segurança!
+$_SESSION['usuario_id'] = $user['id'];
+$_SESSION['usuario_nome'] = $user['nome'];
+// Opcional: $_SESSION['is_admin'] = ($user['email'] === 'admin@example.com'); // Defina uma flag de admin
+
+http_response_code(200);
+echo json_encode([
+    "status" => "sucesso",
+    "mensagem" => "Login realizado com sucesso!",
+    "usuario" => ["id" => $user['id'], "nome" => $user['nome']] // Retorna dados básicos
+]);
 
 // Definir charset da conexão
 $mysqli->set_charset("utf8mb4");

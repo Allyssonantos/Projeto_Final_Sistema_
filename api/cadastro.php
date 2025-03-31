@@ -125,6 +125,19 @@ if ($stmt_insert->execute()) {
     echo json_encode(["sucesso" => false, "mensagem" => "Erro ao tentar realizar o cadastro."]);
 }
 
+// verificar se o usuario esta cadastro
+
+if (isset($_SESSION['usuario_id'])) {
+    echo json_encode([
+        "logado" => true,
+        "usuario_id" => $_SESSION['usuario_id'],
+        "usuario_nome" => $_SESSION['usuario_nome'] ?? 'Usuário',
+        "is_admin" => $_SESSION['is_admin'] ?? false // Envia se é admin
+    ]);
+} else {
+    echo json_encode(["logado" => false]);
+}
+
 // Fechar o statement de inserção
 $stmt_insert->close();
 
