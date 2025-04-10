@@ -1,32 +1,28 @@
 <?php
 // api/adicionar_produto.php
 
-// --- Configurações Iniciais ---
-error_reporting(E_ALL); // Mostrar todos os erros
-ini_set('display_errors', 1); // Exibir erros (bom para debug, desative em produção)
-ini_set('log_errors', 1); // Habilitar log de erros
-// ini_set('error_log', '/caminho/completo/para/php_error.log'); // Defina um caminho se souber
+<?php
+// api/adicionar_produto.php
+session_start(); // ESSENCIAL para verificar admin
 
-// --- Headers CORS e de Resposta ---
-header("Access-Control-Allow-Origin: *"); // Permite acesso de qualquer origem (restrinja em produção!)
-header("Content-Type: application/json; charset=UTF-8"); // A resposta SEMPRE será JSON
-header("Access-Control-Allow-Methods: POST, OPTIONS"); // Métodos permitidos
-header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With"); // Headers permitidos
+error_reporting(E_ALL); ini_set('display_errors', 1); ini_set('log_errors', 1);
 
-// --- Tratamento da Requisição OPTIONS (Preflight) ---
-// Necessário para requisições POST com certos headers ou Content-Type (como multipart/form-data implícito)
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    // Simplesmente envia os headers acima e termina
-    exit(0);
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Credentials: true"); // ESSENCIAL
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') { exit(0); }
+
+// --- !!! VERIFICAÇÃO DE ADMIN !!! ---
+$is_admin_check = (isset($_SESSION['usuario_email']) && $_SESSION['usuario_email'] === 'allyssonsantos487@gmail.com'); // !! SUBSTITUA !!
+if (!isset($_SESSION['usuario_id']) || !$is_admin_check ) {
+     http_response_code(403); echo json_encode(["sucesso" => false, "mensagem" => "Acesso negado."]); exit;
 }
+// -------------------------------------
 
-// --- Verificar Método HTTP ---
-// Este endpoint só aceita POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405); // Method Not Allowed
-    echo json_encode(["sucesso" => false, "mensagem" => "Método HTTP não permitido. Use POST."]);
-    exit;
-}
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') { /* ... erro 405 ... */ exit; }
 
 // --- Definições e Verificações do Diretório de Upload ---
 // Define o caminho para a pasta de uploads, subindo um nível a partir de /api/

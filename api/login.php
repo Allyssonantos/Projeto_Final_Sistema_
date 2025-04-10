@@ -129,7 +129,8 @@ if ($result->num_rows === 1) {
 
         // !! Exemplo de verificação de Admin - NÃO SEGURO !!
         // Você DEVE ter uma forma melhor de identificar admins (ex: coluna 'role' no DB)
-        $_SESSION['is_admin'] = ($user['email'] === 'admin@example.com'); // <<< SUBSTITUA PELA LÓGICA REAL
+        $_SESSION['is_admin'] = ($user['email'] === 'allyssonsantos487@gmail.com');
+        error_log("[Login API] Verificando se {$user['email']} é admin... Resultado: " . ($_SESSION['is_admin'] ? 'SIM' : 'NÃO')); // Log para debug
 
         error_log("[Login API] Login BEM-SUCEDIDO para usuário ID: " . $user['id'] . ", Email: " . $email);
 

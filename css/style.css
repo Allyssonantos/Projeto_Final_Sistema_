@@ -279,4 +279,16 @@ body::after {
      .produto img { height: 120px; }
 }
 
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f8f9fa;
+    padding: 10px;
+    text-align: center;
+}
+
+
+
 /* --- END OF FILE style.css --- */

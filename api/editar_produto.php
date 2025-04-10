@@ -1,15 +1,22 @@
 <?php
-// api/editar_produto.php -- VERSÃO DE DEBUG DETALHADO
+// api/editar_produto.php
+session_start(); // ESSENCIAL
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1); // Mantenha 1 para ver erros no output se JSON falhar
-ini_set('log_errors', 1); // Garante que erros sejam logados
-// ini_set('error_log', '/caminho/absoluto/para/seu/php_error.log'); // Descomente e ajuste se souber o caminho do log
+error_reporting(E_ALL); ini_set('display_errors', 1); ini_set('log_errors', 1);
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Credentials: true"); // ESSENCIAL
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') { exit(0); }
+
+// --- !!! VERIFICAÇÃO DE ADMIN !!! ---
+$is_admin_check = (isset($_SESSION['usuario_email']) && $_SESSION['usuario_email'] === 'allyssonsantos487@gmail.com'); // !! SUBSTITUA !!
+if (!isset($_SESSION['usuario_id']) || !$is_admin_check ) {
+     http_response_code(403); echo json_encode(["sucesso" => false, "mensagem" => "Acesso negado."]); exit;
+}
 
 error_log("--- [EDITAR PRODUTO] Requisição recebida ---");
 

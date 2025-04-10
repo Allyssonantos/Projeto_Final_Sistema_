@@ -1,4 +1,4 @@
-// js/store.js
+// js/store.js - CORRIGIDO
 
 document.addEventListener("DOMContentLoaded", function () {
     // --- Configurações e Constantes ---
@@ -13,6 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const totalP = document.getElementById("total");
     const btnFinalizar = document.getElementById("btn-finalizar-pedido"); // ID atualizado no HTML
 
+    // ---------- BLOCO REMOVIDO DAQUI ----------
+    // const response = await fetch(...); // <--- ESTE BLOCO FOI REMOVIDO
+    // ---------- FIM DO BLOCO REMOVIDO ----------
+
     // --- Estado do Carrinho (Armazenado na memória do navegador) ---
     let carrinho = [];
 
@@ -20,8 +24,11 @@ document.addEventListener("DOMContentLoaded", function () {
     async function carregarProdutos() {
         console.log("STORE.JS: Iniciando carregamento de produtos..."); // Log inicial
         try {
-            const response = await fetch(`${API_BASE_URL}/produtos.php`);
-            console.log("STORE.JS: Fetch produtos.php - Status:", response.status); // Log status
+            // Ajuste para usar a API correta se mudou para all_in_one.php
+             const response = await fetch(`${API_BASE_URL}/produtos.php`); // Ou all_in_one.php?action=listarProdutos
+            // const response = await fetch(`${API_BASE_URL}/all_in_one.php?action=listarProdutos`); // DESCOMENTE esta linha se usar all_in_one
+
+            console.log("STORE.JS: Fetch produtos - Status:", response.status); // Log status
             if (!response.ok) {
                 throw new Error(`Erro HTTP ao buscar produtos: ${response.status}`);
             }
@@ -166,15 +173,14 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("STORE.JS: Display do carrinho atualizado. Total:", totalCalculado.toFixed(2));
     }
 
-    // --- Finalizar Pedido (Função de Exemplo) ---
-    async function finalizarPedido() {
+    // --- Finalizar Pedido (Função CORRETA) ---
+    async function finalizarPedido() { // Já estava async, correto
         console.log("STORE.JS: Iniciando finalizarPedido...");
         if (carrinho.length === 0) {
             alert("Seu carrinho está vazio!");
             return;
         }
 
-        // Prepara os dados para enviar (apenas ID e quantidade são necessários, preço será verificado no backend)
         const itensParaEnviar = carrinho.map(item => ({
             id: item.id,
             quantidade: item.quantidade
@@ -182,34 +188,32 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("STORE.JS: Itens a serem enviados para API:", itensParaEnviar);
 
         try {
-            exibirMensagemCarrinho("Processando seu pedido...", "info"); // Mostra feedback
+            exibirMensagemCarrinho("Processando seu pedido...", "info");
 
-            // Faz fetch para a API de finalizar pedido
-            // credentials: 'include' é necessário para enviar o cookie de sessão
-            const response = await fetch(`${API_BASE_URL}/finalizar_pedido.php`, {
+            // Faz fetch para a API de finalizar pedido (AJUSTE a URL se usar all_in_one.php)
+             const response = await fetch(`${API_BASE_URL}/finalizar_pedido.php`, { // Ou all_in_one.php
+            // const response = await fetch(`${API_BASE_URL}/all_in_one.php`, { // DESCOMENTE esta linha se usar all_in_one
                  method: 'POST',
                  credentials: 'include', // <<< IMPORTANTE para sessão
                  headers: { 'Content-Type': 'application/json' },
-                 body: JSON.stringify({ carrinho: itensParaEnviar }) // Envia o array dentro de um objeto {carrinho: [...]}
+                 // Envia action E carrinho se usar all_in_one
+                 // body: JSON.stringify({ action: 'finalizarPedido', carrinho: itensParaEnviar }) // DESCOMENTE se usar all_in_one
+                 body: JSON.stringify({ carrinho: itensParaEnviar }) // MANTENHA esta se usar finalizar_pedido.php separado
              });
             console.log("STORE.JS: Resposta finalizar_pedido - Status:", response.status);
 
             const data = await response.json();
             console.log("STORE.JS: Resposta JSON finalizar_pedido:", data);
 
-            if (!response.ok) { // Trata erro HTTP
+            if (!response.ok) {
                  throw new Error(data.mensagem || `Erro ${response.status} ao finalizar pedido.`);
              }
 
-            // Verifica o sucesso reportado pela API
             if (data.sucesso) {
                 exibirMensagemCarrinho(`Pedido #${data.pedido_id || ''} realizado com sucesso!`, "success");
-                carrinho = []; // Limpa o carrinho local
-                atualizarCarrinhoDisplay(); // Atualiza a interface
-                // Opcional: redirecionar para página de confirmação ou perfil
-                // setTimeout(() => { window.location.href = 'perfil.html'; }, 2000);
+                carrinho = [];
+                atualizarCarrinhoDisplay();
             } else {
-                // A API retornou {sucesso: false}
                 throw new Error(data.mensagem || "Falha ao processar o pedido.");
             }
 
@@ -225,16 +229,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
      // Função auxiliar para mostrar mensagens perto do carrinho
      function exibirMensagemCarrinho(texto, tipo) {
-         const msgContainer = document.querySelector('.carrinho-container .mensagem-carrinho'); // Crie esta div no HTML se quiser
+         const msgContainer = document.querySelector('.carrinho-container .mensagem-carrinho');
          if (msgContainer) {
               msgContainer.textContent = texto;
               msgContainer.className = `mensagem mensagem-carrinho ${tipo}`;
+              // Adicionar um timeout para limpar a mensagem
+              setTimeout(() => {
+                 if (msgContainer.textContent === texto) { msgContainer.textContent = ''; msgContainer.className = 'mensagem mensagem-carrinho'; }
+             }, 5000);
          } else {
-             // Fallback para alert se não houver container
               if(tipo === 'error') alert(`Erro: ${texto}`);
-              // else alert(texto); // Evitar muitos alerts de sucesso
+              else alert(texto); // Alert para sucesso também
          }
-          // Limpar msg após um tempo
      }
 
     // --- Scroll Suave para Seções ---
@@ -242,7 +248,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(`STORE.JS: Tentando scroll para #${sectionId}`);
         const section = document.getElementById(sectionId);
         if (section) {
-            // Usa scrollIntoView para um efeito suave
             section.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
             console.warn(`STORE.JS: Seção com id "${sectionId}" não encontrada para scroll.`);
@@ -250,35 +255,28 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // --- Adicionar Event Listeners Globais (Delegação) ---
-
-    // Listener no BODY para capturar cliques em botões Adicionar/Remover
     document.body.addEventListener('click', (event) => {
-        // Verifica se o elemento clicado TEM a classe 'btn-add-carrinho'
         if (event.target.classList.contains('btn-add-carrinho')) {
             console.log(">>> Botão Adicionar Clicado!");
-            const button = event.target; // O botão que foi clicado
+            const button = event.target;
             const id = button.getAttribute('data-id');
             const nome = button.getAttribute('data-nome');
             const preco = button.getAttribute('data-preco');
             console.log("Dados do botão:", { id, nome, preco });
-
-            // Verifica se os dados essenciais foram obtidos do botão
              if (id && nome && preco !== null && preco !== undefined) {
-                 adicionarAoCarrinho(id, nome, preco); // Chama a função para adicionar
+                 adicionarAoCarrinho(id, nome, preco);
              } else {
                  console.error("ERRO: Não foi possível obter dados (id, nome, preco) do botão 'Adicionar' clicado!");
-                 alert("Erro ao obter informações do produto. Tente recarregar a página.");
+                 alert("Erro ao obter informações do produto.");
              }
         }
-
-        // Verifica se o elemento clicado TEM a classe 'btn-remover-item'
         if(event.target.classList.contains('btn-remover-item')) {
             console.log(">>> Botão Remover Clicado!");
             const button = event.target;
             const id = button.getAttribute('data-id');
             console.log("ID para remover:", id);
             if (id) {
-                removerDoCarrinho(id); // Chama a função para remover
+                removerDoCarrinho(id);
             } else {
                  console.error("ERRO: Não foi possível obter ID do botão 'Remover' clicado!");
             }
@@ -309,10 +307,8 @@ document.addEventListener("DOMContentLoaded", function () {
         console.warn("STORE.JS: Nenhum botão de navegação com [data-scroll-to] encontrado.");
     }
 
-
     // --- Inicialização ---
-    // Chama as funções para carregar produtos e exibir o carrinho inicial ao carregar a página
     carregarProdutos();
-    atualizarCarrinhoDisplay(); // Para mostrar "Carrinho vazio." inicialmente
+    atualizarCarrinhoDisplay(); // Mostra "Carrinho vazio." inicialmente
 
 }); // Fim do DOMContentLoaded
