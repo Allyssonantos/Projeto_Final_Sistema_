@@ -1,7 +1,9 @@
-// js/auth.js 
+// js/auth.js - ATUALIZADO E CORRIGIDO (Inclui Endereço/Telefone no Cadastro)
+
 document.addEventListener("DOMContentLoaded", function () {
     // --- Configurações e Constantes ---
     const API_BASE_URL = "http://localhost/pizzaria_express/api"; // !! VERIFIQUE SUA URL !!
+    // Defina a URL da API aqui. Se usar all_in_one.php, ajuste as URLs dos fetch abaixo.
 
     // --- Lógica de Cadastro ---
     const cadastroForm = document.getElementById("cadastroForm");
@@ -12,28 +14,36 @@ document.addEventListener("DOMContentLoaded", function () {
         cadastroForm.addEventListener("submit", async function (e) {
             e.preventDefault(); // Impede envio padrão do formulário
 
-            // Pega os valores dos campos
-            const nome = document.getElementById("nome")?.value.trim(); // Usa optional chaining ?. por segurança
+            // Pega os valores dos campos (usa ?. para evitar erro se elemento não existir)
+            const nome = document.getElementById("nome")?.value.trim();
             const email = document.getElementById("email")?.value.trim();
             const senha = document.getElementById("senha")?.value.trim();
-            const endereco = document.getElementById("endereco")?.value.trim() || ''; // Pega endereço (ou vazio)
-            const telefone = document.getElementById("telefone")?.value.trim() || ''; // Pega telefone (ou vazio)
+            const endereco = document.getElementById("endereco")?.value.trim(); // Pega endereço
+            const telefone = document.getElementById("telefone")?.value.trim() || null; // Pega telefone (null se vazio)
 
             // Limpa mensagens anteriores
             mensagemCadastro.textContent = "";
             mensagemCadastro.className = "mensagem"; // Reseta classes CSS
 
             // Validação básica no frontend (principal validação é no PHP)
-            if (!nome || !email || !senha) {
-                 mensagemCadastro.textContent = "Nome, Email e Senha são obrigatórios.";
+            let errosValidacao = [];
+            if (!nome) { errosValidacao.push("Nome"); }
+            if (!email) { errosValidacao.push("Email"); }
+            if (!senha) { errosValidacao.push("Senha"); }
+            if (!endereco) { errosValidacao.push("Endereço"); } // Endereço obrigatório
+             // Validação simples de email
+             if (email && (!email.includes('@') || !email.includes('.'))) {
+                errosValidacao.push("Email (formato inválido)");
+            }
+             // Validação simples de senha (ex: mínimo 6 caracteres)
+             if (senha && senha.length < 6) {
+                errosValidacao.push("Senha (mínimo 6 caracteres)");
+            }
+
+            if (errosValidacao.length > 0) {
+                 mensagemCadastro.textContent = `Campos obrigatórios ou inválidos: ${errosValidacao.join(', ')}.`;
                  mensagemCadastro.classList.add("error");
                  return;
-            }
-            // Validação simples de email (PHP fará validação mais robusta)
-            if (!email.includes('@') || !email.includes('.')) {
-                mensagemCadastro.textContent = "Formato de e-mail inválido.";
-                mensagemCadastro.classList.add("error");
-                return;
             }
 
 
@@ -41,11 +51,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             try {
                 // Faz a requisição POST para a API de cadastro
+                // Ajuste a URL se usar all_in_one.php (adicionar action=registrar)
                 const response = await fetch(`${API_BASE_URL}/cadastro.php`, {
+                // const response = await fetch(`${API_BASE_URL}/all_in_one.php`, { // DESCOMENTE se usar all_in_one
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     // Envia os dados (incluindo os novos campos) como JSON
-                    body: JSON.stringify({ nome, email, senha, endereco, telefone })
+                    body: JSON.stringify({ nome, email, senha, endereco, telefone }) // Inclui endereco e telefone
+                    // body: JSON.stringify({ action: 'registrar', nome, email, senha, endereco, telefone }) // DESCOMENTE se usar all_in_one
                 });
 
                 console.log("AUTH.JS (Cadastro): Resposta recebida - Status:", response.status);
@@ -112,11 +125,14 @@ document.addEventListener("DOMContentLoaded", function () {
             try {
                 // Faz a requisição POST para a API de login
                 // credentials: 'include' é VITAL para enviar/receber cookies de sessão PHP
-                const response = await fetch(`${API_BASE_URL}/login.php`, {
+                // Ajuste a URL se usar all_in_one.php (adicionar action=login)
+                 const response = await fetch(`${API_BASE_URL}/login.php`, {
+                // const response = await fetch(`${API_BASE_URL}/all_in_one.php`, { // DESCOMENTE se usar all_in_one
                     method: "POST",
                     credentials: 'include', // <<< ESSENCIAL PARA SESSÃO FUNCIONAR
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email, senha })
+                     body: JSON.stringify({ email, senha })
+                    // body: JSON.stringify({ action: 'login', email, senha }) // DESCOMENTE se usar all_in_one
                 });
 
                 console.log("AUTH.JS (Login): Resposta recebida - Status:", response.status);
@@ -140,8 +156,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     setTimeout(() => {
                         if (isAdmin) {
                             // Redireciona admin para a página de produtos do admin
-                            console.log("AUTH.JS (Login): Redirecionando para admin_main.html");
-                            window.location.href = "admin_main.html"; // Ou admin_pedidos.html se preferir
+                            console.log("AUTH.JS (Login): Redirecionando para admin_main.html"); // Mudado para admin_main
+                            window.location.href = "admin_main.html"; // Usa a nova página combinada
                         } else {
                             // Redireciona usuário normal para a página principal
                             console.log("AUTH.JS (Login): Redirecionando para index.html");
