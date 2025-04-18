@@ -16,11 +16,20 @@
     font-size: 2em;
 }
 
+/* --- Mensagens de Feedback (Herda de base.css, mas pode ajustar) --- */
+#mensagem-admin {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
 /* --- Navegação por Abas --- */
+.admin-nav {
+    margin-bottom: 0; /* Remove margem inferior para conectar com a seção */
+}
 .admin-nav ul {
     list-style: none;
     padding: 0;
-    margin: 0 0 25px 0; /* Espaço abaixo da navegação */
+    margin: 0; /* Remove margem padrão da ul */
     display: flex;
     flex-wrap: wrap; /* Permite quebrar linha em telas pequenas */
     border-bottom: 2px solid #b71c1c; /* Linha abaixo das abas */
@@ -28,7 +37,7 @@
 
 .admin-nav ul li {
     margin-right: 5px;
-    margin-bottom: -2px; /* Para sobrepor a borda inferior */
+    margin-bottom: -2px; /* Sobrepõe a borda inferior */
     border: 1px solid #ddd;
     border-bottom: none;
     border-radius: 5px 5px 0 0; /* Cantos arredondados no topo */
@@ -41,32 +50,47 @@
 
 .admin-nav ul li.active {
     background-color: #fff; /* Cor ativa (mesma do fundo da seção) */
-    border: 1px solid #ddd;
+    border-top: 2px solid #b71c1c; /* Destaque extra na aba ativa */
+    border-left: 1px solid #b71c1c;
+    border-right: 1px solid #b71c1c;
     border-bottom: 2px solid #fff; /* Cobre a linha principal */
     position: relative;
-    z-index: 1; /* Fica sobre a linha */
+    z-index: 1;
+    font-weight: bold;
 }
 .admin-nav ul li.active a {
     color: #b71c1c;
-    font-weight: bold;
 }
 
-.admin-nav ul li a {
+.admin-nav ul li a,
+.admin-nav ul li button { /* Estilo para link e botão (logout) */
     display: block;
     padding: 12px 20px;
     text-decoration: none;
     color: #333;
-    white-space: nowrap; /* Evita quebra de texto nos links */
+    white-space: nowrap; /* Evita quebra de texto */
+    cursor: pointer;
+    background: none; /* Remove fundo do botão */
+    border: none;     /* Remove borda do botão */
+    font-family: inherit; /* Usa a mesma fonte */
+    font-size: inherit; /* Usa o mesmo tamanho */
 }
+.admin-nav ul li button {
+    color: #d32f2f; /* Cor específica para botão logout */
+}
+.admin-nav ul li button:hover {
+    text-decoration: underline;
+}
+
 
 /* --- Seções de Conteúdo (Produtos e Pedidos) --- */
 .admin-section {
-    padding: 25px;
+    padding: 30px; /* Mais padding interno */
     background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 0 8px 8px 8px; /* Cantos arredondados (exceto topo esquerdo) */
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    margin-top: -1px; /* Alinha com a borda das abas */
+    border: 1px solid #ddd; /* Borda sutil */
+    border-top: none; /* Remove borda superior para conectar com abas */
+    border-radius: 0 0 8px 8px; /* Cantos arredondados apenas embaixo */
+    box-shadow: 0 3px 8px rgba(0,0,0,0.06);
 }
 
 /* Classe para esconder seções inativas */
@@ -86,13 +110,13 @@
 
 /* --- Estilos Comuns para Containers Internos e Formulários --- */
 .container-admin {
-    background-color: rgba(245, 245, 245, 0.6); /* Fundo levemente diferente */
-    padding: 20px;
+    background-color: #fdfdfd;
+    padding: 25px;
     border-radius: 5px;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
     margin-bottom: 30px;
 }
-.container-admin h2 { /* Títulos dentro dos sub-containers */
+.container-admin h2 { /* Títulos dentro dos sub-containers (como Adicionar/Listar) */
      font-size: 1.3em;
      color: #333;
      border-bottom: none;
@@ -100,16 +124,15 @@
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 18px; /* Espaçamento consistente */
 }
 .form-group label {
     display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+    margin-bottom: 6px;
+    font-weight: 600;
     font-size: 0.9em;
-    color: #555;
+    color: #444;
 }
-/* Inputs, Textareas, Selects herdam de base.css, mas podemos ajustar */
 textarea {
     min-height: 80px;
     resize: vertical;
@@ -118,88 +141,81 @@ input[type="file"] {
     border: 1px solid #ccc;
     padding: 8px;
     background-color: #fff;
+    border-radius: 4px;
 }
 small {
-    font-size: 0.8em;
+    font-size: 0.85em;
     color: #777;
-    margin-left: 5px;
+    display: block; /* Quebra linha */
+    margin-top: 4px;
 }
 
-/* --- Tabela de PRODUTOS (Estilos de admin.css) --- */
-#tabela-produtos { /* ID específico para a tabela de produtos */
+/* --- Tabela de PRODUTOS --- */
+#tabela-produtos { /* ID específico */
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     background-color: #fff;
 }
-
 #tabela-produtos th,
 #tabela-produtos td {
-    padding: 12px 10px; /* Ajuste padding */
-    border: 1px solid #ddd;
+    padding: 12px 10px;
+    border: 1px solid #e0e0e0; /* Borda mais clara */
     text-align: left;
     vertical-align: middle;
     font-size: 14px;
 }
-
 #tabela-produtos th {
-    background-color: #b71c1c;
-    color: white;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 12px; /* Fonte menor para cabeçalho */
+    background-color: #b71c1c; color: white; font-weight: bold;
+    text-transform: uppercase; font-size: 12px;
 }
+#tabela-produtos tbody tr:nth-child(even) { background-color: #f8f9fa; }
+#tabela-produtos tbody tr:hover { background-color: #e9ecef; }
 
-#tabela-produtos tbody tr:nth-child(even) { background-color: #fdfdfd; }
-#tabela-produtos tbody tr:hover { background-color: #f1f1f1; }
-
-/* Inputs e Selects dentro da tabela de produtos */
 #tabela-produtos td input,
 #tabela-produtos td select {
-    padding: 5px 8px; /* Menor padding */
-    font-size: 13px;
-    border: 1px solid #ccc;
-    max-width: 95%; /* Evita transbordar */
-    box-sizing: border-box;
+    padding: 5px 8px; font-size: 13px; border: 1px solid #ccc;
+    max-width: 95%; box-sizing: border-box; border-radius: 3px;
 }
 #tabela-produtos td input:disabled,
 #tabela-produtos td select:disabled {
-    background-color: #eee; border-color: #ddd; color: #777; cursor: not-allowed;
+    background-color: #e9ecef; border-color: #dee2e6; color: #6c757d; cursor: not-allowed;
 }
 
 /* Imagem na tabela de produtos */
-#tabela-produtos .td-imagem { text-align: center; width: 80px; } /* Largura fixa para coluna imagem */
+#tabela-produtos .td-imagem { text-align: center; width: 85px; }
 #tabela-produtos .imagem-produto-preview {
-    max-width: 50px; max-height: 50px; display: block; margin: 0 auto 5px auto;
-    border: 1px solid #eee; object-fit: cover; border-radius: 3px;
+    max-width: 55px; max-height: 55px; display: block; margin: 0 auto 5px auto;
+    border: 1px solid #eee; object-fit: cover; border-radius: 4px;
 }
 #tabela-produtos .nome-imagem-atual { font-size: 10px; color: #666; display: block; word-break: break-all; }
 #tabela-produtos .imagem-edit-input { display: block; font-size: 11px; margin-top: 5px; max-width: 100%;}
 
 /* Ações na tabela de produtos */
 #tabela-produtos td.actions { text-align: center; white-space: nowrap; }
-#tabela-produtos .actions button { padding: 5px 8px; font-size: 12px; margin: 0 2px; min-width: 55px; }
-/* Cores dos botões já definidas em base.css ou estilos específicos */
-.button-edit { background-color: #5cb85c; } .button-edit:hover { background-color: #4cae4c; }
-.button-save { background-color: #337ab7; } .button-save:hover { background-color: #286090; }
-.button-delete { background-color: #d9534f; } .button-delete:hover { background-color: #c9302c; }
-.hidden { display: none; } /* Classe utilitária para esconder */
+#tabela-produtos .actions button { padding: 5px 10px; font-size: 12px; margin: 0 3px; min-width: 60px; }
+/* Cores dos botões */
+.button-edit { background-color: #5cb85c; color: white; } .button-edit:hover { background-color: #4cae4c; }
+.button-save { background-color: #337ab7; color: white; } .button-save:hover { background-color: #286090; }
+.button-delete { background-color: #d9534f; color: white; } .button-delete:hover { background-color: #c9302c; }
+.hidden { display: none !important; } /* Garante que vai esconder */
 
 
-/* --- Filtros e Tabela de PEDIDOS (Estilos de admin_pedidos.css) --- */
+/* --- Filtros e Tabela de PEDIDOS --- */
 .filtros-pedidos {
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #f1f1f1;
+    margin-bottom: 25px;
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
     border-radius: 5px;
     display: flex;
     align-items: center;
-    gap: 15px; /* Espaço entre label, select, botão */
+    gap: 15px;
     flex-wrap: wrap;
 }
-.filtros-pedidos label { margin-bottom: 0; } /* Remove margem inferior do label */
-.filtros-pedidos select { min-width: 150px; }
-.filtros-pedidos button { background-color: #6c757d; } /* Cor secundária para recarregar */
+.filtros-pedidos label { margin-bottom: 0; font-weight: 500; }
+.filtros-pedidos select { min-width: 180px; } /* Mais espaço para o select */
+.filtros-pedidos button { background-color: #6c757d; }
 .filtros-pedidos button:hover { background-color: #5a6268; }
 
 /* Tabela de Pedidos */
@@ -211,31 +227,54 @@ small {
 }
 #tabela-pedidos th,
 #tabela-pedidos td {
-    padding: 10px 12px;
-    border: 1px solid #ddd;
+    padding: 12px 15px; /* Mais padding */
+    border: 1px solid #dee2e6; /* Borda padrão Bootstrap */
     text-align: left;
     font-size: 14px;
     vertical-align: middle;
 }
 #tabela-pedidos th {
-    background-color: #5a6268; /* Cor diferente para admin pedidos */
+    background-color: #b71c1c; /* Cabeçalho escuro */
     color: white;
     font-size: 12px;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 #tabela-pedidos tbody tr:nth-child(even) { background-color: #f8f9fa; }
 #tabela-pedidos tbody tr:hover { background-color: #e9ecef; }
 
 /* Célula de Status na tabela de pedidos */
-#tabela-pedidos td.status-cell { min-width: 160px; }
+#tabela-pedidos td.status-cell { position: relative; min-width: 180px; }
 #tabela-pedidos select.status-pedido-select {
-     width: 100%;
-     padding: 6px;
+     width: 100%; /* Ocupa largura */
+     padding: 6px 8px;
      border: 1px solid #ccc;
      border-radius: 4px;
      background-color: #fff;
      font-size: 13px;
+     margin-bottom: 5px; /* Espaço para botões abaixo */
+     box-sizing: border-box;
 }
+#tabela-pedidos select.status-pedido-select.status-changed { /* Destaque se alterado */
+    border-color: #ff9800;
+    box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
+}
+
+/* Container e botões Salvar/Cancelar Status */
+.status-actions {
+    margin-top: 5px;
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end; /* Alinha botões à direita */
+}
+.button-small { /* Estilo para botões menores */
+    padding: 3px 8px !important;
+    font-size: 11px !important;
+    min-width: auto !important;
+}
+
+.button-cancel-status { background-color: #6c757d; }
+.button-cancel-status:hover { background-color: #5a6268; }
 
 
 /* --- RESPONSIVIDADE --- */
@@ -243,191 +282,60 @@ small {
 /* Telas Médias (Tablets) */
 @media (max-width: 992px) {
     .admin-wrapper { padding: 10px; }
-    .admin-section { padding: 15px; }
+    .admin-section { padding: 20px; }
+    #tabela-produtos, #tabela-pedidos { min-width: 850px; } /* Ajusta largura mínima */
 
-    /* Habilita rolagem horizontal para AMBAS as tabelas se necessário */
+    /* Habilita rolagem horizontal */
     .table-container, .tabela-pedidos-container {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         margin-bottom: 15px;
-        border: 1px solid #ddd; /* Adiciona borda sutil ao container de rolagem */
+        border: 1px solid #ddd;
     }
-
-     /* Garante largura mínima para as tabelas não colapsarem muito */
-    #tabela-produtos, #tabela-pedidos { min-width: 800px; }
 }
 
-/* Telas Pequenas (Celulares) - Transformar tabela de PRODUTOS em "cards" */
+/* Telas Pequenas (Celulares) */
 @media (max-width: 768px) {
-    .admin-nav ul { flex-direction: column; border-bottom: none;} /* Empilha abas */
+    .admin-nav ul { flex-direction: column; border-bottom: none;}
     .admin-nav ul li { margin-right: 0; margin-bottom: 1px; border-radius: 5px; border: 1px solid #ddd; }
-    .admin-nav ul li.active { border-bottom: 1px solid #ddd; } /* Remove override da borda */
-    .admin-section { border-radius: 8px; margin-top: 15px;} /* Ajusta borda e margem */
+    .admin-nav ul li.active { border-bottom: 1px solid #ddd; border-top-width: 2px; }
+    .admin-section { border-radius: 8px; margin-top: 15px;}
 
-    /* Esconde cabeçalho da tabela de PRODUTOS */
+    /* Tabela de PRODUTOS vira Cards */
     #tabela-produtos thead { display: none; }
-
-    /* Linhas da tabela de PRODUTOS como blocos */
-    #tabela-produtos tr { display: block; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; }
-    #tabela-produtos, #tabela-produtos tbody, #tabela-produtos td { border: none; } /* Remove bordas internas */
-
-    /* Células da tabela de PRODUTOS como blocos */
-    #tabela-produtos td {
-        display: block; text-align: right; padding-left: 45%; /* Espaço maior para label */
-        position: relative; border-bottom: 1px dotted #eee; font-size: 14px;
-    }
+    #tabela-produtos tr { display: block; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; padding: 10px; }
+    #tabela-produtos, #tabela-produtos tbody, #tabela-produtos td { border: none; }
+    #tabela-produtos td { display: block; text-align: right; padding-left: 45%; position: relative; border-bottom: 1px dotted #eee; font-size: 14px; padding-top: 8px; padding-bottom: 8px;}
     #tabela-produtos td:last-child { border-bottom: none; }
-
-    /* Labels ::before para tabela de PRODUTOS */
-    #tabela-produtos td::before {
-        content: attr(data-label); position: absolute; left: 10px; width: calc(45% - 20px);
-        text-align: left; font-weight: bold; color: #555; font-size: 11px; text-transform: uppercase;
-    }
-
-     /* Ajustes para inputs/selects na tabela de PRODUTOS modo card */
+    #tabela-produtos td::before { content: attr(data-label); position: absolute; left: 10px; width: calc(45% - 20px); text-align: left; font-weight: bold; color: #555; font-size: 11px; text-transform: uppercase; }
     #tabela-produtos td input, #tabela-produtos td select { width: auto; max-width: 100%; display: inline-block; margin-left: 5px; }
-    #tabela-produtos td[data-label="Descrição"] input { width: 60%; min-width: 150px; }
-
-     /* Ajustes para imagem na tabela de PRODUTOS modo card */
-     #tabela-produtos .td-imagem { text-align: left; padding-left: 10px; }
-     #tabela-produtos .td-imagem::before { display: none; }
-     #tabela-produtos .imagem-produto-preview { display: inline-block; vertical-align: middle; margin: 0 10px 0 0; max-width: 40px; max-height: 40px;}
-     #tabela-produtos .nome-imagem-atual, #tabela-produtos .imagem-edit-input { display: inline-block; vertical-align: middle; }
-
-     /* Ações na tabela de PRODUTOS modo card */
-    #tabela-produtos td.actions { text-align: center; padding-left: 10px; }
+    #tabela-produtos .td-imagem { text-align: left; padding-left: 10px; }
+    #tabela-produtos .td-imagem::before { display: none; }
+    #tabela-produtos .imagem-produto-preview { display: inline-block; vertical-align: middle; margin: 0 10px 0 0; max-width: 40px; max-height: 40px;}
+    #tabela-produtos .nome-imagem-atual, #tabela-produtos .imagem-edit-input { display: inline-block; vertical-align: middle; }
+    #tabela-produtos td.actions { text-align: center; padding-left: 10px; padding-top: 10px; }
     #tabela-produtos td.actions::before { display: none; }
     #tabela-produtos td.actions button { margin: 5px; display: inline-block; }
 
-    /* Tabela de PEDIDOS em telas pequenas: Mantém rolagem horizontal (menos colunas) */
-    #tabela-pedidos { min-width: 600px; } /* Ajusta largura mínima se necessário */
+    /* Tabela de PEDIDOS mantém rolagem, mas ajusta padding */
+    #tabela-pedidos { min-width: 650px; }
+     #tabela-pedidos th, #tabela-pedidos td { padding: 8px 10px; font-size: 13px; }
+     #tabela-pedidos td.status-cell { min-width: 160px; } /* Garante espaço pro select e botões */
+
 }
 
-/* Estilos para o Modal de Detalhes do Pedido */
-.modal {
-    display: none; /* Escondido por padrão */
-    position: fixed; /* Fica fixo na tela */
-    z-index: 1001; /* Fica sobre outros elementos */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto; /* Habilita scroll se conteúdo for grande */
-    background-color: rgba(0,0,0,0.6); /* Fundo escuro semi-transparente */
-    padding-top: 60px; /* Espaço do topo */
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 5% auto; /* Centraliza verticalmente (aproximado) e horizontalmente */
-    padding: 25px 35px;
-    border: 1px solid #888;
-    width: 80%; /* Largura do modal */
-    max-width: 700px; /* Largura máxima */
-    border-radius: 8px;
-    position: relative;
-}
-
-/* Botão de fechar (X) */
-.modal-close-btn {
-    color: #aaa;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.modal-close-btn:hover,
-.modal-close-btn:focus {
-    color: black;
-    text-decoration: none;
-}
-
-/* Estilos para o conteúdo do modal */
-.modal-content h2 {
-    margin-top: 0;
-    color: #b71c1c;
-    text-align: center;
-    margin-bottom: 20px;
-}
-.modal-content h3 {
-    margin-top: 25px;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 5px;
-    font-size: 1.2em;
-    color: #333;
-}
-
-#modal-pedido-corpo p {
-    margin: 5px 0;
-    line-height: 1.5;
-}
-#modal-pedido-corpo strong {
-    color: #555;
-}
-
-#modal-lista-itens {
-    list-style: none;
-    padding: 0;
-}
-#modal-lista-itens li {
-    padding: 8px 0;
-    border-bottom: 1px dotted #eee;
-    display: flex;
-    align-items: center;
-    gap: 15px; /* Espaço entre elementos */
-    font-size: 0.95em;
-}
-#modal-lista-itens li:last-child {
-    border-bottom: none;
-}
-#modal-lista-itens img { /* Estilo para imagem do item no modal */
-    max-width: 40px;
-    max-height: 40px;
-    object-fit: cover;
-    border-radius: 3px;
-    border: 1px solid #eee;
-}
-#modal-lista-itens .item-nome { flex-grow: 1; } /* Faz nome ocupar espaço */
-#modal-lista-itens .item-preco { white-space: nowrap; } /* Evita quebra de linha no preço */
-
-#modal-pedido-observacoes p {
-    background-color: #f9f9f9;
-    border: 1px dashed #ddd;
-    padding: 10px;
-    border-radius: 4px;
-    font-style: italic;
-    color: #444;
-    white-space: pre-wrap; /* Preserva quebras de linha das observações */
-}
-
-/* Estilo de carregamento para o corpo do modal */
-#modal-pedido-corpo.loading p {
-    text-align: center;
-    color: #999;
-    font-style: italic;
-}
-
-/* Classe para mostrar o modal */
-.modal:not(.hidden) {
-    display: block;
-}
-
-/* Ajustes Finais para Telas Muito Pequenas */
+/* Ajustes Finais */
 @media (max-width: 480px) {
     .admin-wrapper h1 { font-size: 1.5em; }
     .admin-section h2 { font-size: 1.2em; }
-    .admin-nav ul li a { padding: 10px; }
+    .admin-nav ul li a, .admin-nav ul li button { padding: 10px; }
 
-    /* Tabela de Produtos */
+    /* Tabela Produtos Card */
     #tabela-produtos td { padding-left: 35%; font-size: 13px; }
     #tabela-produtos td::before { width: calc(35% - 15px); font-size: 10px;}
     #tabela-produtos td[data-label="Descrição"] input { width: 100%; margin-left: 0; display: block; margin-top: 5px; }
 
-    /* Tabela de Pedidos */
-    #tabela-pedidos th, #tabela-pedidos td { padding: 8px 6px; font-size: 12px; }
-    #tabela-pedidos { min-width: 450px; }
+    /* Tabela Pedidos Rolagem */
+    #tabela-pedidos { min-width: 500px; }
+    #tabela-pedidos th, #tabela-pedidos td { padding: 6px 8px; font-size: 12px; }
 }

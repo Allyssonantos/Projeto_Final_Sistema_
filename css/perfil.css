@@ -1,85 +1,320 @@
 /* css/perfil.css */
+
+body {
+    background-color: #f4f5f7; /* Fundo levemente cinza para o body */
+}
+
+/* Navbar Fixa */
+.navbar {
+    position: fixed; /* Fixa no topo */
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 50px; /* Altura aumentada */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Alinha botões à direita */
+    padding: 0 30px; /* Padding horizontal */
+    background-color: #d32f2f;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000; /* Garante que fique sobre outros elementos */
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 15px; /* Espaçamento entre botões */
+}
+
+.nav-buttons a, .nav-buttons button {
+    padding: 8px 18px; /* Ajuste padding */
+    background-color: white;
+    color: #d32f2f; /* Texto vermelho */
+    font-weight: bold;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+.nav-buttons a:hover, .nav-buttons button:hover {
+    background-color: #eee; /* Leve mudança no hover */
+    transform: none; /* Remove o scale do base.css se não desejar */
+}
+
+.nav-buttons a img{
+    width: 20px;
+}
+
 .container-perfil {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 25px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    max-width: 850px; /* Largura máxima */
+    margin: 40px auto; /* Mais espaço acima/abaixo */
+    padding: 0; /* Padding removido do container principal */
+    background-color: transparent; /* Fundo base do body */
+    box-shadow: none;
+    border-radius: 0;
 }
 
-.container-perfil h1,
-.container-perfil h2 {
+.container-perfil h1 {
     text-align: center;
-    color: #d32f2f;
-    margin-bottom: 25px;
+    color: #b71c1c; /* Vermelho Escuro */
+    margin-bottom: 35px;
+    font-size: 2.1em;
+    font-weight: 600;
+    display: flex; /* Para alinhar ícone */
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espaço entre ícone e texto */
 }
-.container-perfil h2 {
-     text-align: left;
-     font-size: 1.5em;
-     border-bottom: 1px solid #eee;
-     padding-bottom: 10px;
-     margin-top: 30px;
+.container-perfil h1 .fas { /* Estilo do ícone (se usar Font Awesome) */
+    font-size: 0.9em;
 }
 
-#dados-usuario p {
-    margin-bottom: 10px;
-    font-size: 1.1em;
-    line-height: 1.6;
+
+/* Estilo Geral dos Cards */
+.profile-card,
+.order-history-card {
+    background-color: #ffffff; /* Fundo branco */
+    border-radius: 8px;
+    margin-bottom: 35px; /* Espaço entre os cards */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07); /* Sombra mais suave */
+    overflow: hidden; /* Importante para conter cantos arredondados */
+    border: 1px solid #e0e0e0; /* Borda sutil */
 }
-#dados-usuario p strong {
-    display: inline-block;
-    min-width: 100px; /* Alinha os valores */
+
+/* Cabeçalho dos Cards */
+.card-header {
+    display: flex;
+    justify-content: space-between; /* Alinha título à esquerda, botão à direita */
+    align-items: center;
+    background-color: #f9fafb; /* Fundo bem claro */
+    padding: 18px 25px;
+    border-bottom: 1px solid #e0e0e0; /* Linha separadora */
+}
+
+.card-header h2 {
+    margin: 0;
+    font-size: 1.3em;
+    color: #d32f2f; /* Vermelho padrão */
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.card-header h2 .fas { /* Ícone do título */
+    font-size: 0.9em;
+}
+
+/* Botão dentro do cabeçalho (ex: Editar Perfil) */
+.card-header .button-secondary { /* Assume que você tem uma classe base ou cria uma */
+    padding: 6px 12px;
+    font-size: 0.85em;
+    background-color: #6c757d; /* Cinza */
+    color: white;
+    border: none;
+}
+.card-header .button-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Corpo dos Cards */
+.card-body {
+    padding: 25px;
+}
+
+/* Estilos "Meus Dados" com Lista de Definição */
+.profile-details {
+    line-height: 1.7; /* Melhora legibilidade */
+}
+.profile-details dt { /* Termo (label: Nome, Email...) */
+    font-weight: 600; /* Mais forte */
     color: #555;
+    font-size: 0.85em; /* Um pouco menor */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+.profile-details dd { /* Definição (valor: Maycon Castro...) */
+    margin-left: 0;
+    margin-bottom: 18px; /* Espaço entre os itens */
+    font-size: 1.05em;
+    color: #222;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #eaeaea; /* Separador mais suave */
+}
+.profile-details dd:last-of-type {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none; /* Remove linha do último item */
 }
 
-#dados-usuario.loading span,
-#lista-meus-pedidos.loading p {
-    color: #999;
+/* Loading State */
+.loading p,
+.loading span,
+.loading dd {
+    color: #999 !important; /* Usa !important para sobrescrever se necessário */
     font-style: italic;
 }
 
-/* Estilo básico para histórico */
+
+/* Estilos Histórico de Pedidos */
 .pedido-historico-item {
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    border: 1px solid #e9e9e9;
+    border-radius: 6px;
     margin-bottom: 20px;
-    padding: 15px;
-    background-color: #f9f9f9;
+    background-color: #fff;
+    transition: box-shadow 0.2s ease-in-out;
+}
+.pedido-historico-item:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
 .pedido-historico-header {
+    display: flex; /* Flex para melhor alinhamento */
+    flex-wrap: wrap; /* Quebra linha se não couber */
+    justify-content: space-between; /* Espaça os itens */
+    align-items: center;
+    gap: 10px 20px; /* Espaço entre itens */
+    padding: 12px 18px;
+    background-color: #fcfcfc; /* Quase branco */
+    border-bottom: 1px solid #e9e9e9;
+    font-size: 0.9em;
+    color: #444;
+    border-radius: 6px 6px 0 0;
+}
+.pedido-historico-header span { margin: 0; }
+.pedido-historico-header strong { color: #111; }
+
+/* Classes de Status (Manter ou ajustar cores) */
+.status-recebido { color: #ff9800; font-weight: bold; }
+.status-em-preparo { color: #2196F3; font-weight: bold; }
+.status-saiu-para-entrega { color: #9c27b0; font-weight: bold; }
+.status-entregue { color: #4CAF50; font-weight: bold; }
+.status-cancelado { color: #f44336; font-weight: bold; }
+
+.pedido-historico-itens {
+    padding: 15px 18px;
+}
+.pedido-historico-itens h4 { margin-top: 0; margin-bottom: 12px; font-size: 1.05em; color: #555; font-weight: 600; }
+.pedido-historico-itens ul { list-style: none; padding: 0; margin: 0; }
+.pedido-historico-itens li {
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-    border-bottom: 1px dashed #ccc;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
     font-size: 0.95em;
     color: #333;
+    border-bottom: 1px dotted #f0f0f0;
 }
-.pedido-historico-header span {
-    margin-right: 15px;
-    margin-bottom: 5px;
+.pedido-historico-itens li:last-child { border-bottom: none; }
+.pedido-historico-itens img {
+    width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #eee;
 }
-.pedido-historico-header .status-recebido { color: orange; }
-.pedido-historico-header .status-em-preparo { color: blue; }
-.pedido-historico-header .status-saiu-para-entrega { color: purple; }
-.pedido-historico-header .status-entregue { color: green; }
-.pedido-historico-header .status-cancelado { color: red; }
+.pedido-historico-itens .item-nome { flex-grow: 1; font-weight: 500; }
+.pedido-historico-itens .item-preco { color: #666; font-size: 0.9em; white-space: nowrap; }
 
+.pedido-historico-observacoes {
+    padding: 0 18px 15px 18px; /* Padding ajustado */
+    margin-top: 10px;
+}
+.pedido-historico-observacoes h4 { margin-bottom: 8px; font-size: 1em; color: #555; font-weight: 600; }
+.pedido-historico-observacoes p {
+    background-color: #fff9e6; /* Amarelo bem claro */
+    border: 1px dashed #ffe5a1;
+    padding: 12px;
+    border-radius: 4px;
+    font-style: italic;
+    color: #7d6a24;
+    white-space: pre-wrap; /* Mantém quebras de linha */
+    font-size: 0.9em;
+    line-height: 1.5;
+    margin: 0;
+}
 
-.pedido-historico-itens h4 {
-    margin-bottom: 8px;
-    font-size: 1em;
+/* --- Estilos para o Formulário de Edição --- */
+#form-editar-perfil {
+    margin-top: 20px; /* Espaço acima do formulário */
+}
+
+#form-editar-perfil .form-group {
+    margin-bottom: 18px;
+}
+
+#form-editar-perfil label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 0.9em;
     color: #444;
 }
-.pedido-historico-itens ul {
-    list-style: none;
-    padding-left: 10px;
+
+/* Inputs herdam de base.css, podemos ajustar se necessário */
+#form-editar-perfil input[type="text"],
+#form-editar-perfil input[type="email"],
+#form-editar-perfil input[type="tel"] {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    width: 100%; /* Ocupa largura total */
+    box-sizing: border-box;
 }
-.pedido-historico-itens li {
-    font-size: 0.9em;
-    color: #555;
-    margin-bottom: 4px;
+#form-editar-perfil input:focus {
+     border-color: #d32f2f;
+     box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.2);
+     outline: none;
+}
+
+
+#form-editar-perfil .form-actions {
+    margin-top: 25px;
+    display: flex;
+    gap: 10px; /* Espaço entre botões */
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+#form-editar-perfil button { /* Botão principal (Salvar) */
+    /* Herda de base.css, pode sobrescrever */
+    padding: 10px 20px;
+    flex-grow: 1; /* Opcional: faz ocupar espaço */
+}
+
+#form-editar-perfil .button-secondary { /* Botão Cancelar */
+    background-color: #6c757d;
+    flex-grow: 0; /* Não cresce */
+}
+#form-editar-perfil .button-secondary:hover {
+    background-color: #5a6268;
+}
+
+#form-editar-perfil small {
+    display: block;
+    margin-top: 15px;
+    font-size: 0.85em;
+    color: #777;
+    text-align: center;
+}
+
+
+/* Classe utilitária para esconder/mostrar */
+.hidden {
+    display: none !important;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+     .container-perfil h1 { font-size: 1.9em; margin-bottom: 25px; }
+     .card-header { padding: 15px 20px; }
+     .card-header h2 { font-size: 1.2em; }
+     .card-body { padding: 20px; }
+     .profile-details dd { font-size: 1em; }
+}
+
+@media (max-width: 600px) {
+    .container-perfil { margin: 20px auto; }
+    .container-perfil h1 { font-size: 1.6em; }
+    .card-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .card-header h2 { font-size: 1.15em; }
+    #btn-editar-perfil { align-self: flex-end; } /* Botão editar para a direita */
+    .card-body { padding: 15px; }
+    .pedido-historico-header { grid-template-columns: 1fr 1fr; /* Duas colunas */ font-size: 0.85em;}
+    .pedido-historico-itens li { font-size: 0.9em; }
 }

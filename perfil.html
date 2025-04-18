@@ -1,52 +1,95 @@
 <!DOCTYPE html>
- <html lang="pt-BR">
- <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Meu Perfil - Pizzaria Express</title>
-     <link rel="stylesheet" href="css/base.css">
-     <link rel="stylesheet" href="css/perfil.css"> <!-- Crie este CSS -->
- 
- </head>
- <body>
-     <!-- Navbar (incluir global.js ajustará os links login/logout/perfil) -->
-     <nav class="navbar">
-         <div class="nav-brand"><a href="index.html">Pizzaria Express</a></div>
-         <div class="nav-buttons">
-             <a href="index.html" class="nav-button">Cardápio</a>
-             <a href="perfil.html" id="nav-perfil" class="nav-button hidden">Meu Perfil</a>
-             <a href="admin.html" id="nav-admin-prod" class="nav-button hidden">Admin Produtos</a>
-             <a href="admin_pedidos.html" id="nav-admin-pedidos" class="nav-button hidden">Admin Pedidos</a>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - Pizzaria Express</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/perfil.css"> <!-- Crie ou atualize este CSS -->
+    <!-- Opcional: Ícones (ex: Font Awesome) -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
+</head>
+<body>
+    <!-- Navbar (mantém a estrutura anterior, global.js controla os links) -->
+        <!-- Navbar -->
+    <nav class="navbar">
+         <!-- Logo pode vir aqui também se preferir -->
+        <div class="nav-buttons">
+            
+            <button data-scroll-to="menu-pizzas">Pizzas</button>
+            <button data-scroll-to="menu-bebidas">Bebidas</button>
+
+             <!-- Links Admin (mostrados/escondidos pelo global.js se for admin) -->
+             <a href="admin_main.html" id="nav-admin-prod" class="nav-button hidden">Pagina Admin</a>
+
              <a href="login.html" id="nav-login" class="nav-button">Login</a>
              <button id="nav-logout" class="nav-button hidden">Logout</button>
-         </div>
-     </nav>
- 
-     <main class="container-perfil">
-         <h1>Meu Perfil</h1>
-         <div id="mensagem-perfil" class="mensagem"></div>
- 
-         <section id="dados-usuario" class="loading">
-             <h2>Meus Dados</h2>
-             <p><strong>Nome:</strong> <span id="perfil-nome">Carregando...</span></p>
-             <p><strong>Email:</strong> <span id="perfil-email">Carregando...</span></p>
-             <p><strong>Telefone:</strong> <span id="perfil-telefone">Carregando...</span></p>
-             <p><strong>Endereço:</strong> <span id="perfil-endereco">Carregando...</span></p>
-             <!-- Adicionar botão/formulário para editar perfil (funcionalidade futura) -->
-             <!-- <button id="btn-editar-perfil">Editar Perfil</button> -->
-         </section>
- 
-         <section id="historico-pedidos">
-             <h2>Histórico de Pedidos</h2>
-             <div id="lista-meus-pedidos" class="loading">
-                 <p>Carregando histórico...</p>
-             </div>
-         </section>
- 
-     </main>
- 
-     
- 
-     <script src="js/global.js"></script> <!-- Para login/logout status -->
-     <script src="js/perfil.js"></script>
- </body>
+            
+        </div>
+    </nav>
+
+    <main class="container-perfil">
+        <h1><i class="fas fa-user-circle"></i> Meu Perfil</h1> <!-- Ícone (se usar Font Awesome) -->
+        <div id="mensagem-perfil" class="mensagem"></div>
+
+        <!-- Card: Meus Dados -->
+        <section id="dados-usuario" class="profile-card loading">
+            <header class="card-header">
+                <h2>Meus Dados</h2>
+                <!-- Botão para INICIAR edição -->
+                <button id="btn-editar-perfil" class="button-secondary">Editar Perfil</button>
+            </header>
+            <div class="card-body">
+                <!-- Área de exibição dos dados (inicialmente visível) -->
+                <div id="display-dados-usuario">
+                    <dl class="profile-details">
+                        <dt>Nome:</dt> <dd id="perfil-nome">Carregando...</dd>
+                        <dt>Email:</dt> <dd id="perfil-email">Carregando...</dd>
+                        <dt>Telefone:</dt> <dd id="perfil-telefone">Carregando...</dd>
+                        <dt>Endereço:</dt> <dd id="perfil-endereco">Carregando...</dd>
+                    </dl>
+                </div>
+
+                <!-- Formulário de Edição (inicialmente escondido) -->
+                <form id="form-editar-perfil" class="hidden">
+                     <div class="form-group">
+                         <label for="edit-nome">Nome Completo:</label>
+                         <input type="text" id="edit-nome" name="nome" required>
+                     </div>
+                      <div class="form-group">
+                         <label for="edit-email">E-mail:</label>
+                         <input type="email" id="edit-email" name="email" required>
+                      </div>
+                     <div class="form-group">
+                         <label for="edit-telefone">Telefone (com DDD):</label>
+                         <input type="tel" id="edit-telefone" name="telefone" placeholder="(XX) 9XXXX-XXXX ou (XX) XXXX-XXXX">
+                     </div>
+                     <div class="form-group">
+                         <label for="edit-endereco">Endereço Completo:</label>
+                         <input type="text" id="edit-endereco" name="endereco" placeholder="Rua Exemplo, 123, Bairro, Cidade - UF" required>
+                     </div>
+                     <div class="form-actions">
+                         <button type="submit" id="btn-salvar-perfil">Salvar Alterações</button>
+                         <button type="button" id="btn-cancelar-edicao" class="button-secondary">Cancelar</button>
+                     </div>
+                      <small>Para alterar a senha, utilize a opção "Esqueci minha senha" (funcionalidade futura).</small>
+                </form>
+            </div>
+        </section>
+
+        <!-- Card: Histórico de Pedidos (sem mudanças aqui) -->
+        <section id="historico-pedidos" class="order-history-card">
+             <header class="card-header">
+                <h2>Histórico de Pedidos</h2>
+             </header>
+            <div id="lista-meus-pedidos" class="card-body loading">
+                <p>Carregando histórico...</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="js/global.js"></script>
+    <script src="js/perfil.js"></script>
+</body>
+</html>
