@@ -43,6 +43,10 @@ body {
     transform: none; /* Remove o scale do base.css se não desejar */
 }
 
+.nav-buttons a img{
+    width: 20px;
+}
+
 /* Header Principal */
 .main-header {
     background-color: #e64a19; /* Tom de laranja/vermelho */
