@@ -57,11 +57,31 @@
     <!-- Carrinho Lateral -->
     <aside class="carrinho-container">
         <h2>Carrinho</h2>
-        <ul id="carrinho-itens"> <!-- ID atualizado -->
+        <ul id="carrinho-itens">
             <li>Carrinho vazio.</li>
         </ul>
         <p id="total">Total: R$ 0,00</p>
-        <button id="btn-finalizar-pedido">Finalizar Pedido</button> <!-- ID adicionado -->
+
+        <!-- === SEÇÃO DE PAGAMENTO ADICIONADA === -->
+        <div class="forma-pagamento">
+            <h3>Forma de Pagamento</h3>
+            <div class="pagamento-opcao">
+                <input type="radio" id="pagamento-pix" name="forma_pagamento" value="PIX" checked>
+                <label for="pagamento-pix">PIX (Chave será exibida após finalizar)</label>
+                <!-- Adicionar mais detalhes sobre o PIX se necessário -->
+            </div>
+            <div class="pagamento-opcao">
+                <input type="radio" id="pagamento-entrega" name="forma_pagamento" value="Na Entrega">
+                <label for="pagamento-entrega">Cartão/Dinheiro (somente na entrega)</label>
+            </div>
+            <div id="mensagem-pagamento" class="mensagem small-mensagem hidden"></div> <!-- Para mensagens de erro -->
+        </div>
+        <!-- === FIM DA SEÇÃO DE PAGAMENTO === -->
+
+         <!-- Mensagem para erros gerais do carrinho ou sucesso do pedido -->
+        <div class="mensagem-carrinho"></div>
+
+        <button id="btn-finalizar-pedido">Finalizar Pedido</button>
     </aside>
 
     <!-- Footer -->

@@ -235,6 +235,54 @@ body {
     font-size: 16px;
 }
 
+/* --- Estilos para Forma de Pagamento no Carrinho --- */
+.forma-pagamento {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #eee; /* Linha separadora */
+}
+
+.forma-pagamento h3 {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: 600;
+}
+
+.pagamento-opcao {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start; /* Alinha label com topo do radio */
+    gap: 8px; /* Espaço entre radio e label */
+}
+
+.pagamento-opcao input[type="radio"] {
+    margin-top: 3px; /* Alinha melhor com o texto */
+    cursor: pointer;
+}
+
+.pagamento-opcao label {
+    font-size: 0.95em;
+    color: #444;
+    cursor: pointer;
+    line-height: 1.4;
+}
+
+/* Estilo para mensagens pequenas dentro da seção */
+.small-mensagem {
+    padding: 8px 10px !important;
+    font-size: 0.85em !important;
+    margin-top: 5px;
+}
+.small-mensagem:not(.hidden) { /* Garante que display: block seja aplicado */
+     display: block !important;
+}
+
+/* Garante espaço antes do botão finalizar */
+#btn-finalizar-pedido {
+    margin-top: 25px;
+}
+
 /* Limpa floats para o footer (se houver) */
 body::after {
     content: "";

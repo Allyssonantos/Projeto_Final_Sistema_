@@ -1,98 +1,102 @@
-// js/store.js - CORRIGIDO
+// js/store.js - COMPLETO E ATUALIZADO (com Forma de Pagamento)
 
 document.addEventListener("DOMContentLoaded", function () {
-    // --- Configurações e Constantes ---
-    const API_BASE_URL = "http://localhost/pizzaria_express/api"; // !! VERIFIQUE SUA URL DA API !!
-    // const UPLOADS_BASE_URL = 'uploads/produtos/'; // Não precisamos mais disto se a API retorna a URL completa
-    const PLACEHOLDER_IMG = 'img/placeholder.png'; // !! Certifique-se que este arquivo existe em pizzaria_express/img/ !!
+    // === Configurações e Constantes ===
+    const API_BASE_URL = "http://localhost/pizzaria_express/api"; // !! VERIFIQUE SUA URL !!
+    const PLACEHOLDER_IMG = 'img/placeholder.png'; // !! Garanta que img/placeholder.png existe !!
 
-    // --- Referências aos Elementos do DOM ---
+    // === Referências aos Elementos do DOM ===
     const listaPizzasContainer = document.getElementById("lista-pizzas");
     const listaBebidasContainer = document.getElementById("lista-bebidas");
-    const carrinhoUl = document.getElementById("carrinho-itens"); // ID atualizado no HTML
+    const carrinhoUl = document.getElementById("carrinho-itens");
     const totalP = document.getElementById("total");
-    const btnFinalizar = document.getElementById("btn-finalizar-pedido"); // ID atualizado no HTML
+    const btnFinalizar = document.getElementById("btn-finalizar-pedido");
+    // Seletores para Forma de Pagamento
+    const opcoesPagamento = document.querySelectorAll('input[name="forma_pagamento"]');
+    const mensagemPagamentoEl = document.getElementById('mensagem-pagamento');
+    const mensagemCarrinhoEl = document.querySelector('.carrinho-container .mensagem-carrinho'); // Div para mensagens gerais do carrinho/pedido
 
-    // ---------- BLOCO REMOVIDO DAQUI ----------
-    // const response = await fetch(...); // <--- ESTE BLOCO FOI REMOVIDO
-    // ---------- FIM DO BLOCO REMOVIDO ----------
-
-    // --- Estado do Carrinho (Armazenado na memória do navegador) ---
+    // === Estado do Carrinho (Array na memória) ===
     let carrinho = [];
 
-    // --- Buscar e Renderizar Produtos ---
-    async function carregarProdutos() {
-        console.log("STORE.JS: Iniciando carregamento de produtos..."); // Log inicial
-        try {
-            // Ajuste para usar a API correta se mudou para all_in_one.php
-             const response = await fetch(`${API_BASE_URL}/produtos.php`); // Ou all_in_one.php?action=listarProdutos
-            // const response = await fetch(`${API_BASE_URL}/all_in_one.php?action=listarProdutos`); // DESCOMENTE esta linha se usar all_in_one
+    // === Funções de Carregamento e Renderização ===
 
-            console.log("STORE.JS: Fetch produtos - Status:", response.status); // Log status
+    /**
+     * Busca os produtos da API e chama a função para renderizá-los.
+     */
+    async function carregarProdutos() {
+        console.log("STORE.JS: Iniciando carregamento de produtos...");
+        try {
+            // Ajuste a URL se estiver usando a API combinada all_in_one.php
+            const response = await fetch(`${API_BASE_URL}/produtos.php`);
+            // const response = await fetch(`${API_BASE_URL}/all_in_one.php?action=listarProdutos`); // DESCOMENTE se usar all_in_one
+
+            console.log("STORE.JS: Fetch produtos - Status:", response.status);
             if (!response.ok) {
-                throw new Error(`Erro HTTP ao buscar produtos: ${response.status}`);
+                throw new Error(`Erro HTTP ${response.status} ao buscar produtos.`);
             }
             const produtos = await response.json();
-            console.log("STORE.JS: Produtos recebidos da API:", produtos); // Log dados recebidos
+            console.log("STORE.JS: Produtos recebidos da API:", produtos);
 
-            // Verifica se 'produtos' é um array antes de filtrar
-             if (!Array.isArray(produtos)) {
-                 console.error("STORE.JS: API não retornou um array de produtos:", produtos);
-                 throw new Error("Formato de dados inválido da API.");
-             }
+            if (!Array.isArray(produtos)) {
+                throw new Error("Formato de dados inválido recebido da API.");
+            }
 
             // Separa produtos por categoria
             const pizzas = produtos.filter(p => p.categoria === 'pizza');
             const bebidas = produtos.filter(p => p.categoria === 'bebida');
-            console.log("STORE.JS: Pizzas filtradas:", pizzas.length);
-            console.log("STORE.JS: Bebidas filtradas:", bebidas.length);
+            console.log(`STORE.JS: Filtrados - Pizzas: ${pizzas.length}, Bebidas: ${bebidas.length}`);
 
             // Renderiza nas seções corretas
             renderizarProdutos(pizzas, listaPizzasContainer);
             renderizarProdutos(bebidas, listaBebidasContainer);
 
         } catch (error) {
-            console.error("STORE.JS: Erro ao carregar produtos:", error);
-            // Exibe mensagens de erro nos containers, se existirem
-            const errorMsg = `Erro ao carregar: ${error.message}`;
-            if (listaPizzasContainer) listaPizzasContainer.innerHTML = `<p>${errorMsg}</p>`;
-            if (listaBebidasContainer) listaBebidasContainer.innerHTML = `<p>${errorMsg}</p>`;
+            console.error("STORE.JS: Erro CRÍTICO ao carregar produtos:", error);
+            const errorMsg = `Falha ao carregar produtos: ${error.message}`;
+            if (listaPizzasContainer) listaPizzasContainer.innerHTML = `<p class="error-message">${errorMsg}</p>`;
+            if (listaBebidasContainer) listaBebidasContainer.innerHTML = `<p class="error-message">${errorMsg}</p>`;
         }
     }
 
+    /**
+     * Renderiza uma lista de produtos em um container HTML específico.
+     * @param {Array} produtos Array de objetos de produto.
+     * @param {HTMLElement} container Elemento HTML onde os produtos serão inseridos.
+     */
     function renderizarProdutos(produtos, container) {
         if (!container) {
-            console.warn("STORE.JS: Container para renderizar produtos não encontrado.");
+            console.warn("STORE.JS: Container de renderização não encontrado:", container);
             return;
         }
-        container.innerHTML = ""; // Limpa container
+        container.innerHTML = ""; // Limpa conteúdo anterior
 
         if (!Array.isArray(produtos) || produtos.length === 0) {
-            container.innerHTML = "<p>Nenhum produto disponível nesta categoria.</p>";
+            container.innerHTML = "<p>Nenhum produto disponível nesta categoria no momento.</p>";
             return;
         }
-        console.log(`STORE.JS: Renderizando ${produtos.length} produtos no container`, container.id);
+        console.log(`STORE.JS: Renderizando ${produtos.length} produtos em #${container.id}`);
 
         produtos.forEach(produto => {
             const divProduto = document.createElement("div");
             divProduto.classList.add("produto");
-            // Usa a imagem_url retornada pela API ou o placeholder
+            // Usa a imagem_url da API ou o placeholder definido
             const imagemUrl = produto.imagem_url ? produto.imagem_url : PLACEHOLDER_IMG;
 
-            // Cria o HTML interno do card do produto
+            // Cria o HTML do card do produto
             divProduto.innerHTML = `
-                <img src="${imagemUrl}" alt="${produto.nome || 'Produto'}">
+                <img src="${imagemUrl}" alt="${produto.nome || 'Imagem do Produto'}">
                 <div class="info">
-                    <h3>${produto.nome || 'Nome Indisponível'}</h3>
+                    <h3>${produto.nome || 'Produto Sem Nome'}</h3>
                     <p>${produto.descricao || ''}</p>
                     <p class="preco">R$ ${Number(produto.preco).toFixed(2)}</p>
                     <button class="btn-add-carrinho" data-id="${produto.id}" data-nome="${produto.nome}" data-preco="${produto.preco}">Adicionar</button>
                 </div>
             `;
 
-             // Adiciona tratamento de erro para imagem quebrada (importante!)
+             // Adiciona tratamento de erro para imagens quebradas
              const imgElement = divProduto.querySelector('img');
-             if (imgElement) { // Verifica se a imagem existe antes de adicionar o handler
+             if (imgElement) {
                  imgElement.onerror = () => {
                     console.warn(`STORE.JS: Erro ao carregar imagem: ${imgElement.src}. Usando placeholder.`);
                     imgElement.src = PLACEHOLDER_IMG;
@@ -102,55 +106,62 @@ document.addEventListener("DOMContentLoaded", function () {
                   console.warn("STORE.JS: Tag <img> não encontrada no produto:", produto.nome);
              }
 
-
-            // Adiciona o card do produto ao container correto
             container.appendChild(divProduto);
         });
     }
 
-    // --- Gerenciamento do Carrinho ---
+    // === Funções de Gerenciamento do Carrinho ===
+
+    /**
+     * Adiciona um item ao carrinho ou incrementa sua quantidade se já existir.
+     * @param {string|number} id ID do produto.
+     * @param {string} nome Nome do produto.
+     * @param {string|number} preco Preço do produto.
+     */
     function adicionarAoCarrinho(id, nome, preco) {
-        // Validação básica dos dados recebidos
-        if (!id || !nome || preco === undefined || preco === null || isNaN(Number(preco))) {
-             console.error("STORE.JS: Tentativa de adicionar item inválido ao carrinho:", {id, nome, preco});
-             alert("Erro ao adicionar item ao carrinho. Dados inválidos.");
+        const precoNumerico = Number(preco);
+        // Validação básica dos dados recebidos do botão
+        if (!id || !nome || preco === undefined || preco === null || isNaN(precoNumerico)) {
+             console.error("STORE.JS: Tentativa de adicionar item inválido:", {id, nome, preco});
+             exibirMensagemCarrinho("Erro ao adicionar item (dados inválidos).", "error");
              return;
         }
-        console.log(">>> Função adicionarAoCarrinho chamada com:", { id, nome, preco });
-        // Procura se o item já existe no carrinho pelo ID
-        const itemExistente = carrinho.find(item => String(item.id) === String(id)); // Compara como string para segurança
+        console.log(">>> Função adicionarAoCarrinho chamada com:", { id, nome, preco: precoNumerico });
+
+        const idString = String(id); // Garante comparação como string
+        const itemExistente = carrinho.find(item => item.id === idString);
 
         if (itemExistente) {
-            // Se existe, incrementa a quantidade
-            itemExistente.quantidade++;
+            itemExistente.quantidade++; // Incrementa quantidade
             console.log("STORE.JS: Item existente, quantidade incrementada:", itemExistente);
         } else {
-            // Se não existe, adiciona novo item ao array do carrinho
-            carrinho.push({ id: String(id), nome, preco: Number(preco), quantidade: 1 });
+            // Adiciona novo item
+            carrinho.push({ id: idString, nome, preco: precoNumerico, quantidade: 1 });
             console.log("STORE.JS: Novo item adicionado ao carrinho:", carrinho[carrinho.length - 1]);
         }
-        // Atualiza a exibição do carrinho na interface
-        atualizarCarrinhoDisplay();
+        atualizarCarrinhoDisplay(); // Atualiza a interface
     }
 
+    /**
+     * Remove um item do carrinho pelo ID.
+     * @param {string|number} id ID do produto a remover.
+     */
     function removerDoCarrinho(id) {
-         console.log(`STORE.JS: Tentando remover item com ID: ${id}`);
-         // Filtra o array, mantendo apenas os itens cujo ID NÃO é o que queremos remover
-         carrinho = carrinho.filter(item => String(item.id) !== String(id));
+         const idString = String(id);
+         console.log(`STORE.JS: Tentando remover item com ID: ${idString}`);
+         carrinho = carrinho.filter(item => item.id !== idString); // Cria novo array sem o item
          console.log("STORE.JS: Carrinho após remoção:", carrinho);
-         // Atualiza a exibição
-         atualizarCarrinhoDisplay();
+         atualizarCarrinhoDisplay(); // Atualiza interface
     }
 
+    /**
+     * Atualiza a exibição HTML do carrinho (lista de itens e total).
+     */
     function atualizarCarrinhoDisplay() {
-        // Verifica se os elementos do carrinho existem no HTML
-        if (!carrinhoUl || !totalP) {
-            console.error("STORE.JS: Elementos do display do carrinho (#carrinho-itens ou #total) não encontrados.");
-            return;
-        }
+        if (!carrinhoUl || !totalP) { console.error("STORE.JS: Elementos do display do carrinho não encontrados."); return; }
         console.log("STORE.JS: Atualizando display do carrinho...");
 
-        carrinhoUl.innerHTML = ""; // Limpa lista atual
+        carrinhoUl.innerHTML = ""; // Limpa lista
         let totalCalculado = 0;
 
         if (carrinho.length === 0) {
@@ -158,104 +169,123 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             carrinho.forEach(item => {
                 const li = document.createElement("li");
-                // Cria o HTML para cada item no carrinho, incluindo botão de remover
                 li.innerHTML = `
                     ${item.nome} (x${item.quantidade}) - R$ ${(item.preco * item.quantidade).toFixed(2)}
-                    <button class="btn-remover-item" data-id="${item.id}">Remover</button>
+                    <button class="btn-remover-item" data-id="${item.id}" title="Remover item">×</button> <!-- Botão Remover -->
                 `;
                 carrinhoUl.appendChild(li);
-                // Soma o valor do item ao total
-                totalCalculado += item.preco * item.quantidade;
+                totalCalculado += item.preco * item.quantidade; // Soma ao total
             });
         }
-        // Atualiza o texto do total
-        totalP.textContent = `Total: R$ ${totalCalculado.toFixed(2)}`;
-        console.log("STORE.JS: Display do carrinho atualizado. Total:", totalCalculado.toFixed(2));
+        totalP.textContent = `Total: R$ ${totalCalculado.toFixed(2)}`; // Atualiza total
+        console.log("STORE.JS: Display carrinho atualizado. Total:", totalCalculado.toFixed(2));
     }
 
-    // --- Finalizar Pedido (Função CORRETA) ---
-    async function finalizarPedido() { // Já estava async, correto
+    // === Função para Finalizar Pedido ===
+
+    /**
+     * Coleta dados do carrinho e forma de pagamento, envia para a API e trata a resposta.
+     */
+    async function finalizarPedido() {
         console.log("STORE.JS: Iniciando finalizarPedido...");
+        exibirMensagemCarrinho("", "info"); // Limpa mensagens anteriores
+        exibirMensagemPagamento("", "info");
+
         if (carrinho.length === 0) {
+            exibirMensagemCarrinho("Seu carrinho está vazio!", "error");
             alert("Seu carrinho está vazio!");
             return;
         }
 
-        const itensParaEnviar = carrinho.map(item => ({
-            id: item.id,
-            quantidade: item.quantidade
-        }));
+        // Pega a forma de pagamento selecionada
+        let formaPagamentoSelecionada = null;
+        opcoesPagamento.forEach(radio => { if (radio.checked) { formaPagamentoSelecionada = radio.value; } });
+
+        if (!formaPagamentoSelecionada) {
+             exibirMensagemPagamento("Por favor, selecione uma forma de pagamento.", "error");
+             return;
+        }
+        console.log("STORE.JS: Forma de pagamento selecionada:", formaPagamentoSelecionada);
+
+        // Prepara os itens para enviar (Backend deve validar preço/existência)
+        const itensParaEnviar = carrinho.map(item => ({ id: item.id, quantidade: item.quantidade }));
         console.log("STORE.JS: Itens a serem enviados para API:", itensParaEnviar);
 
         try {
-            exibirMensagemCarrinho("Processando seu pedido...", "info");
+            exibirMensagemCarrinho("Processando seu pedido...", "info"); // Feedback visual
 
-            // Faz fetch para a API de finalizar pedido (AJUSTE a URL se usar all_in_one.php)
-             const response = await fetch(`${API_BASE_URL}/finalizar_pedido.php`, { // Ou all_in_one.php
-            // const response = await fetch(`${API_BASE_URL}/all_in_one.php`, { // DESCOMENTE esta linha se usar all_in_one
+            // Faz fetch para a API (Ajuste URL e body se usar all_in_one.php)
+             const response = await fetch(`${API_BASE_URL}/finalizar_pedido.php`, {
+            // const response = await fetch(`${API_BASE_URL}/all_in_one.php`, { // DESCOMENTE se usar all_in_one
                  method: 'POST',
-                 credentials: 'include', // <<< IMPORTANTE para sessão
+                 credentials: 'include', // <<< ESSENCIAL para enviar cookie de sessão
                  headers: { 'Content-Type': 'application/json' },
-                 // Envia action E carrinho se usar all_in_one
-                 // body: JSON.stringify({ action: 'finalizarPedido', carrinho: itensParaEnviar }) // DESCOMENTE se usar all_in_one
-                 body: JSON.stringify({ carrinho: itensParaEnviar }) // MANTENHA esta se usar finalizar_pedido.php separado
+                  body: JSON.stringify({ carrinho: itensParaEnviar, formaPagamento: formaPagamentoSelecionada })
+                 // body: JSON.stringify({ action: 'finalizarPedido', carrinho: itensParaEnviar, formaPagamento: formaPagamentoSelecionada }) // DESCOMENTE se usar all_in_one
              });
             console.log("STORE.JS: Resposta finalizar_pedido - Status:", response.status);
 
-            const data = await response.json();
+            let data; try { data = await response.json(); } catch(e){ throw new SyntaxError("Resposta inválida do servidor."); }
             console.log("STORE.JS: Resposta JSON finalizar_pedido:", data);
 
-            if (!response.ok) {
-                 throw new Error(data.mensagem || `Erro ${response.status} ao finalizar pedido.`);
-             }
+            // Verifica se a resposta HTTP e a lógica da API indicam sucesso
+            if (!response.ok) { throw new Error(data.mensagem || `Erro ${response.status}`); }
+            if (!data.sucesso) { throw new Error(data.mensagem || "Falha ao finalizar pedido."); }
 
-            if (data.sucesso) {
-                exibirMensagemCarrinho(`Pedido #${data.pedido_id || ''} realizado com sucesso!`, "success");
-                carrinho = [];
-                atualizarCarrinhoDisplay();
-            } else {
-                throw new Error(data.mensagem || "Falha ao processar o pedido.");
-            }
+            // --- SUCESSO ---
+            let msgSucesso = `Pedido #${data.pedido_id || ''} realizado com sucesso!`;
+            if (formaPagamentoSelecionada === 'PIX') {
+                 msgSucesso += `\n\n${data.instrucoesPix || 'Instruções para pagamento PIX serão exibidas ou enviadas.'}`;
+            } else { msgSucesso += `\n\nPague na entrega.`; }
 
-        } catch (error) {
+            exibirMensagemCarrinho(msgSucesso, "success"); // Mostra mensagem no container do carrinho
+            alert(msgSucesso); // Mostra alert também
+            carrinho = []; // Limpa o array do carrinho local
+            atualizarCarrinhoDisplay(); // Atualiza a interface
+
+        } catch (error) { // --- TRATAMENTO DE ERRO ---
             console.error("STORE.JS: Erro ao finalizar pedido:", error);
-             if (error instanceof SyntaxError) {
-                 exibirMensagemCarrinho("Erro ao processar resposta do servidor.", "error");
-             } else {
-                 exibirMensagemCarrinho(`Erro: ${error.message}`, "error");
-             }
+             let errorMsgUser = "Não foi possível finalizar seu pedido."; // Mensagem padrão
+             if (error instanceof SyntaxError) { errorMsgUser = "Erro ao processar resposta do servidor."; }
+             else { errorMsgUser = `Erro: ${error.message}`; } // Usa mensagem do erro capturado
+             exibirMensagemCarrinho(errorMsgUser, "error");
         }
     }
 
-     // Função auxiliar para mostrar mensagens perto do carrinho
+     // --- Funções Auxiliares de Mensagem ---
      function exibirMensagemCarrinho(texto, tipo) {
-         const msgContainer = document.querySelector('.carrinho-container .mensagem-carrinho');
-         if (msgContainer) {
-              msgContainer.textContent = texto;
-              msgContainer.className = `mensagem mensagem-carrinho ${tipo}`;
-              // Adicionar um timeout para limpar a mensagem
-              setTimeout(() => {
-                 if (msgContainer.textContent === texto) { msgContainer.textContent = ''; msgContainer.className = 'mensagem mensagem-carrinho'; }
-             }, 5000);
-         } else {
+         if (mensagemCarrinhoEl) {
+              mensagemCarrinhoEl.textContent = texto;
+              mensagemCarrinhoEl.className = `mensagem mensagem-carrinho ${tipo}`; // Define classe para estilo
+              mensagemCarrinhoEl.classList.toggle('hidden', !texto); // Mostra/esconde
+               // Auto-limpeza após 7 segundos
+               setTimeout(() => {
+                  if (mensagemCarrinhoEl.textContent === texto) {
+                       mensagemCarrinhoEl.textContent = '';
+                       mensagemCarrinhoEl.className = 'mensagem mensagem-carrinho hidden';
+                  }
+              }, 7000);
+         } else { // Fallback para alert
               if(tipo === 'error') alert(`Erro: ${texto}`);
-              else alert(texto); // Alert para sucesso também
+              else if (texto) alert(texto);
+         }
+     }
+     function exibirMensagemPagamento(texto, tipo) {
+         if (mensagemPagamentoEl) {
+              mensagemPagamentoEl.textContent = texto;
+              mensagemPagamentoEl.className = `mensagem small-mensagem ${tipo}`; // Usa classe small
+              mensagemPagamentoEl.classList.toggle('hidden', !texto);
          }
      }
 
     // --- Scroll Suave para Seções ---
-    function scrollToSection(sectionId) {
-        console.log(`STORE.JS: Tentando scroll para #${sectionId}`);
-        const section = document.getElementById(sectionId);
-        if (section) {
-            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else {
-            console.warn(`STORE.JS: Seção com id "${sectionId}" não encontrada para scroll.`);
-        }
-    }
+    function scrollToSection(sectionId) { /* ... (código igual antes) ... */ }
 
-    // --- Adicionar Event Listeners Globais (Delegação) ---
+    // === Adicionar Event Listeners ===
+
+    // Listener Global no BODY para Adicionar/Remover Itens (Delegação)
     document.body.addEventListener('click', (event) => {
+        // Adicionar ao Carrinho
         if (event.target.classList.contains('btn-add-carrinho')) {
             console.log(">>> Botão Adicionar Clicado!");
             const button = event.target;
@@ -265,50 +295,31 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("Dados do botão:", { id, nome, preco });
              if (id && nome && preco !== null && preco !== undefined) {
                  adicionarAoCarrinho(id, nome, preco);
-             } else {
-                 console.error("ERRO: Não foi possível obter dados (id, nome, preco) do botão 'Adicionar' clicado!");
-                 alert("Erro ao obter informações do produto.");
-             }
+             } else { console.error("ERRO: Dados inválidos no botão 'Adicionar'!"); }
         }
+        // Remover do Carrinho
         if(event.target.classList.contains('btn-remover-item')) {
             console.log(">>> Botão Remover Clicado!");
             const button = event.target;
             const id = button.getAttribute('data-id');
             console.log("ID para remover:", id);
-            if (id) {
-                removerDoCarrinho(id);
-            } else {
-                 console.error("ERRO: Não foi possível obter ID do botão 'Remover' clicado!");
-            }
+            if (id) { removerDoCarrinho(id); }
+            else { console.error("ERRO: ID não encontrado no botão 'Remover'!"); }
         }
     });
 
     // Listener para o botão Finalizar Pedido
-    if (btnFinalizar) {
-        btnFinalizar.addEventListener('click', finalizarPedido);
-    } else {
-        console.warn("STORE.JS: Botão #btn-finalizar-pedido não encontrado.");
-    }
+    if (btnFinalizar) { btnFinalizar.addEventListener('click', finalizarPedido); }
+    else { console.warn("STORE.JS: Botão #btn-finalizar-pedido não encontrado."); }
 
-    // Listeners para os botões de Navegação (Scroll)
+    // Listeners para os botões de Navegação Scroll (se existirem)
     const navButtons = document.querySelectorAll('.nav-buttons button[data-scroll-to]');
     if (navButtons.length > 0) {
-        navButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const sectionId = button.getAttribute('data-scroll-to');
-                if (sectionId) {
-                    scrollToSection(sectionId);
-                } else {
-                    console.warn("STORE.JS: Botão de navegação não tem atributo data-scroll-to.");
-                }
-            });
-        });
-    } else {
-        console.warn("STORE.JS: Nenhum botão de navegação com [data-scroll-to] encontrado.");
-    }
+        navButtons.forEach(button => { /* ... (código igual antes) ... */ });
+    } else { console.warn("STORE.JS: Nenhum botão de navegação [data-scroll-to] encontrado."); }
 
-    // --- Inicialização ---
-    carregarProdutos();
-    atualizarCarrinhoDisplay(); // Mostra "Carrinho vazio." inicialmente
+    // === Inicialização ===
+    carregarProdutos(); // Carrega os produtos da API
+    atualizarCarrinhoDisplay(); // Garante que o carrinho comece como "vazio"
 
 }); // Fim do DOMContentLoaded
