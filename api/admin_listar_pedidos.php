@@ -1,6 +1,6 @@
 <?php
 // api/admin_listar_pedidos.php
-// Lista pedidos para o admin, incluindo uma string concatenada dos itens.
+// Lista pedidos para o admin, incluindo forma de pagamento e itens concatenados.
 
 session_start(); // ESSENCIAL: No topo absoluto!
 
@@ -55,7 +55,7 @@ if ($mysqli->connect_error) {
 }
 $mysqli->set_charset("utf8mb4");
 
-// --- Lógica para Buscar Pedidos COM ITENS CONCATENADOS ---
+// --- Lógica para Buscar Pedidos COM ITENS e FORMA PGTO ---
 
 $status_filtro = $_GET['status'] ?? null; // Pega filtro da URL
 $status_validos = ['Recebido', 'Em Preparo', 'Saiu para Entrega', 'Entregue', 'Cancelado'];
@@ -63,13 +63,11 @@ $pedidos = [];
 $params = []; // Parâmetros para bind
 $types = ""; // Tipos para bind
 
-// SQL Modificada com LEFT JOIN e GROUP_CONCAT
-// CONCAT(pi.quantidade, 'x ', pi.nome_produto): Formata cada item como "Qtdx Nome"
-// GROUP_CONCAT(... SEPARATOR '; '): Junta todos os itens de um mesmo pedido em uma única string, separados por "; ".
-// Usamos um alias 'itens_pedido' para a string concatenada.
+// *** SQL ATUALIZADA para incluir p.forma_pagamento ***
 $sql = "SELECT
             p.id, p.usuario_id, p.nome_cliente, p.email_cliente, p.telefone_cliente,
             p.endereco_entrega, p.data_pedido, p.valor_total, p.status, p.observacoes,
+            p.forma_pagamento, -- <<<<<<<<<<<<<<<<<<<< INCLUÍDO AQUI
             GROUP_CONCAT( CONCAT(pi.quantidade, 'x ', pi.nome_produto) ORDER BY pi.id SEPARATOR '; ') AS itens_pedido
         FROM pedidos p
         LEFT JOIN pedido_itens pi ON p.id = pi.pedido_id"; // LEFT JOIN inclui pedidos mesmo sem itens
@@ -110,7 +108,7 @@ if($stmt){
         // Processa os resultados
         while($p = $result->fetch_assoc()){
             $p['valor_total'] = floatval($p['valor_total']);
-            // A coluna 'itens_pedido' já vem como string concatenada ou NULL se não houver itens
+            // A coluna 'itens_pedido' e 'forma_pagamento' já vêm do banco
             $pedidos[] = $p;
         }
         $result->free(); // Libera memória

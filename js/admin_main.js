@@ -156,47 +156,46 @@ document.addEventListener("DOMContentLoaded", function () {
           }
      }
 
-    function renderizarTabelaPedidos(pedidos) {
-         if (!corpoTabelaPedidos) return;
-         corpoTabelaPedidos.innerHTML = '';
+     function renderizarTabelaPedidos(pedidos) {
+        if (!corpoTabelaPedidos) return;
+        corpoTabelaPedidos.innerHTML = '';
 
-         if (pedidos.length === 0) {
-             corpoTabelaPedidos.innerHTML = `<tr><td colspan="8">Nenhum pedido encontrado${filtroStatusSelect.value ? ` com o status "${filtroStatusSelect.value}"` : ''}.</td></tr>`; // Colspan 8
-             return;
-         }
+        if (pedidos.length === 0) {
+            corpoTabelaPedidos.innerHTML = `<tr><td colspan="9">Nenhum pedido encontrado...</td></tr>`; // Colspan 9
+            return;
+        }
 
-         pedidos.forEach(pedido => {
-             const row = document.createElement('tr');
-             row.classList.add(`status-row-${(pedido.status || '').toLowerCase().replace(/\s+/g, '-')}`);
-             row.setAttribute('data-pedido-id', pedido.id);
+        pedidos.forEach(pedido => {
+            const row = document.createElement('tr');
+            row.classList.add(`status-row-${(pedido.status || '').toLowerCase().replace(/\s+/g, '-')}`);
+            row.setAttribute('data-pedido-id', pedido.id);
 
-             let dataFormatada = 'Inválida';
-              try { if (pedido.data_pedido) { dataFormatada = new Date(pedido.data_pedido).toLocaleString('pt-BR'); }} catch(e){}
+            let dataFormatada = 'Inválida';
+             try { if (pedido.data_pedido) { dataFormatada = new Date(pedido.data_pedido).toLocaleString('pt-BR'); }} catch(e){}
 
-             let statusSelectHtml = `<select class="status-pedido-select" data-pedido-id="${pedido.id}" aria-label="Status do Pedido ${pedido.id}">`;
-             statusPermitidos.forEach(statusOpt => {
-                  const selected = (pedido.status === statusOpt) ? ' selected' : '';
-                  statusSelectHtml += `<option value="${statusOpt}"${selected}>${statusOpt}</option>`;
-             });
-             statusSelectHtml += `</select>`;
+            let statusSelectHtml = `<select class="status-pedido-select" data-pedido-id="${pedido.id}" ...>`;
+            statusPermitidos.forEach(statusOpt => { const selected = (pedido.status === statusOpt) ? ' selected' : ''; statusSelectHtml += `<option value="${statusOpt}"${selected}>${statusOpt}</option>`; });
+            statusSelectHtml += `</select>`;
 
-             // Formata a string de itens vinda da API (chave 'itens_pedido')
-             const itensFormatados = (pedido.itens_pedido || 'Nenhum item').replace(/;\s*/g, '<br>');
+            const itensFormatados = (pedido.itens_pedido || 'Nenhum item').replace(/;\s*/g, '<br>');
+            // ** Pega a forma de pagamento (pode ser NULL) **
+            const formaPagamentoTexto = pedido.forma_pagamento || 'Não informado';
 
-             // Monta a linha da tabela com a nova célula "Itens"
-             row.innerHTML = `
-                 <td data-label="ID Pedido">${pedido.id}</td>
-                 <td data-label="Data">${dataFormatada}</td>
-                 <td data-label="Cliente">${pedido.nome_cliente || '?'} (<a href="mailto:${pedido.email_cliente || ''}">${pedido.email_cliente || 'N/A'}</a>)</td>
-                 <td data-label="Telefone">${pedido.telefone_cliente || 'N/A'}</td>
-                 <td data-label="Endereço">${pedido.endereco_entrega || '?'}</td>
-                 <td data-label="Itens" class="itens-cell">${itensFormatados}</td> <!-- <<< CÉLULA DE ITENS -->
-                 <td data-label="Total">R$ ${Number(pedido.valor_total).toFixed(2)}</td>
-                 <td data-label="Status" class="status-cell">${statusSelectHtml}</td>
-             `;
-             corpoTabelaPedidos.appendChild(row);
-         });
-     }
+            // Monta a linha da tabela com a nova célula "Pagamento"
+            row.innerHTML = `
+                <td data-label="ID Pedido">${pedido.id}</td>
+                <td data-label="Data">${dataFormatada}</td>
+                <td data-label="Cliente">${pedido.nome_cliente || '?'} (<a href="mailto:${pedido.email_cliente || ''}">${pedido.email_cliente || 'N/A'}</a>)</td>
+                <td data-label="Telefone">${pedido.telefone_cliente || 'N/A'}</td>
+                <td data-label="Endereço">${pedido.endereco_entrega || '?'}</td>
+                <td data-label="Itens" class="itens-cell">${itensFormatados}</td>
+                <td data-label="Total">R$ ${Number(pedido.valor_total).toFixed(2)}</td>
+                <td data-label="Pagamento">${formaPagamentoTexto}</td> <!-- <<< CÉLULA PAGAMENTO -->
+                <td data-label="Status" class="status-cell">${statusSelectHtml}</td>
+            `;
+            corpoTabelaPedidos.appendChild(row);
+        });
+    }
 
     // === Funções de Ação (Produtos) ===
     async function adicionarProduto() {
@@ -424,16 +423,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Listener de CLICK na tabela de PEDIDOS para abrir o MODAL (Se existir)
-     if(modalDetalhes && corpoTabelaPedidos) {
-         corpoTabelaPedidos.addEventListener('click', (event) => {
-             const target = event.target;
-             if (!target.classList.contains('status-pedido-select')) {
-                 const row = target.closest('tr');
-                 const pedidoId = row?.getAttribute('data-pedido-id');
-                 if (pedidoId) { mostrarDetalhesPedido(pedidoId); }
-             }
-         });
-     }
+    
 
 
     // === Inicialização ===
