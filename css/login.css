@@ -1,53 +1,179 @@
-/* --- START OF FILE login.css --- */
+/* css/login.css - Estilos Melhorados */
 
-/* Body já configurado em base.css para centralizar */
+/* Importa fontes do Google (Exemplo: Poppins) - Adicione ao seu <head> ou CSS base se preferir */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-/* Estilos específicos para o container de login, se necessário */
+/* Estilo do Body (pode estar em base.css também) */
+body { /* Adiciona classe ao body no HTML se quiser isolar o fundo */
+    font-family: 'Poppins', sans-serif; /* Fonte mais moderna */
+    background:  #b71c1c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Container Principal do Login */
 .login-container {
-    max-width: 400px; /* Pode ajustar a largura aqui */
+    background-color: #ffffff; /* Fundo branco */
+    padding: 40px 35px; /* Mais padding */
+    border-radius: 10px; /* Cantos mais arredondados */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Sombra mais pronunciada */
+    width: 100%;
+    max-width: 400px; /* Largura máxima */
+    text-align: center;
+    border-top: 5px solid #d32f2f; /* Detalhe de borda superior */
 }
 
-/* Estilos dos campos e labels (podem herdar de base.css ou sobrescrever) */
+/* Container e Estilo do Logo */
+.login-logo-container {
+    margin-bottom: 25px;
+}
+.login-logo {
+    max-width: 130px; /* Ajuste o tamanho conforme necessário */
+    height: auto;
+}
+
+/* Título "Login" */
+.login-container h2 {
+    font-size: 2em; /* Maior */
+    color: #b71c1c; /* Vermelho escuro */
+    margin-bottom: 30px; /* Mais espaço */
+    font-weight: 600;
+}
+
+/* Agrupamento Label + Input */
 .input-field {
-    margin-bottom: 15px; /* Espaçamento entre campos */
-    text-align: left; /* Alinha label à esquerda */
+    margin-bottom: 20px;
+    text-align: left;
+    position: relative; /* Para posicionar ícones, se usar */
 }
 
-label {
-    font-size: 14px;
-    color: #555; /* Cor um pouco mais suave */
-    display: block; /* Garante que fique acima do input */
-    margin-bottom: 3px;
+/* Labels */
+.input-field label {
+    display: block;
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 6px;
+    font-weight: 500;
 }
 
-/* Botão de submit já estilizado em base.css, pode adicionar especificidade */
-#loginForm button {
-    margin-top: 10px; /* Espaço acima do botão */
-    width: 100%; /* Garante largura total */
+/* Campos de Input */
+.input-field input[type="email"],
+.input-field input[type="password"] {
+    width: 100%;
+    padding: 12px 15px; /* Padding interno */
+    /* padding-left: 40px; */ /* Adicionar se usar ícones */
+    border: 1px solid #ccc; /* Borda mais suave */
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit; /* Herda Poppins */
+    background-color: #f9f9f9; /* Fundo levemente cinza */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box; /* Garante que padding não aumente a largura */
 }
 
-/* Link para cadastro */
-.signup-link {
-    margin-top: 25px; /* Mais espaço acima */
-    font-size: 14px;
+/* Ícones dentro dos Inputs (Opcional) */
+/*
+.input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(calc(-50% + 8px));
+    color: #aaa;
+}
+*/
+
+/* Efeito de Foco nos Inputs */
+.input-field input:focus {
+    border-color: #d32f2f;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15);
 }
 
-.signup-link p {
-    margin-bottom: 8px; /* Espaço entre os links */
+/* Botão de Login */
+.btn-login {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #d32f2f; /* Vermelho Principal */
+    color: white;
+    border: none;
+    font-size: 1.1em;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    margin-top: 15px; /* Espaço acima */
+    letter-spacing: 0.5px;
 }
 
-/* Responsividade se necessário, além do base.css */
+.btn-login:hover {
+    background-color: #b71c1c; /* Vermelho mais escuro */
+    transform: translateY(-2px); /* Leve efeito ao passar o mouse */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.btn-login:active {
+    transform: translateY(0px); /* Volta ao normal ao clicar */
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Links Úteis (Cadastro e Voltar) */
+.links-uteis {
+    margin-top: 25px;
+    font-size: 0.9em;
+}
+
+.links-uteis p {
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.links-uteis a {
+    color: #d32f2f;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.links-uteis a:hover {
+    color: #b71c1c;
+    text-decoration: underline;
+}
+
+.link-voltar {
+    font-size: 0.85em;
+    color: #777;
+}
+.link-voltar:hover {
+    color: #555;
+}
+
+/* Mensagem de Feedback (Ajuste se necessário - herda de base.css) */
+.mensagem {
+    margin-top: 0; /* Remove margem superior padrão do base */
+    margin-bottom: 20px; /* Espaço abaixo da mensagem */
+    padding: 12px 15px;
+    font-size: 0.95em;
+}
+.mensagem:not(.hidden) { /* Garante que display block seja aplicado quando não escondida */
+    display: block !important;
+}
+
+
+/* Responsividade (Ajustes Menores) */
 @media (max-width: 480px) {
     .login-container {
-        padding: 20px; /* Menos padding em telas pequenas */
+        padding: 30px 25px;
     }
-    h2 {
-        font-size: 20px;
+    .login-container h2 {
+        font-size: 1.8em;
     }
-    input, button {
-        font-size: 14px;
-        padding: 10px;
+    .input-field input[type="email"],
+    .input-field input[type="password"],
+    .btn-login {
+        padding: 11px 15px;
+        font-size: 0.95em;
     }
 }
-
-/* --- END OF FILE login.css --- */

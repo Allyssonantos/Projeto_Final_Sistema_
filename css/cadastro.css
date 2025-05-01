@@ -1,52 +1,169 @@
-/* --- START OF FILE cadastro.css --- */
+/* css/cadastro.css - Estilos Melhorados (baseado no login) */
 
-/* Body já configurado em base.css para centralizar */
+/* Importa fontes (se não estiver no base.css) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-/* Estilos específicos para o container de cadastro */
+/* Estilo do Body (se não usar classe específica no body HTML) */
+body {
+    font-family: 'Poppins', sans-serif;
+    background:  #b71c1c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Container Principal do Cadastro */
 .cadastro-container {
-    max-width: 420px; /* Um pouco maior talvez */
-}
-
-/* Estilo dos labels */
-label {
-    font-size: 14px;
-    color: #555;
-    text-align: left;
-    display: block;
-    margin-bottom: 3px; /* Pequeno espaço abaixo do label */
-    margin-top: 12px; /* Espaço acima de cada label/input */
-}
-
-label:first-of-type {
-    margin-top: 0; /* Remove margem do primeiro label */
-}
-
-/* Inputs já estilizados em base.css */
-
-/* Botão de submit */
-#cadastroForm button {
-    margin-top: 20px; /* Espaço acima do botão */
+    background-color: #ffffff;
+    padding: 40px 35px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     width: 100%;
+    max-width: 450px; /* Um pouco maior para mais campos */
+    text-align: center;
+    border-top: 5px solid #d32f2f;
 }
 
-/* Link para login */
-.cadastro-container p { /* Seleciona o <p> dentro do container específico */
-    margin-top: 20px;
-    font-size: 14px;
+/* Container e Estilo do Logo (Opcional) */
+.cadastro-logo-container {
+    margin-bottom: 25px;
+}
+.cadastro-logo {
+    max-width: 130px;
+    height: auto;
+}
+
+/* Título "Cadastro" */
+.cadastro-container h2 {
+    font-size: 1.9em; /* Levemente menor que Login */
+    color: #b71c1c;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* Agrupamento Label + Input */
+.input-field {
+    margin-bottom: 18px; /* Espaçamento consistente */
+    text-align: left;
+}
+
+/* Labels */
+.input-field label {
+    display: block;
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+/* Campos de Input */
+.input-field input[type="text"],
+.input-field input[type="email"],
+.input-field input[type="password"],
+.input-field input[type="tel"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+}
+
+/* Efeito de Foco nos Inputs */
+.input-field input:focus {
+    border-color: #d32f2f;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15);
+}
+
+/* Botão de Cadastro */
+.btn-cadastro { /* Classe específica para o botão */
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    font-size: 1.1em;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    margin-top: 20px; /* Mais espaço acima */
+    letter-spacing: 0.5px;
+}
+
+.btn-cadastro:hover {
+    background-color: #b71c1c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.btn-cadastro:active {
+    transform: translateY(0px);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Links Úteis (Login e Voltar) */
+.links-uteis { /* Mesma classe do login */
+    margin-top: 25px;
+    font-size: 0.9em;
+}
+
+.links-uteis p {
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.links-uteis a {
+    color: #d32f2f;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.links-uteis a:hover {
+    color: #b71c1c;
+    text-decoration: underline;
+}
+
+.link-voltar {
+    font-size: 0.85em;
+    color: #777;
+}
+.link-voltar:hover {
+    color: #555;
+}
+
+/* Mensagem de Feedback (Herda de base.css) */
+.mensagem {
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding: 12px 15px;
+    font-size: 0.95em;
+}
+.mensagem:not(.hidden) {
+    display: block !important;
 }
 
 /* Responsividade */
 @media (max-width: 480px) {
     .cadastro-container {
-        padding: 20px;
+        padding: 30px 25px;
     }
-    h2 {
-        font-size: 20px;
+    .cadastro-container h2 {
+        font-size: 1.6em; /* Ajusta tamanho do título */
     }
-     input, button {
-        font-size: 14px;
-        padding: 10px;
+    .input-field input[type="text"],
+    .input-field input[type="email"],
+    .input-field input[type="password"],
+    .input-field input[type="tel"],
+    .btn-cadastro {
+        padding: 11px 15px;
+        font-size: 0.95em;
     }
 }
-
-/* --- END OF FILE cadastro.css --- */

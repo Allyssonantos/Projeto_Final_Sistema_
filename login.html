@@ -1,42 +1,52 @@
-<!-- START OF FILE login.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Pizzaria Express</title>
-    <link rel="stylesheet" href="./css/base.css"> <!-- CSS Base -->
-    <link rel="stylesheet" href="./css/login.css"> <!-- CSS Específico -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/login.css">
+    <!-- Opcional: Adicionar link para Font Awesome se quiser usar ícones -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
 </head>
 <body>
-    <!-- Usando container padrão do base.css -->
-    <div class="content-container login-container"> <!-- Classe específica opcional -->
+    <div class="content-container login-container">
+        <!-- Logo Adicionada -->
+        <div class="login-logo-container">
+            <img src="img/logo2_pizzaria.png" alt="Logo Pizzaria Express" class="login-logo">
+        </div>
+
         <h2>Login</h2>
 
         <!-- Mensagem de Feedback -->
-        <div id="mensagem-login" class="mensagem"></div> <!-- ID específico -->
+        <div id="mensagem-login" class="mensagem hidden"></div> <!-- Começa escondida -->
 
         <form id="loginForm">
             <div class="input-field">
                 <label for="email">E-mail:</label>
-                <input type="email" id="email" name="email" required>
+                <!-- Opcional: adicionar ícone -->
+                <!-- <i class="fas fa-envelope input-icon"></i> -->
+                <input type="email" id="email" name="email" required placeholder="seuemail@example.com">
             </div>
 
             <div class="input-field">
                 <label for="senha">Senha:</label>
-                <input type="password" id="senha" name="senha" required>
+                 <!-- Opcional: adicionar ícone -->
+                 <!-- <i class="fas fa-lock input-icon"></i> -->
+                <input type="password" id="senha" name="senha" required placeholder="Digite sua senha">
             </div>
 
-            <button type="submit">Entrar</button>
+            <button type="submit" class="btn-login">Entrar</button>
         </form>
 
-        <div class="signup-link">
+        <div class="links-uteis">
              <p>Ainda não tem uma conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
-             <p><a href="index.html">Voltar à página inicial</a></p> <!-- Link para voltar -->
+             <p><a href="index.html" class="link-voltar">Voltar à página inicial</a></p>
         </div>
     </div>
 
-    <script src="./js/auth.js"></script> <!-- Script específico -->
+    <!-- Scripts (Garantir que o caminho está correto) -->
+    <script src="js/global.js"></script> <!-- Pode ser necessário se houver lógica global -->
+    <script src="js/auth.js"></script>
 </body>
 </html>
-<!-- END OF FILE login.html -->
