@@ -1,346 +1,335 @@
 /* css/admin_main.css - Estilos para a página combinada do Administrador */
 
+/* Importa Fontes (Opcional - coloque no base.css ou no <head> se preferir) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* --- Reset Básico e Body (Herda de base.css, mas podemos garantir a fonte) --- */
+body {
+    font-family: 'Poppins', sans-serif; /* Aplica a fonte */
+    background-color: #ffffff; /* Fundo cinza bem claro para a página */
+    color: #333;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
 /* --- Layout Geral e Wrapper --- */
 .admin-wrapper {
     width: 100%;
-    max-width: 1200px; /* Largura máxima do conteúdo */
-    margin: 20px auto; /* Centraliza na página */
-    padding: 15px;     /* Espaçamento interno */
+    max-width: 1300px; /* Mais espaço horizontal */
+    margin: 30px auto; /* Margem superior/inferior e centraliza */
+    padding: 20px;
     box-sizing: border-box;
 }
 
-.admin-wrapper h1 {
+/* Logo no Topo */
+.admin-logo-container {
     text-align: center;
-    color: #b71c1c; /* Vermelho escuro */
-    margin-bottom: 30px;
-    font-size: 2em;
+    margin-bottom: 15px;
+}
+.admin-logo {
+    max-width: 120px; /* Ajuste conforme necessário */
+    height: auto;
 }
 
-/* --- Mensagens de Feedback (Herda de base.css, mas pode ajustar) --- */
+/* Título Principal */
+.admin-wrapper h1 {
+    text-align: center;
+    color: #b71c1c; /* Vermelho escuro (consistente) */
+    margin-bottom: 30px;
+    font-size: 2.2em;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.admin-wrapper h1 .fas { /* Estilo ícone (se usar Font Awesome) */
+     font-size: 0.85em;
+     opacity: 0.8;
+}
+
+/* --- Mensagens de Feedback --- */
+/* Herda de base.css, mas garantimos margem */
 #mensagem-admin {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     text-align: center;
 }
+#mensagem-admin:not(.hidden) { /* Garante visibilidade */
+     display: block !important;
+}
+
 
 /* --- Navegação por Abas --- */
 .admin-nav {
-    margin-bottom: 0; /* Remove margem inferior para conectar com a seção */
+    margin-bottom: 0; /* Remove margem inferior */
+    background-color: #ffffff; /* Fundo branco */
+    border-radius: 8px 8px 0 0; /* Cantos arredondados só em cima */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04); /* Sombra muito suave */
+    border: 1px solid #dee2e6; /* Borda padrão Bootstrap */
+    border-bottom: none;
+    overflow: hidden;
 }
 .admin-nav ul {
     list-style: none;
     padding: 0;
-    margin: 0; /* Remove margem padrão da ul */
+    margin: 0;
     display: flex;
-    flex-wrap: wrap; /* Permite quebrar linha em telas pequenas */
-    border-bottom: 2px solid #b71c1c; /* Linha abaixo das abas */
+    flex-wrap: wrap; /* Quebra linha em telas pequenas */
 }
 
 .admin-nav ul li {
-    margin-right: 5px;
-    margin-bottom: -2px; /* Sobrepõe a borda inferior */
-    border: 1px solid #ddd;
-    border-bottom: none;
-    border-radius: 5px 5px 0 0; /* Cantos arredondados no topo */
-    background-color: #f1f1f1; /* Cor inativa */
-    transition: background-color 0.2s ease;
-}
-.admin-nav ul li:hover {
-    background-color: #e0e0e0;
-}
-
-.admin-nav ul li.active {
-    background-color: #fff; /* Cor ativa (mesma do fundo da seção) */
-    border-top: 2px solid #b71c1c; /* Destaque extra na aba ativa */
-    border-left: 1px solid #b71c1c;
-    border-right: 1px solid #b71c1c;
-    border-bottom: 2px solid #fff; /* Cobre a linha principal */
+    margin: 0;
+    border: none;
+    border-right: 1px solid #eee; /* Separador vertical suave */
+    background-color: transparent;
     position: relative;
-    z-index: 1;
-    font-weight: bold;
 }
-.admin-nav ul li.active a {
-    color: #b71c1c;
+.admin-nav ul li:last-child {
+    border-right: none;
+}
+.admin-nav ul li:hover a,
+.admin-nav ul li:hover button {
+    background-color: #f8f9fa; /* Fundo leve ao passar o mouse */
 }
 
+/* Links e Botões nas Abas */
 .admin-nav ul li a,
-.admin-nav ul li button { /* Estilo para link e botão (logout) */
-    display: block;
-    padding: 12px 20px;
-    text-decoration: none;
-    color: #333;
-    white-space: nowrap; /* Evita quebra de texto */
-    cursor: pointer;
-    background: none; /* Remove fundo do botão */
-    border: none;     /* Remove borda do botão */
-    font-family: inherit; /* Usa a mesma fonte */
-    font-size: inherit; /* Usa o mesmo tamanho */
-}
 .admin-nav ul li button {
-    color: #d32f2f; /* Cor específica para botão logout */
-}
-.admin-nav ul li button:hover {
-    text-decoration: underline;
-}
-
-
-/* --- Seções de Conteúdo (Produtos e Pedidos) --- */
-.admin-section {
-    padding: 30px; /* Mais padding interno */
-    background-color: #fff;
-    border: 1px solid #ddd; /* Borda sutil */
-    border-top: none; /* Remove borda superior para conectar com abas */
-    border-radius: 0 0 8px 8px; /* Cantos arredondados apenas embaixo */
-    box-shadow: 0 3px 8px rgba(0,0,0,0.06);
-}
-
-/* Classe para esconder seções inativas */
-.admin-section.hidden {
-    display: none;
-}
-
-/* Títulos dentro das seções */
-.admin-section h2 {
-    font-size: 1.6em;
-    color: #d32f2f; /* Vermelho */
-    margin-top: 0;
-    margin-bottom: 25px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-/* --- Estilos Comuns para Containers Internos e Formulários --- */
-.container-admin {
-    background-color: #fdfdfd;
-    padding: 25px;
-    border-radius: 5px;
-    border: 1px solid #eee;
-    margin-bottom: 30px;
-}
-.container-admin h2 { /* Títulos dentro dos sub-containers (como Adicionar/Listar) */
-     font-size: 1.3em;
-     color: #333;
-     border-bottom: none;
-     margin-bottom: 20px;
-}
-
-.form-group {
-    margin-bottom: 18px; /* Espaçamento consistente */
-}
-.form-group label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    font-size: 0.9em;
-    color: #444;
-}
-textarea {
-    min-height: 80px;
-    resize: vertical;
-}
-input[type="file"] {
-    border: 1px solid #ccc;
-    padding: 8px;
-    background-color: #fff;
-    border-radius: 4px;
-}
-small {
-    font-size: 0.85em;
-    color: #777;
-    display: block; /* Quebra linha */
-    margin-top: 4px;
-}
-
-/* --- Tabela de PRODUTOS --- */
-#tabela-produtos { /* ID específico */
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: #fff;
-}
-#tabela-produtos th,
-#tabela-produtos td {
-    padding: 12px 10px;
-    border: 1px solid #e0e0e0; /* Borda mais clara */
-    text-align: left;
-    vertical-align: middle;
-    font-size: 14px;
-}
-#tabela-produtos th {
-    background-color: #b71c1c; color: white; font-weight: bold;
-    text-transform: uppercase; font-size: 12px;
-}
-#tabela-produtos tbody tr:nth-child(even) { background-color: #f8f9fa; }
-#tabela-produtos tbody tr:hover { background-color: #e9ecef; }
-
-#tabela-produtos td input,
-#tabela-produtos td select {
-    padding: 5px 8px; font-size: 13px; border: 1px solid #ccc;
-    max-width: 95%; box-sizing: border-box; border-radius: 3px;
-}
-#tabela-produtos td input:disabled,
-#tabela-produtos td select:disabled {
-    background-color: #e9ecef; border-color: #dee2e6; color: #6c757d; cursor: not-allowed;
-}
-
-/* Imagem na tabela de produtos */
-#tabela-produtos .td-imagem { text-align: center; width: 85px; }
-#tabela-produtos .imagem-produto-preview {
-    max-width: 55px; max-height: 55px; display: block; margin: 0 auto 5px auto;
-    border: 1px solid #eee; object-fit: cover; border-radius: 4px;
-}
-#tabela-produtos .nome-imagem-atual { font-size: 10px; color: #666; display: block; word-break: break-all; }
-#tabela-produtos .imagem-edit-input { display: block; font-size: 11px; margin-top: 5px; max-width: 100%;}
-
-/* Ações na tabela de produtos */
-#tabela-produtos td.actions { text-align: center; white-space: nowrap; }
-#tabela-produtos .actions button { padding: 5px 10px; font-size: 12px; margin: 0 3px; min-width: 60px; }
-/* Cores dos botões */
-.button-edit { background-color: #5cb85c; color: white; } .button-edit:hover { background-color: #4cae4c; }
-.button-save { background-color: #337ab7; color: white; } .button-save:hover { background-color: #286090; }
-.button-delete { background-color: #d9534f; color: white; } .button-delete:hover { background-color: #c9302c; }
-.hidden { display: none !important; } /* Garante que vai esconder */
-
-
-/* --- Filtros e Tabela de PEDIDOS --- */
-.filtros-pedidos {
-    margin-bottom: 25px;
-    padding: 15px 20px;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 5px;
     display: flex;
     align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px 25px;
+    text-decoration: none;
+    color: #495057; /* Cinza escuro para inativos */
+    font-weight: 500;
+    white-space: nowrap;
+    transition: color 0.2s ease, background-color 0.2s ease, border-bottom-color 0.2s ease;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.95em;
+    border-bottom: 3px solid transparent; /* Borda inferior invisível para espaço */
 }
-.filtros-pedidos label { margin-bottom: 0; font-weight: 500; }
-.filtros-pedidos select { min-width: 180px; } /* Mais espaço para o select */
-.filtros-pedidos button { background-color: #6c757d; }
-.filtros-pedidos button:hover { background-color: #5a6268; }
+.admin-nav ul li button { /* Botão Logout */
+     color: #dc3545; /* Vermelho Bootstrap */
+}
+.admin-nav ul li button:hover {
+    color: #c82333;
+}
+.admin-nav ul li a .fas,
+.admin-nav ul li button .fas { /* Ícones */
+    font-size: 0.9em;
+    opacity: 0.7;
+}
 
-/* Tabela de Pedidos */
-#tabela-pedidos { /* ID da tabela de pedidos */
+/* Aba Ativa */
+.admin-nav ul li.active a,
+.admin-nav ul li.active button {
+    color: #b71c1c;
+    font-weight: 600;
+    background-color: #fff; /* Fundo branco (mesmo da seção) */
+    border-bottom-color: #b71c1c; /* Linha inferior vermelha */
+}
+.admin-nav ul li.active a .fas,
+.admin-nav ul li.active button .fas {
+    opacity: 1;
+}
+
+/* --- Seções de Conteúdo --- */
+.admin-section {
+    padding: 30px 35px;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-top: none; /* Conecta com a borda inferior das abas */
+    border-radius: 0 0 8px 8px; /* Cantos inferiores */
+    box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+    margin-top: -1px; /* Alinha com a borda */
+}
+.admin-section.hidden { display: none; }
+
+.admin-section h2 {
+    font-size: 1.6em;
+    color: #343a40; /* Cinza escuro */
+    margin-top: 0;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+.admin-section h2 .fas { font-size: 0.9em; color: #d32f2f; }
+
+/* --- Estilos Formulários e Tabelas --- */
+.container-admin {
+    background-color: transparent; padding: 0; border: none;
+    box-shadow: none; margin-bottom: 40px;
+}
+.container-admin h2 { /* Títulos internos como "Adicionar Novo Produto" */
+     font-size: 1.3em; color: #495057; margin-bottom: 25px;
+}
+
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9em; color: #495057;}
+textarea { min-height: 80px; resize: vertical; }
+input[type="file"] { border: 1px solid #ced4da; padding: 8px; background-color: #fff; border-radius: 4px; }
+small { font-size: 0.85em; color: #6c757d; display: block; margin-top: 4px; }
+
+/* Inputs gerais (herdam de base.css, mas garantimos estilo) */
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="tel"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group select {
+     background-color: #fff;
+     border: 1px solid #ced4da; /* Borda padrão Bootstrap */
+     padding: 10px 12px; /* Padding consistente */
+     border-radius: 4px;
+     font-size: 1em;
+     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+     width: 100%;
+     box-sizing: border-box;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+      border-color: #e07171; /* Vermelho claro no foco */
+      box-shadow: 0 0 0 0.2rem rgba(211, 47, 47, 0.25); /* Sombra vermelha */
+      outline: none;
+}
+
+/* Botão Principal (Adicionar Produto) */
+#btnAdicionarProduto { margin-top: 15px; width: auto; padding-left: 25px; padding-right: 25px; } /* Botão de adicionar mais curto */
+
+
+/* Container de Tabela com Rolagem */
+.table-container, .tabela-pedidos-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+}
+
+/* Estilos Comuns de Tabela */
+.product-table, .order-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
     background-color: #fff;
+    min-width: 800px; /* Largura mínima para evitar quebra excessiva antes da rolagem */
 }
-#tabela-pedidos th,
-#tabela-pedidos td {
-    padding: 12px 15px; /* Mais padding */
-    border: 1px solid #dee2e6; /* Borda padrão Bootstrap */
+.product-table th, .product-table td,
+.order-table th, .order-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dee2e6; /* Linha inferior apenas */
     text-align: left;
-    font-size: 14px;
     vertical-align: middle;
+    font-size: 14px;
+    white-space: nowrap; /* Evita quebra de linha por padrão */
 }
-#tabela-pedidos th {
-    background-color: #b71c1c; /* Cabeçalho escuro */
+.product-table td, .order-table td {
+    color: #495057;
+}
+.product-table thead th, .order-table thead th {
+    border-bottom-width: 2px; /* Linha mais grossa no cabeçalho */
     color: white;
+    font-weight: 600;
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap;
 }
-#tabela-pedidos tbody tr:nth-child(even) { background-color: #f8f9fa; }
-#tabela-pedidos tbody tr:hover { background-color: #e9ecef; }
+.product-table tbody tr:nth-child(even),
+.order-table tbody tr:nth-child(even) { background-color: #f8f9fa; }
+.product-table tbody tr:hover,
+.order-table tbody tr:hover { background-color: #e9ecef; }
 
-/* Célula de Status na tabela de pedidos */
-#tabela-pedidos td.status-cell { position: relative; min-width: 180px; }
-#tabela-pedidos select.status-pedido-select {
-     width: 100%; /* Ocupa largura */
-     padding: 6px 8px;
-     border: 1px solid #ccc;
-     border-radius: 4px;
-     background-color: #fff;
-     font-size: 13px;
-     margin-bottom: 5px; /* Espaço para botões abaixo */
-     box-sizing: border-box;
-}
-#tabela-pedidos select.status-pedido-select.status-changed { /* Destaque se alterado */
-    border-color: #ff9800;
-    box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
-}
+/* Tabela de PRODUTOS */
+#tabela-produtos th { background-color: #d32f2f; }
+#tabela-produtos td[data-label="Descrição"] input { min-width: 200px; } /* Mais espaço para descrição */
+#tabela-produtos td input, #tabela-produtos td select { padding: 5px 8px; font-size: 13px; border: 1px solid #ccc; max-width: 95%; box-sizing: border-box; border-radius: 3px; }
+#tabela-produtos td input:disabled, #tabela-produtos td select:disabled { background-color: #e9ecef; border-color: #dee2e6; color: #6c757d; cursor: not-allowed; }
+#tabela-produtos .td-imagem { text-align: center; width: 85px; }
+#tabela-produtos .imagem-produto-preview { max-width: 55px; max-height: 55px; display: block; margin: 0 auto 5px auto; border: 1px solid #eee; object-fit: cover; border-radius: 4px; }
+#tabela-produtos .nome-imagem-atual { font-size: 10px; color: #6c757d; display: block; word-break: break-all; }
+#tabela-produtos .imagem-edit-input { display: block; font-size: 11px; margin-top: 5px; max-width: 100%;}
+#tabela-produtos td.actions { text-align: center; }
+#tabela-produtos .actions button { padding: 5px 10px; font-size: 12px; margin: 0 3px; min-width: 60px; }
+.button-edit { background-color: #5cb85c; color: white; } .button-edit:hover { background-color: #4cae4c; }
+.button-save { background-color: #337ab7; color: white; } .button-save:hover { background-color: #286090; }
+.button-delete { background-color: #d9534f; color: white; } .button-delete:hover { background-color: #c9302c; }
 
-/* Container e botões Salvar/Cancelar Status */
-.status-actions {
-    margin-top: 5px;
-    display: flex;
-    gap: 5px;
-    justify-content: flex-end; /* Alinha botões à direita */
-}
-.button-small { /* Estilo para botões menores */
-    padding: 3px 8px !important;
-    font-size: 11px !important;
-    min-width: auto !important;
-}
+/* Filtros de PEDIDOS */
+.filtros-pedidos { margin-bottom: 25px; padding: 15px 20px; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+.filtros-pedidos label { margin-bottom: 0; font-weight: 500; }
+.filtros-pedidos select { min-width: 200px; } /* Mais espaço */
+.filtros-pedidos button { background-color: #6c757d; }
+.filtros-pedidos button:hover { background-color: #5a6268; }
 
-.button-cancel-status { background-color: #6c757d; }
-.button-cancel-status:hover { background-color: #5a6268; }
+/* Tabela de PEDIDOS */
+#tabela-pedidos { min-width: 950px; } /* Largura mínima para evitar quebra excessiva */
+#tabela-pedidos th { background-color: #343a40; } /* Cabeçalho escuro */
+#tabela-pedidos td[data-label="Cliente"] a { color: #c12f2f; }
+#tabela-pedidos td[data-label="Cliente"] a:hover { color: #9d2424; }
+#tabela-pedidos td.itens-cell { font-size: 12px; line-height: 1.5; white-space: normal; min-width: 200px; } /* Permite quebra e define largura */
+#tabela-pedidos td[data-label="Pagamento"] { font-weight: 500; }
+#tabela-pedidos td.status-cell { min-width: 180px; }
+#tabela-pedidos select.status-pedido-select { width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; background-color: #fff; font-size: 13px; box-sizing: border-box; }
+#tabela-pedidos select.status-pedido-select.status-salvo-ok { background-color: #dff0d8; transition: background-color 0.5s ease; }
 
+/* Modal (Manter estilos anteriores se usar) */
+
+/* ... etc ... */
 
 /* --- RESPONSIVIDADE --- */
-
-/* Telas Médias (Tablets) */
 @media (max-width: 992px) {
-    .admin-wrapper { padding: 10px; }
+    .admin-wrapper { max-width: 95%; padding: 15px; }
     .admin-section { padding: 20px; }
-    #tabela-produtos, #tabela-pedidos { min-width: 850px; } /* Ajusta largura mínima */
-
-    /* Habilita rolagem horizontal */
-    .table-container, .tabela-pedidos-container {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        margin-bottom: 15px;
-        border: 1px solid #ddd;
-    }
 }
 
-/* Telas Pequenas (Celulares) */
 @media (max-width: 768px) {
     .admin-nav ul { flex-direction: column; border-bottom: none;}
-    .admin-nav ul li { margin-right: 0; margin-bottom: 1px; border-radius: 5px; border: 1px solid #ddd; }
-    .admin-nav ul li.active { border-bottom: 1px solid #ddd; border-top-width: 2px; }
-    .admin-section { border-radius: 8px; margin-top: 15px;}
+    .admin-nav ul li { margin-bottom: 1px; border-radius: 5px; border: 1px solid #ddd; border-right: 1px solid #ddd; }
+    .admin-nav ul li.active { border: 1px solid #b71c1c; border-left: 3px solid #b71c1c; background-color: #fff;}
+    .admin-nav ul li a, .admin-nav ul li button { padding: 12px 15px; border-bottom: none;}
+    .admin-nav ul li.active a, .admin-nav ul li.active button { border-bottom: none;}
+    .admin-section { border-radius: 8px; margin-top: 15px; padding: 20px;}
+    .admin-section h2 { font-size: 1.4em; }
 
-    /* Tabela de PRODUTOS vira Cards */
+    /* Tabela Produtos -> Cards */
     #tabela-produtos thead { display: none; }
-    #tabela-produtos tr { display: block; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; padding: 10px; }
+    #tabela-produtos tr { display: block; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; padding: 15px; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
     #tabela-produtos, #tabela-produtos tbody, #tabela-produtos td { border: none; }
-    #tabela-produtos td { display: block; text-align: right; padding-left: 45%; position: relative; border-bottom: 1px dotted #eee; font-size: 14px; padding-top: 8px; padding-bottom: 8px;}
+    #tabela-produtos td { display: block; text-align: right; padding-left: 40%; position: relative; border-bottom: 1px dotted #eee; font-size: 14px; padding-top: 8px; padding-bottom: 8px;}
     #tabela-produtos td:last-child { border-bottom: none; }
-    #tabela-produtos td::before { content: attr(data-label); position: absolute; left: 10px; width: calc(45% - 20px); text-align: left; font-weight: bold; color: #555; font-size: 11px; text-transform: uppercase; }
+    #tabela-produtos td::before { content: attr(data-label); position: absolute; left: 10px; width: calc(40% - 20px); text-align: left; font-weight: bold; color: #555; font-size: 11px; text-transform: uppercase; }
     #tabela-produtos td input, #tabela-produtos td select { width: auto; max-width: 100%; display: inline-block; margin-left: 5px; }
+    #tabela-produtos td[data-label="Descrição"] input { width: 60%; min-width: 150px; }
     #tabela-produtos .td-imagem { text-align: left; padding-left: 10px; }
     #tabela-produtos .td-imagem::before { display: none; }
     #tabela-produtos .imagem-produto-preview { display: inline-block; vertical-align: middle; margin: 0 10px 0 0; max-width: 40px; max-height: 40px;}
     #tabela-produtos .nome-imagem-atual, #tabela-produtos .imagem-edit-input { display: inline-block; vertical-align: middle; }
-    #tabela-produtos td.actions { text-align: center; padding-left: 10px; padding-top: 10px; }
+    #tabela-produtos td.actions { text-align: center; padding-left: 10px; padding-top: 15px; padding-bottom: 10px; }
     #tabela-produtos td.actions::before { display: none; }
     #tabela-produtos td.actions button { margin: 5px; display: inline-block; }
 
-    /* Tabela de PEDIDOS mantém rolagem, mas ajusta padding */
-    #tabela-pedidos { min-width: 650px; }
-     #tabela-pedidos th, #tabela-pedidos td { padding: 8px 10px; font-size: 13px; }
-     #tabela-pedidos td.status-cell { min-width: 160px; } /* Garante espaço pro select e botões */
-
+    /* Tabela Pedidos (Manter rolagem, ajustar padding) */
+    #tabela-pedidos { min-width: 700px; }
+    #tabela-pedidos th, #tabela-pedidos td { padding: 10px 8px; font-size: 13px; }
+    #tabela-pedidos td.status-cell { min-width: 160px; }
 }
 
-#tabela-pedidos td.itens-cell {
-    font-size: 12px; /* Fonte menor para a lista */
-    line-height: 1.4;
-    max-width: 250px; /* Limita a largura máxima */
-    white-space: normal; /* Permite quebra de linha */
-}
-
-/* Ajuste responsivo se necessário */
-@media (max-width: 992px) {
-     #tabela-pedidos { min-width: 950px; } /* Aumenta largura mínima da tabela */
-}
-
-/* Ajustes Finais */
 @media (max-width: 480px) {
-    .admin-wrapper h1 { font-size: 1.5em; }
-    .admin-section h2 { font-size: 1.2em; }
-    .admin-nav ul li a, .admin-nav ul li button { padding: 10px; }
+    .admin-wrapper { padding: 10px; }
+    .admin-wrapper h1 { font-size: 1.6em; }
+    .admin-section { padding: 15px; }
+    .admin-section h2 { font-size: 1.3em; }
+    .admin-nav ul li a, .admin-nav ul li button { padding: 10px; font-size: 0.9em;}
 
     /* Tabela Produtos Card */
     #tabela-produtos td { padding-left: 35%; font-size: 13px; }
@@ -348,6 +337,9 @@ small {
     #tabela-produtos td[data-label="Descrição"] input { width: 100%; margin-left: 0; display: block; margin-top: 5px; }
 
     /* Tabela Pedidos Rolagem */
-    #tabela-pedidos { min-width: 500px; }
-    #tabela-pedidos th, #tabela-pedidos td { padding: 6px 8px; font-size: 12px; }
+    #tabela-pedidos { min-width: 550px; }
+    #tabela-pedidos th, #tabela-pedidos td { padding: 8px 6px; font-size: 12px; white-space: normal;} /* Permite quebra em telas pequenas */
+     #tabela-pedidos th { white-space: nowrap;} /* Mantem header sem quebra */
+     #tabela-pedidos td.itens-cell {min-width: 150px;}
+     #tabela-pedidos td.status-cell { min-width: 140px; }
 }

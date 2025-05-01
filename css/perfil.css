@@ -1,5 +1,8 @@
 /* css/perfil.css */
 
+/* Importa Fontes (Opcional - coloque no base.css ou no <head> se preferir) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
 body {
     background-color: #f4f5f7; /* Fundo levemente cinza para o body */
 }
@@ -13,35 +16,73 @@ body {
     min-height: 50px; /* Altura aumentada */
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Alinha botões à direita */
-    padding: 0 30px; /* Padding horizontal */
+    justify-content: space-between; /* ESSENCIAL para separar esquerda/direita */
+    padding: 5px 25px; /* Padding horizontal */
     background-color: #d32f2f;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     z-index: 1000; /* Garante que fique sobre outros elementos */
 }
 
-.nav-buttons {
-    display: flex;
-    gap: 15px; /* Espaçamento entre botões */
-}
-
-.nav-buttons a, .nav-buttons button {
-    padding: 8px 18px; /* Ajuste padding */
-    background-color: white;
-    color: #d32f2f; /* Texto vermelho */
-    font-weight: bold;
-    border-radius: 4px;
-    text-transform: uppercase;
-    font-size: 14px;
-}
 .nav-buttons a:hover, .nav-buttons button:hover {
     background-color: #eee; /* Leve mudança no hover */
     transform: none; /* Remove o scale do base.css se não desejar */
 }
 
-.nav-buttons a img{
-    width: 20px;
+/* Container da Esquerda (Logo + Perfil) */
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espaço entre Logo/Brand e link Perfil */
 }
+
+/* Container da Marca/Logo */
+.nav-brand a {
+    display: flex; /* Alinha imagem e texto (se houver) */
+    align-items: center;
+    text-decoration: none;
+    color: white; /* Cor do texto da marca, se tiver */
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+/* Estilo da Imagem do Logo na Navbar */
+.navbar-logo {
+    height: 65px; /* Ajuste a altura do logo conforme necessário */
+    width: auto;  /* Mantém proporção */
+    margin-right: 8px; /* Espaço se houver texto da marca junto */
+    display: block; /* Remove espaço extra abaixo da imagem */
+}
+
+/* Container da Direita (Links/Botões) */
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaço entre os itens da direita */
+}
+
+/* Estilo Geral Botão/Link na Navbar */
+.nav-button {
+    padding: 8px 15px;
+    background-color: white;
+    color: #b71c1c; /* Tom de vermelho */
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    text-transform: uppercase;
+    font-weight: bold;
+    white-space: nowrap; /* Evita quebra de linha */
+}
+
+
+/* Classe para esconder (do global.js) */
+.hidden {
+    display: none !important;
+}
+
 
 .container-perfil {
     max-width: 850px; /* Largura máxima */

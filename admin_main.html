@@ -4,41 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Administrador - Pizzaria Express</title>
-    <!-- Carrega CSS Base e CSS Específico da Página Admin Combinada -->
     <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/admin_main.css">
+    <link rel="stylesheet" href="css/admin_main.css"> <!-- CSS Atualizado -->
+    <!-- Opcional: Font Awesome -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
 </head>
 <body>
     <div class="admin-wrapper">
-        <h1>Painel do Administrador</h1>
+        <!-- Container do Logo Adicionado -->
+        <div class="admin-logo-container">
+             <img src="img/logo2_pizzaria.png" alt="Logo Pizzaria Express" class="admin-logo">
+        </div>
 
-        <!-- Container para exibir mensagens de sucesso ou erro -->
+        <h1><i class="fas fa-user-shield"></i> Painel do Administrador</h1>
+
         <div id="mensagem-admin" class="mensagem"></div>
 
         <!-- Navbar de Navegação das Seções Admin -->
         <nav class="admin-nav">
             <ul>
-                <!-- Aba de Produtos (ativa por padrão) -->
-                <li data-tab="admin-produtos" class="active"><a href="#">Gerenciar Produtos</a></li>
-                <!-- Aba de Pedidos -->
-                <li data-tab="admin-pedidos"><a href="#">Gerenciar Pedidos</a></li>
-                <!-- Link para voltar à loja -->
-                <li><a href="index.html">Voltar à Loja</a></li>
-                <!-- Botão Logout (será gerenciado pelo global.js) -->
-                 <li><button id="nav-logout" class="nav-button hidden" style="background: none; border: none; color: #d32f2f; text-decoration: underline; cursor: pointer; padding: 10px 15px;">Logout</button></li>
+                <li data-tab="admin-produtos" class="active"><a href="#"><i class="fas fa-pizza-slice"></i> Gerenciar Produtos</a></li>
+                <li data-tab="admin-pedidos"><a href="#"><i class="fas fa-receipt"></i> Gerenciar Pedidos</a></li>
+                <li><a href="index.html"><i class="fas fa-store"></i> Voltar à Loja</a></li>
+                 <li><button id="nav-logout" class="nav-button hidden"><i class="fas fa-sign-out-alt"></i> Logout</button></li>
             </ul>
         </nav>
 
-        <!-- ====================================== -->
-        <!-- SEÇÃO DE GERENCIAMENTO DE PRODUTOS      -->
-        <!-- (Inicialmente visível)                -->
-        <!-- ====================================== -->
+        <!-- Seção Produtos -->
         <section id="admin-produtos" class="admin-section">
-
-            <!-- Formulário para ADICIONAR Produto -->
             <div class="container-admin container-cadastrar-produtos">
-                <h2>Adicionar Novo Produto</h2>
+                <h2><i class="fas fa-plus-circle"></i> Adicionar Novo Produto</h2> <!-- Ícone opcional -->
                 <form id="formAdicionarProduto">
+                   <!-- ... campos do formulário ... -->
                     <div class="form-group">
                         <label for="nomeProduto">Nome:</label>
                         <input id="nomeProduto" type="text" placeholder="Nome do Produto" required>
@@ -63,109 +60,47 @@
                         <input type="file" id="imagemProduto" name="imagemProduto" accept="image/jpeg, image/png, image/gif, image/webp">
                         <small>Max 5MB. Tipos: jpg, png, gif, webp</small>
                     </div>
-                    <button type="button" id="btnAdicionarProduto">Adicionar Produto</button>
+                    <button type="button" id="btnAdicionarProduto" class="button-principal">Adicionar Produto</button> <!-- Classe Principal -->
                 </form>
             </div>
-
-            <!-- Tabela para LISTAR/EDITAR/EXCLUIR Produtos -->
             <div class="container-admin container-produtos-cadastrados">
-                <h2>Lista de Produtos Cadastrados</h2>
+                <h2><i class="fas fa-list-ul"></i> Lista de Produtos</h2> <!-- Ícone opcional -->
                 <div class="table-container">
-                    <!-- Tabela de Produtos -->
                     <table id="tabela-produtos" class="product-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Imagem</th>
-                                <th>Nome</th>
-                                <th>Descrição</th>
-                                <th>Preço</th>
-                                <th>Categoria</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="listaProdutos">
-                            <!-- Linhas serão carregadas pelo admin_main.js -->
-                            <tr><td colspan="7" style="text-align:center; padding: 20px;">Carregando produtos...</td></tr>
-                        </tbody>
+                        <!-- ... thead e tbody ... -->
+                        <thead>...</thead>
+                        <tbody id="listaProdutos">...</tbody>
                     </table>
                 </div>
             </div>
-
         </section> <!-- Fim #admin-produtos -->
 
-        <!-- ====================================== -->
-        <!-- SEÇÃO DE GERENCIAMENTO DE PEDIDOS       -->
-        <!-- (Inicialmente escondida com 'hidden') -->
-        <!-- ====================================== -->
+        <!-- Seção Pedidos -->
         <section id="admin-pedidos" class="admin-section hidden">
-            <h2>Gerenciar Pedidos Recebidos</h2>
-
-            <!-- Filtros -->
+            <h2><i class="fas fa-tasks"></i> Gerenciar Pedidos Recebidos</h2> <!-- Ícone opcional -->
             <div class="filtros-pedidos">
-                <label for="filtro-status">Filtrar por Status:</label>
-                <select id="filtro-status">
-                    <option value="">Todos</option>
-                    <option value="Recebido">Recebido</option>
-                    <option value="Em Preparo">Em Preparo</option>
-                    <option value="Saiu para Entrega">Saiu para Entrega</option>
-                    <option value="Entregue">Entregue</option>
-                    <option value="Cancelado">Cancelado</option>
-                </select>
-                <button id="btn-recarregar-pedidos" class="button-secondary">Recarregar Lista</button>
+                <!-- ... filtros ... -->
+                 <label for="filtro-status">Filtrar por Status:</label>
+                 <select id="filtro-status">...</select>
+                 <button id="btn-recarregar-pedidos" class="button-secondary">Recarregar Lista</button>
             </div>
-
-            <!-- Tabela de Pedidos -->
             <div class="tabela-pedidos-container">
-                <table id="tabela-pedidos" class="order-table"> <!-- ID pode precisar ser diferente se houver conflito de CSS -->
-                    <thead>
-                        <tr>
-                            <th>ID Pedido</th>
-                            <th>Data</th>
-                            <th>Cliente</th>
-                            <th>Telefone</th>
-                            <th>Endereço</th>
-                            <th>Itens</th>
-                            <th>Total</th>
-                            <th>Pagamento</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="corpo-tabela-pedidos">
-                        <!-- Linhas serão carregadas pelo admin_main.js -->
-                        <tr><td colspan="9" style="text-align:center; padding: 20px;">Carregando pedidos...</td></tr>
-                    </tbody>
+                <table id="tabela-pedidos" class="order-table">
+                    <!-- ... thead e tbody ... -->
+                    <thead>...</thead>
+                    <tbody id="corpo-tabela-pedidos">...</tbody>
                 </table>
             </div>
-
         </section> <!-- Fim #admin-pedidos -->
 
-        <!-- Modal para Detalhes do Pedido -->
+        <!-- Modal (se usar) -->
         <div id="modal-detalhes-pedido" class="modal hidden">
-            <div class="modal-content">
-                <span class="modal-close-btn">×</span>
-                <h2>Detalhes do Pedido #<span id="modal-pedido-id"></span></h2>
-                <div id="modal-pedido-corpo" class="loading">
-                    <p>Carregando detalhes...</p>
-                    <!-- Detalhes serão inseridos aqui pelo JS -->
-                </div>
-                <div id="modal-pedido-itens">
-                    <h3>Itens do Pedido</h3>
-                    <ul id="modal-lista-itens">
-                        <!-- Itens serão inseridos aqui -->
-                    </ul>
-                </div>
-                <div id="modal-pedido-observacoes">
-                    <h3>Observações do Cliente</h3>
-                    <p id="modal-texto-observacoes">Nenhuma.</p>
-                </div>
-            </div>
+            <!-- ... conteúdo do modal ... -->
         </div>
 
     </div> <!-- Fim .admin-wrapper -->
 
-    <!-- Carrega os scripts necessários -->
-    <script src="js/global.js"></script>       <!-- Controla sessão e navbar global -->
-    <script src="js/admin_main.js"></script>   <!-- Lógica específica desta página admin -->
+    <script src="js/global.js"></script>
+    <script src="js/admin_main.js"></script>
 </body>
 </html>

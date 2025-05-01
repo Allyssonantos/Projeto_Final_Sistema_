@@ -11,25 +11,33 @@
 </head>
 <body>
     <!-- Navbar (mantém a estrutura anterior, global.js controla os links) -->
-        <!-- Navbar -->
+        <!-- Navbar com Logo à Esquerda -->
     <nav class="navbar">
-         <!-- Logo pode vir aqui também se preferir -->
-        <div class="nav-buttons">
-            
-            <button data-scroll-to="menu-pizzas">Pizzas</button>
-            <button data-scroll-to="menu-bebidas">Bebidas</button>
+        <!-- Container para itens à esquerda -->
+        <div class="navbar-left">
+            <!-- LOGO adicionado aqui dentro de .nav-brand -->
+            <div class="nav-brand">
+                <a href="index.html">
+                    <img src="img/logo_pizzaria.png" alt="Pizzaria Express Logo" class="navbar-logo">
+                    <!-- Opcional: Mantenha o nome se quiser -->
+                    <!-- Pizzaria Express -->
+                </a>
+            </div>
+        </div>
 
+        <!-- Container para itens à direita -->
+        <div class="navbar-right">
+             <a href="index.html" class="nav-button">Cardápio</a>
              <!-- Links Admin (mostrados/escondidos pelo global.js se for admin) -->
-             <a href="admin_main.html" id="nav-admin-prod" class="nav-button hidden">Pagina Admin</a>
-
+             <a href="admin_main.html" id="nav-admin-prod" class="nav-button hidden">Admin Produtos</a>
+             <a href="admin_main.html" id="nav-admin-pedidos" class="nav-button hidden">Admin Pedidos</a>
+             <!-- Login/Logout (mostrados/escondidos pelo global.js) -->
              <a href="login.html" id="nav-login" class="nav-button">Login</a>
              <button id="nav-logout" class="nav-button hidden">Logout</button>
-            
         </div>
     </nav>
 
     <main class="container-perfil">
-        <h1><i class="fas fa-user-circle"></i> Meu Perfil</h1> <!-- Ícone (se usar Font Awesome) -->
         <div id="mensagem-perfil" class="mensagem"></div>
 
         <!-- Card: Meus Dados -->
