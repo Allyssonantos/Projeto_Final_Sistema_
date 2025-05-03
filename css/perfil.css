@@ -61,20 +61,23 @@ body {
 }
 
 /* Estilo Geral Botão/Link na Navbar */
-.nav-button {
-    padding: 8px 15px;
+.nav-button{
+    padding: 8px 18px;
     background-color: white;
     color: #b71c1c; /* Tom de vermelho */
-    border: none;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.9em;
-    cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
-    text-transform: uppercase;
     font-weight: bold;
-    white-space: nowrap; /* Evita quebra de linha */
+    border-radius: 4px;
+    font-size: 0.9em;
+    text-transform: uppercase;
+}
+
+.navbar a:hover, .nav-buttons button:hover {
+    background-color: #eee; /* Leve mudança no hover */
+    transform: none; /* Remove o scale do base.css se não desejar */
+}
+
+.navbar a{
+    text-decoration: none;
 }
 
 
@@ -359,3 +362,4 @@ body {
     .pedido-historico-header { grid-template-columns: 1fr 1fr; /* Duas colunas */ font-size: 0.85em;}
     .pedido-historico-itens li { font-size: 0.9em; }
 }
+

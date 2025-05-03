@@ -273,7 +273,7 @@ small { font-size: 0.85em; color: #6c757d; display: block; margin-top: 4px; }
 
 /* Tabela de PEDIDOS */
 #tabela-pedidos { min-width: 950px; } /* Largura mínima para evitar quebra excessiva */
-#tabela-pedidos th { background-color: #343a40; } /* Cabeçalho escuro */
+#tabela-pedidos th { background-color: #d32f2f; } /* Cabeçalho escuro */
 #tabela-pedidos td[data-label="Cliente"] a { color: #c12f2f; }
 #tabela-pedidos td[data-label="Cliente"] a:hover { color: #9d2424; }
 #tabela-pedidos td.itens-cell { font-size: 12px; line-height: 1.5; white-space: normal; min-width: 200px; } /* Permite quebra e define largura */

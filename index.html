@@ -7,20 +7,20 @@
     <title>Pizzaria Express</title>
     <link rel="stylesheet" href="./css/base.css"> <!-- CSS Base -->
     <link rel="stylesheet" href="./css/style.css"> <!-- CSS Específico -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar">
          <!-- Logo pode vir aqui também se preferir -->
         <div class="nav-buttons">
-            <button data-scroll-to="menu-pizzas">Pizzas</button>
-            <button data-scroll-to="menu-bebidas">Bebidas</button>
 
-             <!-- Links Admin (mostrados/escondidos pelo global.js se for admin) -->
-             <a href="admin_main.html" id="nav-admin-prod" class="nav-button hidden">Pagina Admin</a>
+            <button data-scroll-to="menu-pizzas"><i class="fa-solid fa-pizza-slice"></i> Pizzas</button>
+            <button data-scroll-to="menu-bebidas"><i class="fa-solid fa-beer-mug-empty"></i> Bebidas</button>
+            
+            <a href="perfil.html" class="nav-button"><i class="fa-solid fa-circle-user"></i></a>
+            <button data-scroll-to="carrinho"><i class="fa-solid fa-cart-shopping"></i></button>
 
-            <a href="login.html" class="nav-button">Login</a>
-            <a href="perfil.html" class="nav-button"><img src="./img/icone-do-usuario-com-fundo-preto.png" alt=""></a>
         </div>
     </nav>
 
@@ -56,7 +56,7 @@
 
     <!-- Carrinho Lateral -->
     <aside class="carrinho-container">
-        <h2>Carrinho</h2>
+        <h2 id="carrinho" class="menu-section"><i class="fa-solid fa-cart-shopping"></i> Carrinho</h2>
         <ul id="carrinho-itens">
             <li>Carrinho vazio.</li>
         </ul>
@@ -86,7 +86,7 @@
 
     <!-- Footer -->
      <footer class="footer">
-        <p>Todos os direitos reservados © Pizzaria Express 2021</p>
+        <p>Todos os direitos reservados © Pizzaria Express 2025</p>
     </footer>
 
     <script src="./js/store.js"></script> <!-- Script específico -->

@@ -6,8 +6,7 @@
     <title>Meu Perfil - Pizzaria Express</title>
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/perfil.css"> <!-- Crie ou atualize este CSS -->
-    <!-- Opcional: Ícones (ex: Font Awesome) -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <!-- Navbar (mantém a estrutura anterior, global.js controla os links) -->
@@ -27,13 +26,12 @@
 
         <!-- Container para itens à direita -->
         <div class="navbar-right">
-             <a href="index.html" class="nav-button">Cardápio</a>
+             <a href="index.html" class="nav-button"><i class="fa-solid fa-pizza-slice"></i> Cardápio</a>
              <!-- Links Admin (mostrados/escondidos pelo global.js se for admin) -->
-             <a href="admin_main.html" id="nav-admin-prod" class="nav-button hidden">Admin Produtos</a>
-             <a href="admin_main.html" id="nav-admin-pedidos" class="nav-button hidden">Admin Pedidos</a>
+             <a href="admin_main.html" id="nav-admin-prod" class="nav-button hidden"><i class="fas fa-user-shield"></i> Pagina Admin</a>
              <!-- Login/Logout (mostrados/escondidos pelo global.js) -->
              <a href="login.html" id="nav-login" class="nav-button">Login</a>
-             <button id="nav-logout" class="nav-button hidden">Logout</button>
+             <button id="nav-logout" class="nav-button hidden"><i class="fa-solid fa-right-to-bracket"></i></button>
         </div>
     </nav>
 
@@ -94,6 +92,11 @@
                 <p>Carregando histórico...</p>
             </div>
         </section>
+
+        <!-- Footer -->
+     <footer class="footer">
+        <p>Todos os direitos reservados © Pizzaria Express 2025</p>
+    </footer>
 
     </main>
 

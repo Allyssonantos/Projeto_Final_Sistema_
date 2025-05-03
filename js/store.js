@@ -322,4 +322,38 @@ document.addEventListener("DOMContentLoaded", function () {
     carregarProdutos(); // Carrega os produtos da API
     atualizarCarrinhoDisplay(); // Garante que o carrinho comece como "vazio"
 
-}); // Fim do DOMContentLoaded
+}); 
+
+
+/**
+ * Rola suavemente a página qunado clica em bebidas ou pizzas no navBar
+ * @param {string} sectionId - O ID do elemento para o qual rolar.
+ */
+function scrollToSection(sectionId) {
+    console.log(`Tentando scroll para #${sectionId}`);
+    const section = document.getElementById(sectionId);
+    if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        console.log(`Scroll para #${sectionId} iniciado.`);
+    } else {
+        console.warn(`Seção com id "${sectionId}" não encontrada para scroll.`);
+    }
+}
+
+// Listener para os botões de Navegação Scroll na navbar
+// Certifique-se que o seletor está correto para sua estrutura HTML da navbar
+const navScrollButtons = document.querySelectorAll('.navbar-right button[data-scroll-to], .nav-buttons button[data-scroll-to]'); // Pega de ambas as estruturas possíveis
+if (navScrollButtons.length > 0) {
+    navScrollButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const sectionId = button.getAttribute('data-scroll-to');
+            if (sectionId) {
+                scrollToSection(sectionId);
+            } else {
+                console.warn("Botão de navegação scroll sem atributo data-scroll-to válido.");
+            }
+        });
+    });
+} else {
+    console.warn("Nenhum botão de navegação scroll com [data-scroll-to] encontrado.");
+}
