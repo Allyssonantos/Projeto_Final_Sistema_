@@ -4,49 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Perfil - Pizzaria Express</title>
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/perfil.css"> <!-- Crie ou atualize este CSS -->
+    <link rel="stylesheet" href="css/base.css">      <!-- Caminho CSS -->
+    <link rel="stylesheet" href="css/style.css">     <!-- CSS da index (para navbar e footer) -->
+    <link rel="stylesheet" href="css/perfil.css">    <!-- CSS específico do perfil -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navbar (mantém a estrutura anterior, global.js controla os links) -->
-        <!-- Navbar com Logo à Esquerda -->
+    <!-- Navbar IGUAL à da index.html -->
     <nav class="navbar">
-        <!-- Container para itens à esquerda -->
         <div class="navbar-left">
-            <!-- LOGO adicionado aqui dentro de .nav-brand -->
             <div class="nav-brand">
                 <a href="index.html">
                     <img src="img/logo_pizzaria.png" alt="Pizzaria Express Logo" class="navbar-logo">
-                    <!-- Opcional: Mantenha o nome se quiser -->
                     <!-- Pizzaria Express -->
                 </a>
             </div>
         </div>
 
-        <!-- Container para itens à direita -->
         <div class="navbar-right">
-             <a href="index.html" class="nav-button"><i class="fa-solid fa-pizza-slice"></i> Cardápio</a>
-             <!-- Links Admin (mostrados/escondidos pelo global.js se for admin) -->
-             <a href="admin_main.html" id="nav-admin-prod" class="nav-button hidden"><i class="fas fa-user-shield"></i> Pagina Admin</a>
-             <!-- Login/Logout (mostrados/escondidos pelo global.js) -->
-             <a href="login.html" id="nav-login" class="nav-button">Login</a>
-             <button id="nav-logout" class="nav-button hidden"><i class="fa-solid fa-right-to-bracket"></i></button>
+            <!--Link Cardapio-->
+            <a href="index.html" class="nav-button"><i class="fa-solid fa-pizza-slice"></i> Cardápio</a>
+            <!-- Link Admin (mostrados/escondidos pelo global.js) -->
+            <a href="admin_main.html" id="nav-admin-prod" class="nav-button hidden"><i class="fas fa-user-shield"></i> Pagina Admin</a>
+            <!-- Login/Logout (mostrados/escondidos pelo global.js) -->
+            <button id="nav-logout" class="nav-button hidden"><i class="fa-solid fa-right-to-bracket"></i></button>
+
         </div>
     </nav>
 
     <main class="container-perfil">
+        <h1><i class="fas fa-user-circle"></i> Meu Perfil</h1>
         <div id="mensagem-perfil" class="mensagem"></div>
 
-        <!-- Card: Meus Dados -->
+        <!-- Card: Meus Dados (igual antes) -->
         <section id="dados-usuario" class="profile-card loading">
             <header class="card-header">
                 <h2>Meus Dados</h2>
-                <!-- Botão para INICIAR edição -->
                 <button id="btn-editar-perfil" class="button-secondary">Editar Perfil</button>
             </header>
             <div class="card-body">
-                <!-- Área de exibição dos dados (inicialmente visível) -->
                 <div id="display-dados-usuario">
                     <dl class="profile-details">
                         <dt>Nome:</dt> <dd id="perfil-nome">Carregando...</dd>
@@ -55,9 +51,8 @@
                         <dt>Endereço:</dt> <dd id="perfil-endereco">Carregando...</dd>
                     </dl>
                 </div>
-
-                <!-- Formulário de Edição (inicialmente escondido) -->
                 <form id="form-editar-perfil" class="hidden">
+                    <!-- Campos do formulário de edição (iguais antes) -->
                      <div class="form-group">
                          <label for="edit-nome">Nome Completo:</label>
                          <input type="text" id="edit-nome" name="nome" required>
@@ -83,23 +78,29 @@
             </div>
         </section>
 
-        <!-- Card: Histórico de Pedidos (sem mudanças aqui) -->
+        <!-- Card: Histórico de Pedidos (igual antes) -->
         <section id="historico-pedidos" class="order-history-card">
-             <header class="card-header">
-                <h2>Histórico de Pedidos</h2>
-             </header>
+            <header class="card-header">
+                <h2><i class="fas fa-history"></i> Histórico de Pedidos</h2>
+            </header>
             <div id="lista-meus-pedidos" class="card-body loading">
                 <p>Carregando histórico...</p>
             </div>
         </section>
-
-        <!-- Footer -->
-     <footer class="footer">
-        <p>Todos os direitos reservados © Pizzaria Express 2025</p>
-    </footer>
-
     </main>
 
+    <!-- Footer IGUAL ao da index.html -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="copyright">Todos os direitos reservados © Pizzaria Express 2025</p>
+            <div class="footer-buttons"> <!-- Se você usa essa classe -->
+               <a href="https://www.instagram.com/SEUINSTAGRAM" target="_blank" class="nav-button"><i class="fa-brands fa-instagram"></i> Instagram</a>
+               <a href="https://wa.me/SEUNUMEROWHATSAPP" target="_blank" class="nav-button"><i class="fa-brands fa-whatsapp"></i> Whatsapp</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
     <script src="js/global.js"></script>
     <script src="js/perfil.js"></script>
 </body>
