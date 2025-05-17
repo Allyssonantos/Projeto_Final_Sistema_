@@ -6,7 +6,7 @@
 /* --- Reset Básico e Body (Herda de base.css, mas podemos garantir a fonte) --- */
 body {
     font-family: 'Poppins', sans-serif; /* Aplica a fonte */
-    background-color: #ffffff; /* Fundo cinza bem claro para a página */
+    background-color: #f4f5f7; /* Fundo cinza bem claro para a página */
     color: #333;
     margin: 0;
     padding: 0;
