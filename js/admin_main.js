@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
     // === Configurações e Constantes ===
-    const API_BASE_URL = "http://localhost/pizzaria_express/api"; // !! VERIFIQUE SUA URL DA API !!
+    const API_BASE_URL = "./api"; // !! VERIFIQUE SUA URL DA API !!
     const UPLOADS_BASE_URL = 'uploads/produtos/';         // Caminho base para exibir imagens
     const PLACEHOLDER_IMG = 'img/placeholder.png';           // Imagem padrão (certifique-se que existe em pizzaria_express/img/)
     const statusPermitidos = ['Recebido', 'Em Preparo', 'Saiu para Entrega', 'Entregue', 'Cancelado']; // Status válidos para pedidos

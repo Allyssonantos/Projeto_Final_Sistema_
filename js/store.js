@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
     // === Configurações e Constantes ===
-    const API_BASE_URL = "http://localhost/pizzaria_express/api"; // !! VERIFIQUE SUA URL !!
+    const API_BASE_URL = "./api"; // !! VERIFIQUE SUA URL !!
     const PLACEHOLDER_IMG = 'img/placeholder.png'; // !! Garanta que img/placeholder.png existe !!
 
     // === Referências aos Elementos do DOM ===

@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
     // --- Configurações e Constantes ---
-    const API_BASE_URL = "http://localhost/pizzaria_express/api"; // !! VERIFIQUE SUA URL !!
+    const API_BASE_URL = "./api"; // !! VERIFIQUE SUA URL !!
     // Defina a URL da API aqui. Se usar all_in_one.php, ajuste as URLs dos fetch abaixo.
 
     // --- Lógica de Cadastro ---

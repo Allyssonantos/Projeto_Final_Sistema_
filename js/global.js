@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
     // --- Configurações e Constantes ---
-    const API_BASE_URL = "http://localhost/pizzaria_express/api"; // !! VERIFIQUE !!
+    const API_BASE_URL = "./api"; // !! VERIFIQUE !!
 
     // --- Referências aos Elementos do DOM (Navbar) ---
     const navLogin = document.getElementById('nav-login');
