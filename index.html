@@ -1,4 +1,3 @@
-<!-- START OF FILE index.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -8,13 +7,14 @@
     <link rel="icon" href="./img/logo2_pizzaria.png"  sizes="60x60" type="image/x-icon">
     <link rel="stylesheet" href="./css/base.css"> <!-- CSS Base -->
     <link rel="stylesheet" href="./css/style.css"> <!-- CSS Específico -->
+    <!-- os icones do site -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-         <!-- Logo pode vir aqui também se preferir -->
+
         <div class="nav-buttons">
 
             <button data-scroll-to="menu-pizzas"><i class="fa-solid fa-pizza-slice"></i> Pizzas</button>
@@ -27,7 +27,7 @@
     </nav>
 
     <!-- Header -->
-    <header class="main-header"> <!-- Classe adicionada -->
+    <header class="main-header"> 
         <img src="./img/logo_pizzaria.png" alt="Logo da Pizzaria Express" class="logo">
         <h1>Bem-vindo à Nossa Pizzaria</h1>
         <p>Aberto das 18:00 às 23:59 | Peça online!</p>
@@ -37,10 +37,10 @@
     <main class="main-content">
         <!-- Menu de Pizzas -->
         <section id="menu-pizzas" class="menu-section">
-            <h2 class="menu_h2">Menu Pizzas</h2> <!-- Nível H2 é mais apropriado aqui -->
+            <h2 class="menu_h2">Menu Pizzas</h2>
             <div class="container-produtos">
                 <div id="lista-pizzas" class="produtos">
-                    <p>Carregando pizzas...</p> <!-- Feedback inicial -->
+                    <p>Carregando pizzas...</p> <!-- Feedback inicial, quando não estiver conectado no banco de dados aparece -->
                 </div>
             </div>
         </section>
@@ -50,7 +50,7 @@
              <h2 class="menu_h2">Menu Bebidas</h2>
              <div class="container-produtos">
                  <div id="lista-bebidas" class="produtos">
-                     <p>Carregando bebidas...</p> <!-- Feedback inicial -->
+                     <p>Carregando bebidas...</p> <!-- Feedback inicial, quando não estiver conectado no banco de dados aparece -->
                  </div>
             </div>
         </section>
@@ -64,23 +64,22 @@
         </ul>
         <p id="total">Total: R$ 0,00</p>
 
-        <!-- === SEÇÃO DE PAGAMENTO ADICIONADA === -->
+        <!-- FORMA DE PAGAMENTO -->
         <div class="forma-pagamento">
             <h3>Forma de Pagamento</h3>
             <div class="pagamento-opcao">
                 <input type="radio" id="pagamento-pix" name="forma_pagamento" value="PIX" checked>
                 <label for="pagamento-pix">PIX (Chave será exibida após finalizar)</label>
-                <!-- Adicionar mais detalhes sobre o PIX se necessário -->
             </div>
             <div class="pagamento-opcao">
                 <input type="radio" id="pagamento-entrega" name="forma_pagamento" value="Na Entrega">
                 <label for="pagamento-entrega">Cartão/Dinheiro (somente na entrega)</label>
             </div>
-            <div id="mensagem-pagamento" class="mensagem small-mensagem hidden"></div> <!-- Para mensagens de erro -->
+            <div id="mensagem-pagamento" class="mensagem small-mensagem hidden"></div> <!-- Para mensagens de erro, SE ESTIVER ALGUM ERRO -->
         </div>
-        <!-- === FIM DA SEÇÃO DE PAGAMENTO === -->
+        <!--  FIM DA SEÇÃO DE PAGAMENTO  -->
 
-         <!-- Mensagem para erros gerais do carrinho ou sucesso do pedido -->
+         <!-- Mensagem para erros do carrinho ou sucesso do pedido -->
         <div class="mensagem-carrinho"></div>
 
         <button id="btn-finalizar-pedido">Finalizar Pedido</button>
@@ -102,7 +101,6 @@
         </div>
     </footer>
 
-    <script src="./js/store.js"></script> <!-- Script específico -->
+    <script src="./js/store.js"></script> <!-- Script -->
 </body>
 </html>
-<!-- END OF FILE index.html -->

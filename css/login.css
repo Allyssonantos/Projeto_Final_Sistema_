@@ -74,13 +74,12 @@ body { /* Adiciona classe ao body no HTML se quiser isolar o fundo */
     box-sizing: border-box; /* Garante que padding não aumente a largura */
 }
 
-/* Ícones dentro dos Inputs (Opcional) */
+/* Ícones dentro dos Inputs */
 /*
 .input-icon {
     position: absolute;
     left: 12px;
     top: 50%;
-    transform: translateY(calc(-50% + 8px));
     color: #aaa;
 }
 */

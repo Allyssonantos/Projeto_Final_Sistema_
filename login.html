@@ -7,12 +7,10 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/login.css">
     <link rel="icon" href="./img/logo2_pizzaria.png"  sizes="60x60" type="image/x-icon">
-    <!-- Opcional: Adicionar link para Font Awesome se quiser usar ícones -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
 </head>
 <body>
     <div class="content-container login-container">
-        <!-- Logo Adicionada -->
+        <!-- Logo -->
         <div class="login-logo-container">
             <img src="img/logo2_pizzaria.png" alt="Logo Pizzaria Express" class="login-logo">
         </div>
@@ -20,20 +18,16 @@
         <h2>Login</h2>
 
         <!-- Mensagem de Feedback -->
-        <div id="mensagem-login" class="mensagem hidden"></div> <!-- Começa escondida -->
+        <div id="mensagem-login" class="mensagem hidden"></div>
 
         <form id="loginForm">
             <div class="input-field">
                 <label for="email">E-mail:</label>
-                <!-- Opcional: adicionar ícone -->
-                <!-- <i class="fas fa-envelope input-icon"></i> -->
                 <input type="email" id="email" name="email" required placeholder="seuemail@example.com">
             </div>
 
             <div class="input-field">
                 <label for="senha">Senha:</label>
-                 <!-- Opcional: adicionar ícone -->
-                 <!-- <i class="fas fa-lock input-icon"></i> -->
                 <input type="password" id="senha" name="senha" required placeholder="Digite sua senha">
             </div>
 
@@ -46,8 +40,8 @@
         </div>
     </div>
 
-    <!-- Scripts (Garantir que o caminho está correto) -->
-    <script src="js/global.js"></script> <!-- Pode ser necessário se houver lógica global -->
+    <!-- Scripts -->
+    <script src="js/global.js"></script>
     <script src="js/auth.js"></script>
 </body>
 </html>
