@@ -159,6 +159,10 @@ if ($result->num_rows === 1) {
     echo json_encode(["status" => "erro", "sucesso" => false, "mensagem" => "Usuário não encontrado."]);
 }
 
+$telefoneRecebido = $dados->telefone; // Ex: "(62) 91234-5678"
+$telefoneLimpo = preg_replace('/\D/', '', $telefoneRecebido); // Resultado: "62912345678"
+// Salve $telefoneLimpo no banco
+
 // Fechar o statement e a conexão com o banco de dados
 $stmt->close();
 $mysqli->close();

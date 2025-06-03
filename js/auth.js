@@ -186,4 +186,39 @@ document.addEventListener("DOMContentLoaded", function () {
         console.warn("AUTH.JS: Formulário de login encontrado, mas elemento #mensagem-login não.");
     }
 
+    // === NOVA LÓGICA PARA FORMATAÇÃO DE TELEFONE ===
+    const telefoneInput = document.getElementById('telefone');
+
+    if (telefoneInput) {
+        telefoneInput.addEventListener('input', function (e) {
+            let valor = e.target.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+            let formatado = '';
+
+            if (valor.length > 0) {
+                formatado = '(' + valor.substring(0, 2);
+            }
+            if (valor.length > 2) {
+                formatado += ') ' + valor.substring(2, valor.length <= 10 ? 6 : 7);
+            }
+            if (valor.length > (valor.length <= 10 ? 6 : 7)) {
+                formatado += '-' + valor.substring(valor.length <= 10 ? 6 : 7, 11);
+            }
+
+            // Limita o número de caracteres (considerando máscara)
+            if (formatado.length > 15) { // (XX) XXXXX-XXXX (15 chars) ou (XX) XXXX-XXXX (14 chars)
+                 e.target.value = formatado.substring(0, 15);
+            } else {
+                 e.target.value = formatado;
+            }
+        });
+
+        // Opcional: Limpar formatação se o campo ficar vazio (melhora UX)
+        telefoneInput.addEventListener('blur', function(e) {
+            if (e.target.value === '() ' || e.target.value === '()') {
+                e.target.value = '';
+            }
+        });
+    }
+    // === FIM DA NOVA LÓGICA ===
+
 }); // Fim do DOMContentLoaded

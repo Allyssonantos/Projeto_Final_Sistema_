@@ -290,7 +290,7 @@ body::after {
     clear: both;
 }
 
-/* Media Query para telas menores */
+/* resposavidade para o carrinho */
 @media (max-width: 900px) {
     .main-content {
         width: 100%;
@@ -300,9 +300,9 @@ body::after {
     .carrinho-container {
         width: 100%;
         float: none;
-        position: relative; /* Remove sticky */
+        position: relative; 
         top: auto;
-        margin-top: 30px;
+        margin-top: auto;
         border-left: none;
         border-top: 1px solid #ccc;
         box-shadow: none;
