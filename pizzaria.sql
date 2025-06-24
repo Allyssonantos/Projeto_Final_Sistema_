@@ -25,9 +25,6 @@ CREATE TABLE `produtos` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
--- Estrutura da tabela `pedidos`
-
 DROP TABLE IF EXISTS `pedidos`;
 CREATE TABLE `pedidos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -38,29 +35,26 @@ CREATE TABLE `pedidos` (
   `endereco_entrega` text NOT NULL, 
   `data_pedido` datetime NOT NULL DEFAULT current_timestamp(),
   `valor_total` decimal(10,2) NOT NULL,
-  `status` varchar(50) NOT NULL DEFAULT 'Recebido', -- Ex: 'Recebido', 'Em Preparo', 'Saiu para Entrega', 'Entregue', 'Cancelado'
-  `forma_pagamento` varchar(50) DEFAULT NULL, -- Ex: 'PIX', 'Na Entrega'
-  `observacoes` text DEFAULT NULL, -- Observações do cliente para o pedido
+  `status` varchar(50) NOT NULL DEFAULT 'Recebido',
+  `forma_pagamento` varchar(50) DEFAULT NULL,
+  `observacoes` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `usuario_id` (`usuario_id`),
   CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Estrutura da tabela `pedido_itens`
---
 DROP TABLE IF EXISTS `pedido_itens`;
 CREATE TABLE `pedido_itens` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `pedido_id` int(11) NOT NULL,
-  `produto_id` int(11) NOT NULL, -- Ou poderia ser NULL se o produto for deletado
+  `produto_id` int(11) NOT NULL,
   `quantidade` int(11) NOT NULL,
-  `preco_unitario` decimal(10,2) NOT NULL, -- Preço do produto no momento da compra
-  `nome_produto` varchar(100) NOT NULL, -- Nome do produto no momento da compra (para histórico)
+  `preco_unitario` decimal(10,2) NOT NULL,
+  `nome_produto` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `pedido_id` (`pedido_id`),
   KEY `produto_id` (`produto_id`),
   CONSTRAINT `pedido_itens_ibfk_1` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `pedido_itens_ibfk_2` FOREIGN KEY (`produto_id`) REFERENCES `produtos` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE -- Impede deletar produto se estiver em um pedido
-  -- Alternativa para produto_id: ON DELETE SET NULL (mantém o item no pedido mas desvincula do produto original)
+  CONSTRAINT `pedido_itens_ibfk_2` FOREIGN KEY (`produto_id`) REFERENCES `produtos` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+ 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
