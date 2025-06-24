@@ -1,11 +1,9 @@
-// js/admin_main.js - COMBINED ADMIN PANEL - Completo e Atualizado
-
 document.addEventListener("DOMContentLoaded", function () {
     // === Configurações e Constantes ===
-    const API_BASE_URL = "./api"; // !! VERIFIQUE SUA URL DA API !!
-    const UPLOADS_BASE_URL = 'uploads/produtos/';         // Caminho base para exibir imagens
-    const PLACEHOLDER_IMG = 'img/placeholder.png';           // Imagem padrão (certifique-se que existe em pizzaria_express/img/)
-    const statusPermitidos = ['Recebido', 'Em Preparo', 'Saiu para Entrega', 'Entregue', 'Cancelado']; // Status válidos para pedidos
+    const API_BASE_URL = "./api";
+    const UPLOADS_BASE_URL = 'uploads/produtos/';         // Caminho  das imagens
+    const PLACEHOLDER_IMG = 'img/placeholder.png';           // Imagem padrão caso não tenha uma imagem defeina para o produto)
+    const statusPermitidos = ['Recebido', 'Em Preparo', 'Saiu para Entrega', 'Entregue', 'Cancelado']; // Status os pedidos para pedidos
 
     // === Referências aos Elementos do DOM ===
 
@@ -31,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const filtroStatusSelect = document.getElementById('filtro-status');
     const btnRecarregar = document.getElementById('btn-recarregar-pedidos');
 
-    // Elementos do Modal de Detalhes do Pedido (se existir no HTML)
+    // Elementos do Modal de Detalhes do Pedido
     const modalDetalhes = document.getElementById('modal-detalhes-pedido');
     const modalCloseBtn = modalDetalhes?.querySelector('.modal-close-btn');
     const modalPedidoIdSpan = document.getElementById('modal-pedido-id');
@@ -46,11 +44,10 @@ document.addEventListener("DOMContentLoaded", function () {
          btnAdicionarProduto, listaProdutosTbody, nomeInputAdd, descricaoInputAdd, precoInputAdd,
          categoriaSelectAdd, imagemInputAdd, adminPedidosSection, corpoTabelaPedidos,
          filtroStatusSelect, btnRecarregar
-         // Não incluir elementos do modal aqui, pois são opcionais e verificados depois
      ];
      if (elementosEssenciais.some(el => !el)) {
          console.error("ERRO FATAL: Um ou mais elementos essenciais do DOM da página admin não foram encontrados. Verifique os IDs no HTML e JS.");
-         if (mensagemAdmin) exibirMensagem("Erro crítico: Falha ao carregar interface.", "error");
+         if (mensagemAdmin) exibirMensagem("Erro crítico: Falha ao carregar interface.");
          return; // Interrompe
      }
      console.log("ADMIN_MAIN: Todos os elementos essenciais encontrados.");
@@ -75,9 +72,8 @@ document.addEventListener("DOMContentLoaded", function () {
          if (!listaProdutosTbody) return;
          listaProdutosTbody.innerHTML = '<tr><td colspan="7">Carregando produtos...</td></tr>'; // Colspan 7 para produtos
          try {
-             // Ajuste URL se usar all_in_one.php
              const response = await fetch(`${API_BASE_URL}/produtos.php`);
-             // const response = await fetch(`${API_BASE_URL}/all_in_one.php?action=listarProdutos`, {credentials: 'include'});
+            
              if (!response.ok) { throw new Error(`Erro HTTP: ${response.status}`); }
              const produtos = await response.json();
              listaProdutosTbody.innerHTML = "";
@@ -129,9 +125,8 @@ document.addEventListener("DOMContentLoaded", function () {
          if (!corpoTabelaPedidos) return;
          corpoTabelaPedidos.innerHTML = `<tr><td colspan="8">Carregando pedidos...</td></tr>`; // Colspan 8
 
-         // *** USA A API SEPARADA OU ALL_IN_ONE PARA LISTAR PEDIDOS ***
-          let url = `${API_BASE_URL}/admin_listar_pedidos.php`; // Chama o PHP dedicado
-         // let url = `${API_BASE_URL}/all_in_one.php?action=listarPedidosAdmin`; // Ou use all_in_one
+          let url = `${API_BASE_URL}/admin_listar_pedidos.php`; // Chama o PHP
+         
          if (status) { url += `?status=${encodeURIComponent(status)}`; }
 
          try {
